@@ -1,0 +1,13 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageVersion>1.0.0</PackageVersion>
+    <Authors>Mutuduxf</Authors>
+    <Company>Mutuduxf</Company>
+    <PackageTags>Zaaby Zaabee MessageQueue MQ MessageBus RabbitMQ</PackageTags>
+    <PackageProjectUrl>https://github.com/Mutuduxf/Zaabee.RabbitMQ</PackageProjectUrl>
+    <Description>The Interface/BaseClass/Attribute for Zaaby.RabbitMQ</Description>
+    <PackageLicenseUrl>https://raw.githubusercontent.com/Mutuduxf/Zaabee.RabbitMQ/master/LICENSE</PackageLicenseUrl>
+  </PropertyGroup>
+</Project>
