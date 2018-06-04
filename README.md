@@ -1,4 +1,4 @@
-# Zaaby.MessageBus.RabbitMqProvider
+# Zaabee.RabbitMQ
 
 [RabbitMQ](http://www.rabbitmq.com/) is the most widely deployed open source message broker.
 
