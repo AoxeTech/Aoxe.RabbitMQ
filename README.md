@@ -21,7 +21,7 @@ Import reference in startup.cs
 
 ```CSharp
 using Zaabee.RabbitMQ;
-using Zaabee.RabbitMQ.Core;
+using Zaabee.RabbitMQ.Abstractions;
 using Zaabee.RabbitMQ.ISerialize;
 using Zaabee.RabbitMQ.Json;
 ```

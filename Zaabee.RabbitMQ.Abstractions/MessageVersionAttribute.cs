@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Zaabee.RabbitMQ.Core
+namespace Zaabee.RabbitMQ.Abstractions
 {
     public class MessageVersionAttribute : Attribute
     {

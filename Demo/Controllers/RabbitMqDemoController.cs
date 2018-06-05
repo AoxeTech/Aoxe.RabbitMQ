@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
-using Zaabee.RabbitMQ.Core;
+using Zaabee.RabbitMQ.Abstractions;
 
 namespace Demo.Controllers
 {

@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Zaabee.RabbitMQ;
-using Zaabee.RabbitMQ.Core;
+using Zaabee.RabbitMQ.Abstractions;
 using Zaabee.RabbitMQ.ISerialize;
 using Zaabee.RabbitMQ.Json;
 

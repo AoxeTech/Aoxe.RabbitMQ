@@ -1,5 +1,5 @@
 ﻿using System;
-using Zaabee.RabbitMQ.Core;
+using Zaabee.RabbitMQ.Abstractions;
 
 namespace Demo
 {

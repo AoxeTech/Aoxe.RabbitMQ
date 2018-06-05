@@ -6,8 +6,8 @@
     <Authors>Mutuduxf</Authors>
     <Company>Mutuduxf</Company>
     <PackageTags>Zaaby Zaabee MessageQueue MQ MessageBus RabbitMQ</PackageTags>
-    <PackageProjectUrl>https://github.com/Mutuduxf/Zaabee.RabbitMQ</PackageProjectUrl>
     <Description>The Interface/BaseClass/Attribute for Zaaby.RabbitMQ</Description>
+    <PackageProjectUrl>https://github.com/Mutuduxf/Zaabee.RabbitMQ</PackageProjectUrl>
     <PackageLicenseUrl>https://raw.githubusercontent.com/Mutuduxf/Zaabee.RabbitMQ/master/LICENSE</PackageLicenseUrl>
   </PropertyGroup>
 </Project>

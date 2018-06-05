@@ -2,13 +2,13 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zaabee.RabbitMQ", "Zaabee.RabbitMQ\Zaabee.RabbitMQ.csproj", "{E639CCAB-F385-4A1C-A04A-DBC30897D00C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zaabee.RabbitMQ.Core", "Zaabee.RabbitMQ.Core\Zaabee.RabbitMQ.Core.csproj", "{B3DACB49-FAE6-438C-A36F-3E8730764B9C}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zaabee.RabbitMQ.ISerialize", "Zaabee.RabbitMQ.ISerialize\Zaabee.RabbitMQ.ISerialize.csproj", "{87E0837C-B906-4A85-8C31-0E5D407F8C6C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Demo", "Demo\Demo.csproj", "{C225F749-00F6-47EC-8469-20119996C43A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zaabee.RabbitMQ.Json", "Zaabee.RabbitMQ.Json\Zaabee.RabbitMQ.Json.csproj", "{51FC8112-B299-4F3B-B63C-E8BCE646E093}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zaabee.RabbitMQ.Abstractions", "Zaabee.RabbitMQ.Abstractions\Zaabee.RabbitMQ.Abstractions.csproj", "{1E825F68-1F95-49A7-8735-FEC256DBB054}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -20,10 +20,6 @@ Global
 		{E639CCAB-F385-4A1C-A04A-DBC30897D00C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E639CCAB-F385-4A1C-A04A-DBC30897D00C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E639CCAB-F385-4A1C-A04A-DBC30897D00C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B3DACB49-FAE6-438C-A36F-3E8730764B9C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B3DACB49-FAE6-438C-A36F-3E8730764B9C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B3DACB49-FAE6-438C-A36F-3E8730764B9C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B3DACB49-FAE6-438C-A36F-3E8730764B9C}.Release|Any CPU.Build.0 = Release|Any CPU
 		{87E0837C-B906-4A85-8C31-0E5D407F8C6C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{87E0837C-B906-4A85-8C31-0E5D407F8C6C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{87E0837C-B906-4A85-8C31-0E5D407F8C6C}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -36,5 +32,9 @@ Global
 		{51FC8112-B299-4F3B-B63C-E8BCE646E093}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{51FC8112-B299-4F3B-B63C-E8BCE646E093}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{51FC8112-B299-4F3B-B63C-E8BCE646E093}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1E825F68-1F95-49A7-8735-FEC256DBB054}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1E825F68-1F95-49A7-8735-FEC256DBB054}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1E825F68-1F95-49A7-8735-FEC256DBB054}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1E825F68-1F95-49A7-8735-FEC256DBB054}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
