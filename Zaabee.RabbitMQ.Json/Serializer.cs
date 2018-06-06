@@ -1,4 +1,4 @@
-﻿using Zaabee.JsonUtility;
+﻿using Zaabee.Json;
 using Zaabee.RabbitMQ.ISerialize;
 
 namespace Zaabee.RabbitMQ.Json
