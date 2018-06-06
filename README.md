@@ -13,6 +13,8 @@ RabbitMQ is lightweight and easy to deploy on premises and in the cloud. It supp
     Install-Package Zaaby.RabbitMQ
     Install-Package Zaaby.RabbitMQ.Json
 
+Or you can use another serializer base by [Jil](https://github.com/kevin-montrose/Jil) whitch named Zaaby.RabbitMQ.Jil,it will provide higher performance.
+
 ### Asp.net core
 
 #### Build Project
