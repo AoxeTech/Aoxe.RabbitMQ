@@ -9,7 +9,7 @@ using Zaabee.RabbitMQ.ISerialize;
 
 namespace Zaabee.RabbitMQ
 {
-    public class ZaabyRabbitMqClient : IMessageBus
+    public class ZaabeeRabbitMqClient : IMessageBus
     {
         private static IConnection _conn;
         private static ISerializer _serializer;
@@ -23,7 +23,7 @@ namespace Zaabee.RabbitMQ
 
         private static readonly object LockObj = new object();
 
-        public ZaabyRabbitMqClient(MqConfig config, ISerializer serializer)
+        public ZaabeeRabbitMqClient(MqConfig config, ISerializer serializer)
         {
             if (config == null) throw new ArgumentNullException(nameof(config));
             if (serializer == null) throw new ArgumentNullException(nameof(serializer));

@@ -26,8 +26,8 @@ namespace Demo
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
             services.AddSingleton<ISerializer, Serializer>();
-            services.AddSingleton<IMessageBus, ZaabyRabbitMqClient>(p =>
-                new ZaabyRabbitMqClient(new MqConfig
+            services.AddSingleton<IMessageBus, ZaabeeRabbitMqClient>(p =>
+                new ZaabeeRabbitMqClient(new MqConfig
                 {
                     AutomaticRecoveryEnabled = true,
                     HeartBeat = 60,

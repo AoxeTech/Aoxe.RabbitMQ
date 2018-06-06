@@ -10,8 +10,8 @@ RabbitMQ is lightweight and easy to deploy on premises and in the cloud. It supp
 
 ### NuGet
 
-    Install-Package Zaaby.RabbitMQ
-    Install-Package Zaaby.RabbitMQ.Json
+    Install-Package Zaabee.RabbitMQ
+    Install-Package Zaabee.RabbitMQ.Json
 
 Or you can use another serializer base by [Jil](https://github.com/kevin-montrose/Jil) whitch named Zaaby.RabbitMQ.Jil,it will provide higher performance.
 
@@ -32,8 +32,8 @@ Register ZabbyRabbitMqClient in ConfigureServices method
 
 ```CSharp
 services.AddSingleton<ISerializer, Serializer>();
-services.AddSingleton<IMessageBus, ZaabyRabbitMqClient>(p =>
-    new ZaabyRabbitMqClient(new MqConfig
+services.AddSingleton<IMessageBus, ZaabeeRabbitMqClient>(p =>
+    new ZaabeeRabbitMqClient(new MqConfig
     {
         AutomaticRecoveryEnabled = true,
         HeartBeat = 60,
