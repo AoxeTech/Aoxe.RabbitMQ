@@ -2,7 +2,7 @@
 
 namespace Zaabee.RabbitMQ.Abstractions
 {
-    public interface IMessageBus
+    public interface IZaabeeRabbitMqClient
     {
         void PublishEvent<T>(T @event);
         void PublishEvent(string eventName, byte[] body);

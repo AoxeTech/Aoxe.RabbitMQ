@@ -9,7 +9,7 @@ using Zaabee.RabbitMQ.ISerialize;
 
 namespace Zaabee.RabbitMQ
 {
-    public class ZaabeeRabbitMqClient : IMessageBus
+    public class ZaabeeRabbitMqClient : IZaabeeRabbitMqClient
     {
         private static IConnection _conn;
         private static ISerializer _serializer;

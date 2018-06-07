@@ -32,7 +32,7 @@ Register ZabbyRabbitMqClient in ConfigureServices method
 
 ```CSharp
 services.AddSingleton<ISerializer, Serializer>();
-services.AddSingleton<IMessageBus, ZaabeeRabbitMqClient>(p =>
+services.AddSingleton<IZaabeeRabbitMqClient, ZaabeeRabbitMqClient>(p =>
     new ZaabeeRabbitMqClient(new MqConfig
     {
         AutomaticRecoveryEnabled = true,
@@ -77,9 +77,9 @@ Now add a controller in the webapi project like this
 [Route("api/[controller]/[action]")]
 public class RabbitMqDemoController : Controller
 {
-    private readonly IMessageBus _messageBus;
+    private readonly IZaabeeRabbitMqClient _messageBus;
 
-    public RabbitMqDemoController(IMessageBus messageBus)
+    public RabbitMqDemoController(IZaabeeRabbitMqClient messageBus)
     {
         _messageBus = messageBus;
     }

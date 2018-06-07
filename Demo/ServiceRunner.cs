@@ -5,9 +5,9 @@ namespace Demo
 {
     public class ServiceRunner
     {
-        private readonly IMessageBus _messageBus;
+        private readonly IZaabeeRabbitMqClient _messageBus;
 
-        public ServiceRunner(IMessageBus messageBus)
+        public ServiceRunner(IZaabeeRabbitMqClient messageBus)
         {
             _messageBus = messageBus;
         }

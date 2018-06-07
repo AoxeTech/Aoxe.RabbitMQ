@@ -8,9 +8,9 @@ namespace Demo.Controllers
     [Route("api/[controller]/[action]")]
     public class RabbitMqDemoController : Controller
     {
-        private readonly IMessageBus _messageBus;
+        private readonly IZaabeeRabbitMqClient _messageBus;
 
-        public RabbitMqDemoController(IMessageBus messageBus)
+        public RabbitMqDemoController(IZaabeeRabbitMqClient messageBus)
         {
             _messageBus = messageBus;
         }
