@@ -2,13 +2,14 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <PackageVersion>1.1.1</PackageVersion>
+    <PackageVersion>1.2.0</PackageVersion>
     <Authors>Mutuduxf</Authors>
     <Company>Mutuduxf</Company>
     <PackageTags>Zaaby Zaabee MessageQueue MQ MessageBus RabbitMQ</PackageTags>
     <PackageProjectUrl>https://github.com/Mutuduxf/Zaabee.RabbitMQ</PackageProjectUrl>
     <Description>Rabbit client wrapper for asp.net core or Zaaby</Description>
     <PackageLicenseUrl>https://raw.githubusercontent.com/Mutuduxf/Zaabee.RabbitMQ/master/LICENSE</PackageLicenseUrl>
+    <PackageReleaseNotes>Break change,the substribe and listen queue named $"{handle.Method.ReflectedType?.FullName}.{handle.Method.Name}[{messageName}] now</PackageReleaseNotes>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="RabbitMQ.Client" Version="5.0.1" />

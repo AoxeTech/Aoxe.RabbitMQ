@@ -110,7 +110,7 @@ namespace Zaabee.RabbitMQ
         {
             var eventName = GetTypeName(typeof(T));
             var exchange = eventName;
-            var methdoFullName = $"{handle.Method.ReflectedType?.FullName}.{handle.Method.Name}.{eventName}";
+            var methdoFullName = $"{handle.Method.ReflectedType?.FullName}.{handle.Method.Name}[{eventName}]";
 
             var exchangeParam = new ExchangeParam {Exchange = exchange};
             var queueParam = new QueueParam {Queue = methdoFullName};
@@ -163,7 +163,7 @@ namespace Zaabee.RabbitMQ
         {
             var messageName = GetTypeName(typeof(T));
             var exchange = messageName;
-            var methdoFullName = $"{handle.Method.ReflectedType?.FullName}.{handle.Method.Name}.{messageName}";
+            var methdoFullName = $"{handle.Method.ReflectedType?.FullName}.{handle.Method.Name}[{messageName}]";
 
             var exchangeParam = new ExchangeParam {Exchange = exchange, Durable = false};
             var queueParam = new QueueParam {Queue = methdoFullName, Durable = false};
@@ -177,7 +177,7 @@ namespace Zaabee.RabbitMQ
             var messageName = GetTypeName(typeof(T));
             var exchange = messageName;
             var methdoFullName =
-                $"{handle.Method.ReflectedType?.FullName}.{handle.Method.Name}.{messageName}.{Guid.NewGuid()}";
+                $"{handle.Method.ReflectedType?.FullName}.{handle.Method.Name}[{messageName}][{Guid.NewGuid()}]";
 
             var exchangeParam = new ExchangeParam {Exchange = exchange, Durable = false};
             var queueParam =
