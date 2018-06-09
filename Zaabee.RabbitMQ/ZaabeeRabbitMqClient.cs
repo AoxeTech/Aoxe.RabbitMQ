@@ -119,11 +119,9 @@ namespace Zaabee.RabbitMQ
             ConsumeEvent(channel, handle, queueParam.Queue);
         }
 
-        public void RepublishDeadLetterEvent<T>()
+        public void RepublishDeadLetterEvent<T>(string deadLetterQueueName)
         {
-            var eventName = GetTypeName(typeof(T));
-            var deadLetterName = GetDeadLetterName(eventName);
-            var queueParam = new QueueParam {Queue = eventName};
+            var queueParam = new QueueParam {Queue = deadLetterQueueName};
             var channel = GetReceiverChannel(null, queueParam, 1);
 
             var consumer = new EventingBasicConsumer(channel);
@@ -132,7 +130,7 @@ namespace Zaabee.RabbitMQ
                 var body = ea.Body;
                 var msg = _serializer.Deserialize<DeadLetterMsg>(body);
 
-                var republishExchangeParam = new ExchangeParam {Exchange = $"republish-{eventName}"};
+                var republishExchangeParam = new ExchangeParam {Exchange = $"republish-{deadLetterQueueName}"};
                 using (var republishChannel = CreatePublisherChannel(republishExchangeParam, queueParam))
                 {
                     var properties = republishChannel.CreateBasicProperties();
@@ -147,7 +145,7 @@ namespace Zaabee.RabbitMQ
 
                 channel.BasicAck(ea.DeliveryTag, false);
             };
-            channel.BasicConsume(queue: deadLetterName, autoAck: false, consumer: consumer);
+            channel.BasicConsume(queue: deadLetterQueueName, autoAck: false, consumer: consumer);
         }
 
         public void ReceiveMessage<T>(Action<T> handle)
