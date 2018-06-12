@@ -8,7 +8,7 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Zaabee.RabbitMQ">
-      <Version>1.1.1</Version>
+      <Version>1.2.2</Version>
     </PackageReference>
     <PackageReference Include="Zaabee.RabbitMQ.Json">
       <Version>1.1.0</Version>

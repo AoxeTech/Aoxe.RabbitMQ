@@ -13,7 +13,6 @@ namespace Zaabee.RabbitMQ
     {
         private static IConnection _conn;
         private static ISerializer _serializer;
-        private const ushort PrefetchCount = 10;
 
         private static readonly ConcurrentDictionary<string, IModel> SubscriberChannelDic =
             new ConcurrentDictionary<string, IModel>();
@@ -97,16 +96,16 @@ namespace Zaabee.RabbitMQ
             }
         }
 
-        public void ReceiveEvent<T>(Action<T> handle)
+        public void ReceiveEvent<T>(Action<T> handle, ushort prefetchCount = 10)
         {
             var eventName = GetTypeName(typeof(T));
             var queueParam = new QueueParam {Queue = eventName};
-            var channel = GetReceiverChannel(null, queueParam, PrefetchCount);
+            var channel = GetReceiverChannel(null, queueParam, prefetchCount);
 
             ConsumeEvent(channel, handle, eventName);
         }
 
-        public void SubscribeEvent<T>(Action<T> handle)
+        public void SubscribeEvent<T>(Action<T> handle, ushort prefetchCount = 10)
         {
             var eventName = GetTypeName(typeof(T));
             var exchange = eventName;
@@ -114,7 +113,7 @@ namespace Zaabee.RabbitMQ
 
             var exchangeParam = new ExchangeParam {Exchange = exchange};
             var queueParam = new QueueParam {Queue = methdoFullName};
-            var channel = GetReceiverChannel(exchangeParam, queueParam, PrefetchCount);
+            var channel = GetReceiverChannel(exchangeParam, queueParam, prefetchCount);
 
             ConsumeEvent(channel, handle, queueParam.Queue);
         }
@@ -148,16 +147,16 @@ namespace Zaabee.RabbitMQ
             channel.BasicConsume(queue: deadLetterQueueName, autoAck: false, consumer: consumer);
         }
 
-        public void ReceiveMessage<T>(Action<T> handle)
+        public void ReceiveMessage<T>(Action<T> handle, ushort prefetchCount = 10)
         {
             var messageName = GetTypeName(typeof(T));
             var queueParam = new QueueParam {Queue = messageName, Durable = false};
-            var channel = GetReceiverChannel(null, queueParam, PrefetchCount);
+            var channel = GetReceiverChannel(null, queueParam, prefetchCount);
 
             ConsumeMessage(channel, handle, messageName);
         }
 
-        public void SubscribeMessage<T>(Action<T> handle)
+        public void SubscribeMessage<T>(Action<T> handle, ushort prefetchCount = 10)
         {
             var messageName = GetTypeName(typeof(T));
             var exchange = messageName;
@@ -165,12 +164,12 @@ namespace Zaabee.RabbitMQ
 
             var exchangeParam = new ExchangeParam {Exchange = exchange, Durable = false};
             var queueParam = new QueueParam {Queue = methdoFullName, Durable = false};
-            var channel = GetReceiverChannel(exchangeParam, queueParam, PrefetchCount);
+            var channel = GetReceiverChannel(exchangeParam, queueParam, prefetchCount);
 
             ConsumeMessage(channel, handle, queueParam.Queue);
         }
 
-        public void ListenMessage<T>(Action<T> handle)
+        public void ListenMessage<T>(Action<T> handle, ushort prefetchCount = 10)
         {
             var messageName = GetTypeName(typeof(T));
             var exchange = messageName;
@@ -180,7 +179,7 @@ namespace Zaabee.RabbitMQ
             var exchangeParam = new ExchangeParam {Exchange = exchange, Durable = false};
             var queueParam =
                 new QueueParam {Queue = methdoFullName, Durable = false, Exclusive = true, AutoDelete = true};
-            var channel = GetReceiverChannel(exchangeParam, queueParam, PrefetchCount);
+            var channel = GetReceiverChannel(exchangeParam, queueParam, prefetchCount);
 
             ConsumeMessage(channel, handle, queueParam.Queue);
         }

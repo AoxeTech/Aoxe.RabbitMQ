@@ -15,15 +15,15 @@ namespace Demo
         public void Start()
         {
             //_messageBus.ReceiveEvent<TestEvent>(TestEventHandler);
-            _messageBus.ReceiveEvent<TestEvent>(TestEventExceptionHandler);
+            _messageBus.ReceiveEvent<TestEvent>(TestEventExceptionHandler, 15);
             //_messageBus.ReceiveEvent<TestEventWithVersion>(TestEventWithVersionHandler);
-            _messageBus.ReceiveEvent<TestEventWithVersion>(TestEventExceptionWithVersionHandler);
+            _messageBus.ReceiveEvent<TestEventWithVersion>(TestEventExceptionWithVersionHandler, 20);
             _messageBus.ReceiveMessage<TestMessage>(TestMessageHandler);
         }
 
         public void TestEventHandler(TestEvent testEvent)
         {
-            
+
         }
 
         public void TestEventExceptionHandler(TestEvent testEvent)
@@ -33,7 +33,7 @@ namespace Demo
 
         public void TestEventWithVersionHandler(TestEventWithVersion testEventWithVersion)
         {
-            
+
         }
 
         public void TestEventExceptionWithVersionHandler(TestEventWithVersion testEventWithVersion)
@@ -43,7 +43,7 @@ namespace Demo
 
         public void TestMessageHandler(TestMessage testMessage)
         {
-            
+
         }
     }
 }
