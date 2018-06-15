@@ -58,12 +58,11 @@ namespace Zaabee.RabbitMQ
         public void PublishEvent(string eventName, byte[] body)
         {
             var exchangeParam = new ExchangeParam {Exchange = eventName};
-            var queueParam = new QueueParam {Queue = eventName};
-            using (var channel = CreatePublisherChannel(exchangeParam, queueParam))
+            using (var channel = CreatePublisherChannel(exchangeParam, null))
             {
                 var properties = channel.CreateBasicProperties();
                 properties.Persistent = true;
-                var routingKey = queueParam.Queue;
+                var routingKey = exchangeParam.Exchange;
 
                 channel.BasicPublish(exchangeParam.Exchange, routingKey, properties, body);
             }
@@ -72,26 +71,16 @@ namespace Zaabee.RabbitMQ
         public void PublishMessage<T>(T message)
         {
             var messageName = GetTypeName(typeof(T));
-
-            var exchangeParam = new ExchangeParam {Exchange = messageName, Durable = false};
-            var queueParam = new QueueParam {Queue = messageName, Durable = false};
-            using (var channel = CreatePublisherChannel(exchangeParam, queueParam))
-            {
-                var routingKey = queueParam.Queue;
-
-                channel.BasicPublish(exchange: exchangeParam.Exchange, routingKey: routingKey, basicProperties: null,
-                    body: _serializer.Serialize(message));
-            }
+            var body = _serializer.Serialize(message);
+            PublishMessage(messageName, body);
         }
 
         public void PublishMessage(string messageName, byte[] body)
         {
             var exchangeParam = new ExchangeParam {Exchange = messageName, Durable = false};
-            var queueParam = new QueueParam {Queue = messageName, Durable = false};
-            using (var channel = CreatePublisherChannel(exchangeParam, queueParam))
+            using (var channel = CreatePublisherChannel(exchangeParam, null))
             {
-                var routingKey = queueParam.Queue;
-
+                var routingKey = exchangeParam.Exchange;
                 channel.BasicPublish(exchangeParam.Exchange, routingKey, null, body);
             }
         }
@@ -99,8 +88,9 @@ namespace Zaabee.RabbitMQ
         public void ReceiveEvent<T>(Action<T> handle, ushort prefetchCount = 10)
         {
             var eventName = GetTypeName(typeof(T));
+            var exchangeParam = new ExchangeParam {Exchange = eventName};
             var queueParam = new QueueParam {Queue = eventName};
-            var channel = GetReceiverChannel(null, queueParam, prefetchCount);
+            var channel = GetReceiverChannel(exchangeParam, queueParam, prefetchCount);
 
             ConsumeEvent(channel, handle, eventName);
         }
@@ -129,8 +119,11 @@ namespace Zaabee.RabbitMQ
                 var body = ea.Body;
                 var msg = _serializer.Deserialize<DeadLetterMsg>(body);
 
-                var republishExchangeParam = new ExchangeParam {Exchange = $"republish-{deadLetterQueueName}"};
-                using (var republishChannel = CreatePublisherChannel(republishExchangeParam, queueParam))
+                var republishExchangeParam =
+                    new ExchangeParam {Exchange = $"republish-{deadLetterQueueName}", Durable = true};
+                var republishQueueParam =
+                    new QueueParam {Queue = FromDeadLetterName(deadLetterQueueName), Durable = true};
+                using (var republishChannel = CreatePublisherChannel(republishExchangeParam, republishQueueParam))
                 {
                     var properties = republishChannel.CreateBasicProperties();
                     properties.Persistent = true;
@@ -150,8 +143,9 @@ namespace Zaabee.RabbitMQ
         public void ReceiveMessage<T>(Action<T> handle, ushort prefetchCount = 10)
         {
             var messageName = GetTypeName(typeof(T));
+            var exchangeParam = new ExchangeParam {Exchange = messageName, Durable = false};
             var queueParam = new QueueParam {Queue = messageName, Durable = false};
-            var channel = GetReceiverChannel(null, queueParam, prefetchCount);
+            var channel = GetReceiverChannel(exchangeParam, queueParam, prefetchCount);
 
             ConsumeMessage(channel, handle, messageName);
         }
@@ -189,16 +183,17 @@ namespace Zaabee.RabbitMQ
             var channel = _conn.CreateModel();
 
             exchangeParam.Exchange = exchangeParam.Exchange ?? "UndefinedExchangeName";
-            queueParam.Queue = queueParam.Queue ?? "UndefinedQueueName";
 
             channel.ExchangeDeclare(exchange: exchangeParam.Exchange, type: exchangeParam.Type.ToString().ToLower(),
                 durable: exchangeParam.Durable, autoDelete: exchangeParam.AutoDelete,
                 arguments: exchangeParam.Arguments);
 
+            if (queueParam == null) return channel;
+
+            queueParam.Queue = queueParam.Queue ?? "UndefinedQueueName";
             channel.QueueDeclare(queue: queueParam.Queue, durable: queueParam.Durable,
                 exclusive: queueParam.Exclusive, autoDelete: queueParam.AutoDelete,
                 arguments: queueParam.Arguments);
-
             channel.QueueBind(queue: queueParam.Queue, exchange: exchangeParam.Exchange,
                 routingKey: queueParam.Queue);
 
@@ -251,14 +246,29 @@ namespace Zaabee.RabbitMQ
                     catch (Exception ex)
                     {
                         var innestEx = ex.GetInnestException();
-                        PublishEvent(GetDeadLetterName(queue), _serializer.Serialize(new DeadLetterMsg
+
+                        var dlxName = GetDeadLetterName(queue);
+                        var dlxExchangeParam = new ExchangeParam {Exchange = dlxName};
+                        var dlxQueueParam = new QueueParam {Queue = dlxName};
+
+                        using (var deadLetterMsgchannel = CreatePublisherChannel(dlxExchangeParam, dlxQueueParam))
                         {
-                            QueueName = queue,
-                            BodyString = _serializer.ToString(msg),
-                            ExMsg = innestEx.Message,
-                            ExStack = innestEx.StackTrace,
-                            ThrowTime = DateTimeOffset.Now
-                        }));
+                            var properties = deadLetterMsgchannel.CreateBasicProperties();
+                            properties.Persistent = true;
+                            var routingKey = dlxExchangeParam.Exchange;
+
+                            var dlx = new DeadLetterMsg
+                            {
+                                QueueName = queue,
+                                ExMsg = innestEx.Message,
+                                ExStack = innestEx.StackTrace,
+                                ThrowTime = DateTimeOffset.Now,
+                                BodyString = _serializer.ToString(msg)
+                            };
+
+                            deadLetterMsgchannel.BasicPublish(dlxExchangeParam.Exchange, routingKey, properties,
+                                _serializer.Serialize(dlx));
+                        }
                     }
                     finally
                     {
@@ -303,6 +313,11 @@ namespace Zaabee.RabbitMQ
         private static string GetDeadLetterName(string name)
         {
             return $"dead-letter-{name}";
+        }
+
+        private static string FromDeadLetterName(string deadLetterName)
+        {
+            return deadLetterName.Replace("dead-letter-", "");
         }
     }
 }

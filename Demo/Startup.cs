@@ -7,7 +7,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Zaabee.RabbitMQ;
 using Zaabee.RabbitMQ.Abstractions;
-using Zaabee.RabbitMQ.ISerialize;
 using Zaabee.RabbitMQ.Json;
 
 namespace Demo
@@ -25,7 +24,6 @@ namespace Demo
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
-            services.AddSingleton<ISerializer, Serializer>();
             services.AddSingleton<IZaabeeRabbitMqClient, ZaabeeRabbitMqClient>(p =>
                 new ZaabeeRabbitMqClient(new MqConfig
                 {
@@ -35,7 +33,7 @@ namespace Demo
                     Hosts = new List<string>{"192.168.78.152"},
                     UserName = "guest",
                     Password = "guest"
-                }, services.BuildServiceProvider().GetService<ISerializer>()));
+                }, new Serializer()));
             services.AddSingleton<ServiceRunner>();
         }
 
