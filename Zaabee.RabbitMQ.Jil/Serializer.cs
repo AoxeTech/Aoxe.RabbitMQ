@@ -10,6 +10,11 @@ namespace Zaabee.RabbitMQ.Jil
             return o == null ? new byte[0] : o.ToJil().SerializeUtf8();
         }
 
+        public byte[] StringToBytes(string str)
+        {
+            return str.SerializeUtf8();
+        }
+
         public T Deserialize<T>(byte[] bytes)
         {
             if (bytes == null || bytes.Length == 0) return default(T);
@@ -19,6 +24,11 @@ namespace Zaabee.RabbitMQ.Jil
         public string ToString<T>(T o)
         {
             return o == null ? null : o.ToJil();
+        }
+
+        public string BytesToString(byte[] bytes)
+        {
+            return bytes.DeserializeUtf8();
         }
 
         public T FromString<T>(string json)

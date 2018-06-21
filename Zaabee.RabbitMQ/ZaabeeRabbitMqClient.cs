@@ -236,11 +236,9 @@ namespace Zaabee.RabbitMQ
             {
                 Task.Run(() =>
                 {
-                    var body = ea.Body;
-                    var msg = _serializer.Deserialize<T>(body);
-
                     try
                     {
+                        var msg = _serializer.Deserialize<T>(ea.Body);
                         handle(msg);
                     }
                     catch (Exception ex)
@@ -263,7 +261,7 @@ namespace Zaabee.RabbitMQ
                                 ExMsg = innestEx.Message,
                                 ExStack = innestEx.StackTrace,
                                 ThrowTime = DateTimeOffset.Now,
-                                BodyString = _serializer.ToString(msg)
+                                BodyString = _serializer.BytesToString(ea.Body)
                             };
 
                             deadLetterMsgchannel.BasicPublish(dlxExchangeParam.Exchange, routingKey, properties,
