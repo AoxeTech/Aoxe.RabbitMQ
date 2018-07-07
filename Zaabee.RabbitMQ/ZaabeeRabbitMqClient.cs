@@ -229,7 +229,7 @@ namespace Zaabee.RabbitMQ
             });
         }
 
-        private void ConsumeEvent<T>(IModel channel, Action<T> handle, string queue)
+        private static void ConsumeEvent<T>(IModel channel, Action<T> handle, string queue)
         {
             var consumer = new EventingBasicConsumer(channel);
             consumer.Received += (model, ea) =>
@@ -249,9 +249,9 @@ namespace Zaabee.RabbitMQ
                         var dlxExchangeParam = new ExchangeParam {Exchange = dlxName};
                         var dlxQueueParam = new QueueParam {Queue = dlxName};
 
-                        using (var deadLetterMsgchannel = CreatePublisherChannel(dlxExchangeParam, dlxQueueParam))
+                        using (var deadLetterMsgChannel = CreatePublisherChannel(dlxExchangeParam, dlxQueueParam))
                         {
-                            var properties = deadLetterMsgchannel.CreateBasicProperties();
+                            var properties = deadLetterMsgChannel.CreateBasicProperties();
                             properties.Persistent = true;
                             var routingKey = dlxExchangeParam.Exchange;
 
@@ -264,7 +264,7 @@ namespace Zaabee.RabbitMQ
                                 BodyString = _serializer.BytesToString(ea.Body)
                             };
 
-                            deadLetterMsgchannel.BasicPublish(dlxExchangeParam.Exchange, routingKey, properties,
+                            deadLetterMsgChannel.BasicPublish(dlxExchangeParam.Exchange, routingKey, properties,
                                 _serializer.Serialize(dlx));
                         }
                     }
@@ -277,7 +277,7 @@ namespace Zaabee.RabbitMQ
             channel.BasicConsume(queue: queue, autoAck: false, consumer: consumer);
         }
 
-        private void ConsumeMessage<T>(IModel channel, Action<T> handle, string queue)
+        private static void ConsumeMessage<T>(IModel channel, Action<T> handle, string queue)
         {
             var consumer = new EventingBasicConsumer(channel);
             consumer.Received += (model, ea) =>
