@@ -49,6 +49,6 @@ namespace Zaabee.RabbitMQ.Abstractions
         /// <typeparam name="T"></typeparam>
         void ListenMessage<T>(Action<T> handle, ushort prefetchCount = 10);
 
-        void RepublishDeadLetterEvent<T>(string deadLetterQueueName);
+        void RepublishDeadLetterEvent<T>(string deadLetterQueueName, ushort prefetchCount = 10);
     }
 }

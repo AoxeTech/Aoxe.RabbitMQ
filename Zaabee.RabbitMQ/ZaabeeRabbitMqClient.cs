@@ -108,10 +108,10 @@ namespace Zaabee.RabbitMQ
             ConsumeEvent(channel, handle, queueParam.Queue);
         }
 
-        public void RepublishDeadLetterEvent<T>(string deadLetterQueueName)
+        public void RepublishDeadLetterEvent<T>(string deadLetterQueueName, ushort prefetchCount = 10)
         {
             var queueParam = new QueueParam {Queue = deadLetterQueueName};
-            var channel = GetReceiverChannel(null, queueParam, 1);
+            var channel = GetReceiverChannel(null, queueParam, prefetchCount);
 
             var consumer = new EventingBasicConsumer(channel);
             consumer.Received += (model, ea) =>
