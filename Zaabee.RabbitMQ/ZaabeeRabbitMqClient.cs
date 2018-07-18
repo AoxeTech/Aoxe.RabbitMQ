@@ -99,10 +99,10 @@ namespace Zaabee.RabbitMQ
         {
             var eventName = GetTypeName(typeof(T));
             var exchange = eventName;
-            var methdoFullName = $"{handle.Method.ReflectedType?.FullName}.{handle.Method.Name}[{eventName}]";
+            var methodFullName = $"{handle.Method.ReflectedType?.FullName}.{handle.Method.Name}[{eventName}]";
 
             var exchangeParam = new ExchangeParam {Exchange = exchange};
-            var queueParam = new QueueParam {Queue = methdoFullName};
+            var queueParam = new QueueParam {Queue = methodFullName};
             var channel = GetReceiverChannel(exchangeParam, queueParam, prefetchCount);
 
             ConsumeEvent(channel, handle, queueParam.Queue);
@@ -154,10 +154,10 @@ namespace Zaabee.RabbitMQ
         {
             var messageName = GetTypeName(typeof(T));
             var exchange = messageName;
-            var methdoFullName = $"{handle.Method.ReflectedType?.FullName}.{handle.Method.Name}[{messageName}]";
+            var methodFullName = $"{handle.Method.ReflectedType?.FullName}.{handle.Method.Name}[{messageName}]";
 
             var exchangeParam = new ExchangeParam {Exchange = exchange, Durable = false};
-            var queueParam = new QueueParam {Queue = methdoFullName, Durable = false};
+            var queueParam = new QueueParam {Queue = methodFullName, Durable = false};
             var channel = GetReceiverChannel(exchangeParam, queueParam, prefetchCount);
 
             ConsumeMessage(channel, handle, queueParam.Queue);
@@ -167,12 +167,12 @@ namespace Zaabee.RabbitMQ
         {
             var messageName = GetTypeName(typeof(T));
             var exchange = messageName;
-            var methdoFullName =
+            var methodFullName =
                 $"{handle.Method.ReflectedType?.FullName}.{handle.Method.Name}[{messageName}][{Guid.NewGuid()}]";
 
             var exchangeParam = new ExchangeParam {Exchange = exchange, Durable = false};
             var queueParam =
-                new QueueParam {Queue = methdoFullName, Durable = false, Exclusive = true, AutoDelete = true};
+                new QueueParam {Queue = methodFullName, Durable = false, Exclusive = true, AutoDelete = true};
             var channel = GetReceiverChannel(exchangeParam, queueParam, prefetchCount);
 
             ConsumeMessage(channel, handle, queueParam.Queue);
@@ -243,7 +243,7 @@ namespace Zaabee.RabbitMQ
                     }
                     catch (Exception ex)
                     {
-                        var innestEx = ex.GetInnestException();
+                        var innermostEx = ex.GetInnestException();
 
                         var dlxName = GetDeadLetterName(queue);
                         var dlxExchangeParam = new ExchangeParam {Exchange = dlxName};
@@ -258,8 +258,8 @@ namespace Zaabee.RabbitMQ
                             var dlx = new DeadLetterMsg
                             {
                                 QueueName = queue,
-                                ExMsg = innestEx.Message,
-                                ExStack = innestEx.StackTrace,
+                                ExMsg = innermostEx.Message,
+                                ExStack = innermostEx.StackTrace,
                                 ThrowTime = DateTimeOffset.Now,
                                 BodyString = _serializer.BytesToString(ea.Body)
                             };
