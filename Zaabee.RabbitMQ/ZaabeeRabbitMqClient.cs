@@ -98,11 +98,15 @@ namespace Zaabee.RabbitMQ
         public void SubscribeEvent<T>(Action<T> handle, ushort prefetchCount = 10)
         {
             var eventName = GetTypeName(typeof(T));
-            var exchange = eventName;
             var methodFullName = $"{handle.Method.ReflectedType?.FullName}.{handle.Method.Name}[{eventName}]";
+            SubscribeEvent(methodFullName, handle, prefetchCount);
+        }
 
+        public void SubscribeEvent<T>(string queue, Action<T> handle, ushort prefetchCount = 10)
+        {
+            var exchange = GetTypeName(typeof(T));
             var exchangeParam = new ExchangeParam {Exchange = exchange};
-            var queueParam = new QueueParam {Queue = methodFullName};
+            var queueParam = new QueueParam {Queue = queue};
             var channel = GetReceiverChannel(exchangeParam, queueParam, prefetchCount);
 
             ConsumeEvent(channel, handle, queueParam.Queue);
@@ -153,14 +157,19 @@ namespace Zaabee.RabbitMQ
         public void SubscribeMessage<T>(Action<T> handle, ushort prefetchCount = 10)
         {
             var messageName = GetTypeName(typeof(T));
-            var exchange = messageName;
             var methodFullName = $"{handle.Method.ReflectedType?.FullName}.{handle.Method.Name}[{messageName}]";
 
-            var exchangeParam = new ExchangeParam {Exchange = exchange, Durable = false};
-            var queueParam = new QueueParam {Queue = methodFullName, Durable = false};
-            var channel = GetReceiverChannel(exchangeParam, queueParam, prefetchCount);
+            SubscribeMessage(methodFullName, handle, prefetchCount);
+        }
 
-            ConsumeMessage(channel, handle, queueParam.Queue);
+        public void SubscribeMessage<T>(string queue, Action<T> handle, ushort prefetchCount = 10)
+        {
+            var exchange = GetTypeName(typeof(T));
+            var exchangeParam = new ExchangeParam {Exchange = exchange, Durable = false};
+            var queueParam = new QueueParam {Queue = queue, Durable = false};
+            var channel = GetReceiverChannel(exchangeParam, queueParam, prefetchCount);
+            
+            ConsumeEvent(channel, handle, queueParam.Queue);
         }
 
         public void ListenMessage<T>(Action<T> handle, ushort prefetchCount = 10)
