@@ -16,17 +16,17 @@ namespace Demo
         {
 //            _messageBus.ReceiveEvent<TestEvent>(TestEventHandler);
 //            _messageBus.SubscribeEvent<TestEvent>(TestEventHandler);
-            _messageBus.ReceiveEvent<TestEvent>(TestEventExceptionHandler);
-            _messageBus.SubscribeEvent<TestEvent>(TestEventExceptionHandler);
-            _messageBus.ReceiveEvent<TestEventWithVersion>(TestEventWithVersionHandler);
-            _messageBus.ReceiveEvent<TestEventWithVersion>(TestEventExceptionWithVersionHandler, 20);
-            _messageBus.ReceiveMessage<TestMessage>(TestMessageHandler);
-            _messageBus.SubscribeMessage<TestMessage>(TestMessageHandler);
-            _messageBus.ListenMessage<TestMessage>(TestMessageHandler);
+//            _messageBus.ReceiveEvent<TestEvent>(TestEventExceptionHandler);
+//            _messageBus.SubscribeEvent<TestEvent>(TestEventExceptionHandler);
+//            _messageBus.ReceiveEvent<TestEventWithVersion>(TestEventWithVersionHandler);
+//            _messageBus.ReceiveEvent<TestEventWithVersion>(TestEventExceptionWithVersionHandler, 20);
+//            _messageBus.ReceiveMessage<TestMessage>(TestMessageHandler);
+//            _messageBus.SubscribeMessage<TestMessage>(TestMessageHandler);
+//            _messageBus.ListenMessage<TestMessage>(TestMessageHandler);
             _messageBus.RepublishDeadLetterEvent<TestEvent>(
-                "dead-letter-Demo.ServiceRunner.TestEventExceptionHandler[Demo.TestEvent]");
-            _messageBus.RepublishDeadLetterEvent<TestEvent>(
-                "dead-letter-Demo.TestEvent");
+                "dead-letter-EmailApplication.EmailEventHandler.Handle[EmailContract.EmailCommand]");
+//            _messageBus.RepublishDeadLetterEvent<TestEvent>(
+//                "dead-letter-Demo.TestEvent");
         }
 
         public void TestEventHandler(TestEvent testEvent)

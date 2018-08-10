@@ -112,7 +112,7 @@ namespace Zaabee.RabbitMQ
             ConsumeEvent(channel, handle, queueParam.Queue);
         }
 
-        public void RepublishDeadLetterEvent<T>(string deadLetterQueueName, ushort prefetchCount = 10)
+        public void RepublishDeadLetterEvent<T>(string deadLetterQueueName, ushort prefetchCount = 1)
         {
             var queueParam = new QueueParam {Queue = deadLetterQueueName};
             var channel = GetReceiverChannel(null, queueParam, prefetchCount);
