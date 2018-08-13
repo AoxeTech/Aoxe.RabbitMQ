@@ -11,13 +11,13 @@ namespace Zaabee.RabbitMQ
 {
     public class ZaabeeRabbitMqClient : IZaabeeRabbitMqClient
     {
-        private static IConnection _conn;
-        private static ISerializer _serializer;
+        private readonly IConnection _conn;
+        private readonly ISerializer _serializer;
 
-        private static readonly ConcurrentDictionary<string, IModel> SubscriberChannelDic =
+        private readonly ConcurrentDictionary<string, IModel> _subscriberChannelDic =
             new ConcurrentDictionary<string, IModel>();
 
-        private static readonly ConcurrentDictionary<Type, string> QueueNameDic =
+        private readonly ConcurrentDictionary<Type, string> _queueNameDic =
             new ConcurrentDictionary<Type, string>();
 
         private static readonly object LockObj = new object();
@@ -187,7 +187,7 @@ namespace Zaabee.RabbitMQ
             ConsumeMessage(channel, handle, queueParam.Queue);
         }
 
-        private static IModel CreatePublisherChannel(ExchangeParam exchangeParam, QueueParam queueParam)
+        private IModel CreatePublisherChannel(ExchangeParam exchangeParam, QueueParam queueParam)
         {
             var channel = _conn.CreateModel();
 
@@ -209,10 +209,10 @@ namespace Zaabee.RabbitMQ
             return channel;
         }
 
-        private static IModel GetReceiverChannel(ExchangeParam exchangeParam, QueueParam queueParam,
+        private IModel GetReceiverChannel(ExchangeParam exchangeParam, QueueParam queueParam,
             ushort prefetchCount)
         {
-            return SubscriberChannelDic.GetOrAdd(queueParam.Queue, key =>
+            return _subscriberChannelDic.GetOrAdd(queueParam.Queue, key =>
             {
                 var channel = _conn.CreateModel();
 
@@ -238,7 +238,7 @@ namespace Zaabee.RabbitMQ
             });
         }
 
-        private static void ConsumeEvent<T>(IModel channel, Action<T> handle, string queue)
+        private void ConsumeEvent<T>(IModel channel, Action<T> handle, string queue)
         {
             var consumer = new EventingBasicConsumer(channel);
             consumer.Received += (model, ea) =>
@@ -286,7 +286,7 @@ namespace Zaabee.RabbitMQ
             channel.BasicConsume(queue: queue, autoAck: false, consumer: consumer);
         }
 
-        private static void ConsumeMessage<T>(IModel channel, Action<T> handle, string queue)
+        private void ConsumeMessage<T>(IModel channel, Action<T> handle, string queue)
         {
             var consumer = new EventingBasicConsumer(channel);
             consumer.Received += (model, ea) =>
@@ -308,9 +308,9 @@ namespace Zaabee.RabbitMQ
             channel.BasicConsume(queue: queue, autoAck: false, consumer: consumer);
         }
 
-        private static string GetTypeName(Type type)
+        private string GetTypeName(Type type)
         {
-            return QueueNameDic.GetOrAdd(type,
+            return _queueNameDic.GetOrAdd(type,
                 key => !(type.GetCustomAttributes(typeof(MessageVersionAttribute), false).FirstOrDefault() is
                     MessageVersionAttribute msgVerAttr)
                     ? type.ToString()

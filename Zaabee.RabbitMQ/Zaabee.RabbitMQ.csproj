@@ -2,15 +2,15 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <PackageVersion>1.2.7.1</PackageVersion>
-    <Version>1.2.7.1</Version>
+    <PackageVersion>1.2.7.2</PackageVersion>
+    <Version>1.2.7.2</Version>
     <Authors>Mutuduxf</Authors>
     <Company>Mutuduxf</Company>
     <PackageTags>Zaaby Zaabee MessageQueue MQ MessageBus RabbitMQ</PackageTags>
     <PackageProjectUrl>https://github.com/Mutuduxf/Zaabee.RabbitMQ</PackageProjectUrl>
     <Description>Rabbit client wrapper for asp.net core or Zaaby</Description>
     <PackageLicenseUrl>https://raw.githubusercontent.com/Mutuduxf/Zaabee.RabbitMQ/master/LICENSE</PackageLicenseUrl>
-    <PackageReleaseNotes>Complete RepublishDeadLetterEvent</PackageReleaseNotes>
+    <PackageReleaseNotes>Remove static members.</PackageReleaseNotes>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="RabbitMQ.Client" Version="5.1.0" />
