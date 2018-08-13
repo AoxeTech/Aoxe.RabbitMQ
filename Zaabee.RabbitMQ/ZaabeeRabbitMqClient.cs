@@ -20,32 +20,24 @@ namespace Zaabee.RabbitMQ
         private readonly ConcurrentDictionary<Type, string> _queueNameDic =
             new ConcurrentDictionary<Type, string>();
 
-        private static readonly object LockObj = new object();
-
         public ZaabeeRabbitMqClient(MqConfig config, ISerializer serializer)
         {
             if (config == null) throw new ArgumentNullException(nameof(config));
             if (serializer == null) throw new ArgumentNullException(nameof(serializer));
             if (config.Hosts.Count == 0) throw new ArgumentNullException(nameof(config.Hosts));
-            if (_conn != null) return;
-            lock (LockObj)
+            
+            var factory = new ConnectionFactory
             {
-                if (_conn != null) return;
+                RequestedHeartbeat = config.HeartBeat,
+                AutomaticRecoveryEnabled = config.AutomaticRecoveryEnabled,
+                NetworkRecoveryInterval = config.NetworkRecoveryInterval,
+                UserName = config.UserName,
+                Password = config.Password,
+                VirtualHost = string.IsNullOrWhiteSpace(config.VirtualHost) ? "/" : config.VirtualHost,
+            };
 
-                var factory = new ConnectionFactory
-                {
-                    RequestedHeartbeat = config.HeartBeat,
-                    AutomaticRecoveryEnabled = config.AutomaticRecoveryEnabled,
-                    NetworkRecoveryInterval = config.NetworkRecoveryInterval,
-                    UserName = config.UserName,
-                    Password = config.Password,
-                    VirtualHost = string.IsNullOrWhiteSpace(config.VirtualHost) ? "/" : config.VirtualHost,
-                };
-
-                _conn = config.Hosts.Any() ? factory.CreateConnection(config.Hosts) : factory.CreateConnection();
-
-                _serializer = serializer;
-            }
+            _conn = config.Hosts.Any() ? factory.CreateConnection(config.Hosts) : factory.CreateConnection();
+            _serializer = serializer;
         }
 
         public void PublishEvent<T>(T @event)
