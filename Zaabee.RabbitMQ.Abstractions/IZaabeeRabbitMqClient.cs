@@ -5,9 +5,11 @@ namespace Zaabee.RabbitMQ.Abstractions
     public interface IZaabeeRabbitMqClient
     {
         void PublishEvent<T>(T @event);
-        void PublishEvent(string eventName, byte[] body);
+        void PublishEvent<T>(string exchangeName, T @event);
+        void PublishEvent(string exchangeName, byte[] body);
         void PublishMessage<T>(T message);
-        void PublishMessage(string messageName, byte[] body);
+        void PublishMessage<T>(string exchangeName, T message);
+        void PublishMessage(string exchangeName, byte[] body);
 
         /// <summary>
         /// The subscriber cluster will receive the event by the default queue.
@@ -68,7 +70,7 @@ namespace Zaabee.RabbitMQ.Abstractions
         /// <param name="prefetchCount"></param>
         /// <typeparam name="T"></typeparam>
         void SubscribeMessage<T>(string queue, Action<T> handle, ushort prefetchCount = 10);
-        
+
         /// <summary>
         /// The subscriber cluster will receive the message by the specified exchange and queue.
         /// </summary>

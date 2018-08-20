@@ -42,14 +42,19 @@ namespace Zaabee.RabbitMQ
 
         public void PublishEvent<T>(T @event)
         {
-            var eventName = GetTypeName(typeof(T));
-            var body = _serializer.Serialize(@event);
-            PublishEvent(eventName, body);
+            var exchangeName = GetTypeName(typeof(T));
+            PublishEvent(exchangeName, @event);
         }
 
-        public void PublishEvent(string eventName, byte[] body)
+        public void PublishEvent<T>(string exchangeName, T @event)
         {
-            var exchangeParam = new ExchangeParam {Exchange = eventName};
+            var body = _serializer.Serialize(@event);
+            PublishEvent(exchangeName, body);
+        }
+
+        public void PublishEvent(string exchangeName, byte[] body)
+        {
+            var exchangeParam = new ExchangeParam {Exchange = exchangeName};
             using (var channel = CreatePublisherChannel(exchangeParam, null))
             {
                 var properties = channel.CreateBasicProperties();
@@ -62,14 +67,19 @@ namespace Zaabee.RabbitMQ
 
         public void PublishMessage<T>(T message)
         {
-            var messageName = GetTypeName(typeof(T));
-            var body = _serializer.Serialize(message);
-            PublishMessage(messageName, body);
+            var exchangeName = GetTypeName(typeof(T));
+            PublishMessage(exchangeName,message);
         }
 
-        public void PublishMessage(string messageName, byte[] body)
+        public void PublishMessage<T>(string exchangeName, T message)
         {
-            var exchangeParam = new ExchangeParam {Exchange = messageName, Durable = false};
+            var body = _serializer.Serialize(message);
+            PublishMessage(exchangeName, body);
+        }
+
+        public void PublishMessage(string exchangeName, byte[] body)
+        {
+            var exchangeParam = new ExchangeParam {Exchange = exchangeName, Durable = false};
             using (var channel = CreatePublisherChannel(exchangeParam, null))
             {
                 var routingKey = exchangeParam.Exchange;
@@ -161,8 +171,8 @@ namespace Zaabee.RabbitMQ
 
         public void SubscribeMessage<T>(string queue, Action<T> handle, ushort prefetchCount = 10)
         {
-            var exchange = GetTypeName(typeof(T));
-            SubscribeMessage(exchange, queue, handle, prefetchCount);
+            var messageName = GetTypeName(typeof(T));
+            SubscribeMessage(messageName, queue, handle, prefetchCount);
         }
 
         public void SubscribeMessage<T>(string exchange, string queue, Action<T> handle, ushort prefetchCount = 10)
@@ -176,12 +186,11 @@ namespace Zaabee.RabbitMQ
 
         public void ListenMessage<T>(Action<T> handle, ushort prefetchCount = 10)
         {
-            var messageName = GetTypeName(typeof(T));
-            var exchange = messageName;
+            var exchangeName = GetTypeName(typeof(T));
             var methodFullName =
-                $"{handle.Method.ReflectedType?.FullName}.{handle.Method.Name}[{messageName}][{Guid.NewGuid()}]";
+                $"{handle.Method.ReflectedType?.FullName}.{handle.Method.Name}[{exchangeName}][{Guid.NewGuid()}]";
 
-            var exchangeParam = new ExchangeParam {Exchange = exchange, Durable = false};
+            var exchangeParam = new ExchangeParam {Exchange = exchangeName, Durable = false};
             var queueParam =
                 new QueueParam {Queue = methodFullName, Durable = false, Exclusive = true, AutoDelete = true};
             var channel = GetReceiverChannel(exchangeParam, queueParam, prefetchCount);
