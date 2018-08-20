@@ -97,6 +97,11 @@ namespace Zaabee.RabbitMQ
         public void SubscribeEvent<T>(string queue, Action<T> handle, ushort prefetchCount = 10)
         {
             var exchange = GetTypeName(typeof(T));
+            SubscribeEvent(exchange, queue, handle, prefetchCount);
+        }
+
+        public void SubscribeEvent<T>(string exchange, string queue, Action<T> handle, ushort prefetchCount = 10)
+        {
             var exchangeParam = new ExchangeParam {Exchange = exchange};
             var queueParam = new QueueParam {Queue = queue};
             var channel = GetReceiverChannel(exchangeParam, queueParam, prefetchCount);
@@ -157,6 +162,11 @@ namespace Zaabee.RabbitMQ
         public void SubscribeMessage<T>(string queue, Action<T> handle, ushort prefetchCount = 10)
         {
             var exchange = GetTypeName(typeof(T));
+            SubscribeMessage(exchange, queue, handle, prefetchCount);
+        }
+
+        public void SubscribeMessage<T>(string exchange, string queue, Action<T> handle, ushort prefetchCount = 10)
+        {
             var exchangeParam = new ExchangeParam {Exchange = exchange, Durable = false};
             var queueParam = new QueueParam {Queue = queue, Durable = false};
             var channel = GetReceiverChannel(exchangeParam, queueParam, prefetchCount);

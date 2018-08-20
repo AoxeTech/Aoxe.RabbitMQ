@@ -35,6 +35,16 @@ namespace Zaabee.RabbitMQ.Abstractions
         void SubscribeEvent<T>(string queue, Action<T> handle, ushort prefetchCount = 10);
 
         /// <summary>
+        /// The subscriber cluster will receive the event by the specified exchange and queue.
+        /// </summary>
+        /// <param name="exchange"></param>
+        /// <param name="queue"></param>
+        /// <param name="handle"></param>
+        /// <param name="prefetchCount"></param>
+        /// <typeparam name="T"></typeparam>
+        void SubscribeEvent<T>(string exchange, string queue, Action<T> handle, ushort prefetchCount = 10);
+
+        /// <summary>
         /// The subscriber cluster will receive the message by the default queue.
         /// </summary>
         /// <param name="handle"></param>
@@ -58,6 +68,16 @@ namespace Zaabee.RabbitMQ.Abstractions
         /// <param name="prefetchCount"></param>
         /// <typeparam name="T"></typeparam>
         void SubscribeMessage<T>(string queue, Action<T> handle, ushort prefetchCount = 10);
+        
+        /// <summary>
+        /// The subscriber cluster will receive the message by the specified exchange and queue.
+        /// </summary>
+        /// <param name="exchange"></param>
+        /// <param name="queue"></param>
+        /// <param name="handle"></param>
+        /// <param name="prefetchCount"></param>
+        /// <typeparam name="T"></typeparam>
+        void SubscribeMessage<T>(string exchange, string queue, Action<T> handle, ushort prefetchCount = 10);
 
         /// <summary>
         /// The subscriber node will receive the message by its own queue.
