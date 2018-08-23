@@ -30,9 +30,9 @@ namespace Demo
                     AutomaticRecoveryEnabled = true,
                     HeartBeat = 60,
                     NetworkRecoveryInterval = new TimeSpan(60),
-                    Hosts = new List<string>{"172.31.200.20"},
-                    UserName = "FlytAdmin",
-                    Password = "wuliuadmin"
+                    Hosts = new List<string>{"192.168.78.152"},
+                    UserName = "guest",
+                    Password = "guest"
                 }, new Serializer()));
             services.AddSingleton<ServiceRunner>();
         }

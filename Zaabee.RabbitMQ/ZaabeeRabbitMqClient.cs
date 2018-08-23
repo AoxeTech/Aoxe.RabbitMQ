@@ -25,7 +25,7 @@ namespace Zaabee.RabbitMQ
             if (config == null) throw new ArgumentNullException(nameof(config));
             if (serializer == null) throw new ArgumentNullException(nameof(serializer));
             if (config.Hosts.Count == 0) throw new ArgumentNullException(nameof(config.Hosts));
-            
+
             var factory = new ConnectionFactory
             {
                 RequestedHeartbeat = config.HeartBeat,
@@ -68,7 +68,7 @@ namespace Zaabee.RabbitMQ
         public void PublishMessage<T>(T message)
         {
             var exchangeName = GetTypeName(typeof(T));
-            PublishMessage(exchangeName,message);
+            PublishMessage(exchangeName, message);
         }
 
         public void PublishMessage<T>(string exchangeName, T message)
@@ -97,17 +97,39 @@ namespace Zaabee.RabbitMQ
             ConsumeEvent(channel, handle, eventName);
         }
 
-        public void SubscribeEvent<T>(Action<T> handle, ushort prefetchCount = 10)
+        public void ReceiveEvent<T>(Func<Action<T>> resolve, ushort prefetchCount = 10)
         {
             var eventName = GetTypeName(typeof(T));
-            var methodFullName = $"{handle.Method.ReflectedType?.FullName}.{handle.Method.Name}[{eventName}]";
+            var exchangeParam = new ExchangeParam {Exchange = eventName};
+            var queueParam = new QueueParam {Queue = eventName};
+            var channel = GetReceiverChannel(exchangeParam, queueParam, prefetchCount);
+
+            ConsumeEvent(channel, resolve, eventName);
+        }
+
+        public void SubscribeEvent<T>(Action<T> handle, ushort prefetchCount = 10)
+        {
+            var methodFullName = GetQueueName(handle);
             SubscribeEvent(methodFullName, handle, prefetchCount);
+        }
+
+        public void SubscribeEvent<T>(Func<Action<T>> resolve, ushort prefetchCount = 10)
+        {
+            var handle = resolve();
+            var methodFullName = GetQueueName(handle);
+            SubscribeEvent(methodFullName, resolve, prefetchCount);
         }
 
         public void SubscribeEvent<T>(string queue, Action<T> handle, ushort prefetchCount = 10)
         {
             var exchange = GetTypeName(typeof(T));
             SubscribeEvent(exchange, queue, handle, prefetchCount);
+        }
+
+        public void SubscribeEvent<T>(string queue, Func<Action<T>> resolve, ushort prefetchCount = 10)
+        {
+            var exchange = GetTypeName(typeof(T));
+            SubscribeEvent(exchange, queue, resolve, prefetchCount);
         }
 
         public void SubscribeEvent<T>(string exchange, string queue, Action<T> handle, ushort prefetchCount = 10)
@@ -117,6 +139,15 @@ namespace Zaabee.RabbitMQ
             var channel = GetReceiverChannel(exchangeParam, queueParam, prefetchCount);
 
             ConsumeEvent(channel, handle, queueParam.Queue);
+        }
+
+        public void SubscribeEvent<T>(string exchange, string queue, Func<Action<T>> resolve, ushort prefetchCount = 10)
+        {
+            var exchangeParam = new ExchangeParam {Exchange = exchange};
+            var queueParam = new QueueParam {Queue = queue};
+            var channel = GetReceiverChannel(exchangeParam, queueParam, prefetchCount);
+
+            ConsumeEvent(channel, resolve, queueParam.Queue);
         }
 
         public void RepublishDeadLetterEvent<T>(string deadLetterQueueName, ushort prefetchCount = 1)
@@ -161,12 +192,29 @@ namespace Zaabee.RabbitMQ
             ConsumeMessage(channel, handle, messageName);
         }
 
-        public void SubscribeMessage<T>(Action<T> handle, ushort prefetchCount = 10)
+        public void ReceiveMessage<T>(Func<Action<T>> resolve, ushort prefetchCount = 10)
         {
             var messageName = GetTypeName(typeof(T));
-            var methodFullName = $"{handle.Method.ReflectedType?.FullName}.{handle.Method.Name}[{messageName}]";
+            var exchangeParam = new ExchangeParam {Exchange = messageName, Durable = false};
+            var queueParam = new QueueParam {Queue = messageName, Durable = false};
+            var channel = GetReceiverChannel(exchangeParam, queueParam, prefetchCount);
+
+            ConsumeMessage(channel, resolve, messageName);
+        }
+
+        public void SubscribeMessage<T>(Action<T> handle, ushort prefetchCount = 10)
+        {
+            var methodFullName = GetQueueName(handle);
 
             SubscribeMessage(methodFullName, handle, prefetchCount);
+        }
+
+        public void SubscribeMessage<T>(Func<Action<T>> resolve, ushort prefetchCount = 10)
+        {
+            var handle = resolve();
+            var methodFullName = GetQueueName(handle);
+
+            SubscribeMessage(methodFullName, resolve, prefetchCount);
         }
 
         public void SubscribeMessage<T>(string queue, Action<T> handle, ushort prefetchCount = 10)
@@ -175,13 +223,29 @@ namespace Zaabee.RabbitMQ
             SubscribeMessage(messageName, queue, handle, prefetchCount);
         }
 
+        public void SubscribeMessage<T>(string queue, Func<Action<T>> resolve, ushort prefetchCount = 10)
+        {
+            var messageName = GetTypeName(typeof(T));
+            SubscribeMessage(messageName, queue, resolve, prefetchCount);
+        }
+
         public void SubscribeMessage<T>(string exchange, string queue, Action<T> handle, ushort prefetchCount = 10)
         {
             var exchangeParam = new ExchangeParam {Exchange = exchange, Durable = false};
             var queueParam = new QueueParam {Queue = queue, Durable = false};
             var channel = GetReceiverChannel(exchangeParam, queueParam, prefetchCount);
-            
+
             ConsumeEvent(channel, handle, queueParam.Queue);
+        }
+
+        public void SubscribeMessage<T>(string exchange, string queue, Func<Action<T>> resolve,
+            ushort prefetchCount = 10)
+        {
+            var exchangeParam = new ExchangeParam {Exchange = exchange, Durable = false};
+            var queueParam = new QueueParam {Queue = queue, Durable = false};
+            var channel = GetReceiverChannel(exchangeParam, queueParam, prefetchCount);
+
+            ConsumeEvent(channel, resolve, queueParam.Queue);
         }
 
         public void ListenMessage<T>(Action<T> handle, ushort prefetchCount = 10)
@@ -297,6 +361,54 @@ namespace Zaabee.RabbitMQ
             channel.BasicConsume(queue: queue, autoAck: false, consumer: consumer);
         }
 
+        private void ConsumeEvent<T>(IModel channel, Func<Action<T>> resolve, string queue)
+        {
+            var consumer = new EventingBasicConsumer(channel);
+            consumer.Received += (model, ea) =>
+            {
+                Task.Run(() =>
+                {
+                    try
+                    {
+                        var msg = _serializer.Deserialize<T>(ea.Body);
+                        resolve.Invoke()(msg);
+                    }
+                    catch (Exception ex)
+                    {
+                        var innermostEx = ex.GetInnestException();
+
+                        var dlxName = GetDeadLetterName(queue);
+                        var dlxExchangeParam = new ExchangeParam {Exchange = dlxName};
+                        var dlxQueueParam = new QueueParam {Queue = dlxName};
+
+                        using (var deadLetterMsgChannel = CreatePublisherChannel(dlxExchangeParam, dlxQueueParam))
+                        {
+                            var properties = deadLetterMsgChannel.CreateBasicProperties();
+                            properties.Persistent = true;
+                            var routingKey = dlxExchangeParam.Exchange;
+
+                            var dlx = new DeadLetterMsg
+                            {
+                                QueueName = queue,
+                                ExMsg = innermostEx.Message,
+                                ExStack = innermostEx.StackTrace,
+                                ThrowTime = DateTimeOffset.Now,
+                                BodyString = _serializer.BytesToString(ea.Body)
+                            };
+
+                            deadLetterMsgChannel.BasicPublish(dlxExchangeParam.Exchange, routingKey, properties,
+                                _serializer.Serialize(dlx));
+                        }
+                    }
+                    finally
+                    {
+                        channel.BasicAck(ea.DeliveryTag, false);
+                    }
+                });
+            };
+            channel.BasicConsume(queue: queue, autoAck: false, consumer: consumer);
+        }
+
         private void ConsumeMessage<T>(IModel channel, Action<T> handle, string queue)
         {
             var consumer = new EventingBasicConsumer(channel);
@@ -319,6 +431,28 @@ namespace Zaabee.RabbitMQ
             channel.BasicConsume(queue: queue, autoAck: false, consumer: consumer);
         }
 
+        private void ConsumeMessage<T>(IModel channel, Func<Action<T>> resolve, string queue)
+        {
+            var consumer = new EventingBasicConsumer(channel);
+            consumer.Received += (model, ea) =>
+            {
+                Task.Run(() =>
+                {
+                    try
+                    {
+                        var body = ea.Body;
+                        var msg = _serializer.Deserialize<T>(body);
+                        resolve.Invoke()(msg);
+                    }
+                    finally
+                    {
+                        channel.BasicAck(ea.DeliveryTag, false);
+                    }
+                });
+            };
+            channel.BasicConsume(queue: queue, autoAck: false, consumer: consumer);
+        }
+
         private string GetTypeName(Type type)
         {
             return _queueNameDic.GetOrAdd(type,
@@ -326,6 +460,12 @@ namespace Zaabee.RabbitMQ
                     MessageVersionAttribute msgVerAttr)
                     ? type.ToString()
                     : $"{type.ToString()}[{msgVerAttr.Version}]");
+        }
+
+        private string GetQueueName<T>(Action<T> handle)
+        {
+            var messageName = GetTypeName(typeof(T));
+            return $"{handle.Method.ReflectedType?.FullName}.{handle.Method.Name}[{messageName}]";
         }
 
         private static string GetDeadLetterName(string name)
