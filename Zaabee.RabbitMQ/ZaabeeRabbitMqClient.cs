@@ -9,7 +9,7 @@ using Zaabee.RabbitMQ.ISerialize;
 
 namespace Zaabee.RabbitMQ
 {
-    public class ZaabeeRabbitMqClient : IZaabeeRabbitMqClient
+    public class ZaabeeRabbitMqClient : IZaabeeRabbitMqClient, IDisposable
     {
         private readonly IConnection _conn;
         private readonly ISerializer _serializer;
@@ -54,7 +54,7 @@ namespace Zaabee.RabbitMQ
 
         public void PublishEvent(string exchangeName, byte[] body)
         {
-            var exchangeParam = new ExchangeParam {Exchange = exchangeName};
+            var exchangeParam = new ExchangeParam { Exchange = exchangeName };
             using (var channel = CreatePublisherChannel(exchangeParam, null))
             {
                 var properties = channel.CreateBasicProperties();
@@ -79,7 +79,7 @@ namespace Zaabee.RabbitMQ
 
         public void PublishMessage(string exchangeName, byte[] body)
         {
-            var exchangeParam = new ExchangeParam {Exchange = exchangeName, Durable = false};
+            var exchangeParam = new ExchangeParam { Exchange = exchangeName, Durable = false };
             using (var channel = CreatePublisherChannel(exchangeParam, null))
             {
                 var routingKey = exchangeParam.Exchange;
@@ -90,8 +90,8 @@ namespace Zaabee.RabbitMQ
         public void ReceiveEvent<T>(Action<T> handle, ushort prefetchCount = 10)
         {
             var eventName = GetTypeName(typeof(T));
-            var exchangeParam = new ExchangeParam {Exchange = eventName};
-            var queueParam = new QueueParam {Queue = eventName};
+            var exchangeParam = new ExchangeParam { Exchange = eventName };
+            var queueParam = new QueueParam { Queue = eventName };
             var channel = GetReceiverChannel(exchangeParam, queueParam, prefetchCount);
 
             ConsumeEvent(channel, handle, eventName);
@@ -100,8 +100,8 @@ namespace Zaabee.RabbitMQ
         public void ReceiveEvent<T>(Func<Action<T>> resolve, ushort prefetchCount = 10)
         {
             var eventName = GetTypeName(typeof(T));
-            var exchangeParam = new ExchangeParam {Exchange = eventName};
-            var queueParam = new QueueParam {Queue = eventName};
+            var exchangeParam = new ExchangeParam { Exchange = eventName };
+            var queueParam = new QueueParam { Queue = eventName };
             var channel = GetReceiverChannel(exchangeParam, queueParam, prefetchCount);
 
             ConsumeEvent(channel, resolve, eventName);
@@ -134,8 +134,8 @@ namespace Zaabee.RabbitMQ
 
         public void SubscribeEvent<T>(string exchange, string queue, Action<T> handle, ushort prefetchCount = 10)
         {
-            var exchangeParam = new ExchangeParam {Exchange = exchange};
-            var queueParam = new QueueParam {Queue = queue};
+            var exchangeParam = new ExchangeParam { Exchange = exchange };
+            var queueParam = new QueueParam { Queue = queue };
             var channel = GetReceiverChannel(exchangeParam, queueParam, prefetchCount);
 
             ConsumeEvent(channel, handle, queueParam.Queue);
@@ -143,8 +143,8 @@ namespace Zaabee.RabbitMQ
 
         public void SubscribeEvent<T>(string exchange, string queue, Func<Action<T>> resolve, ushort prefetchCount = 10)
         {
-            var exchangeParam = new ExchangeParam {Exchange = exchange};
-            var queueParam = new QueueParam {Queue = queue};
+            var exchangeParam = new ExchangeParam { Exchange = exchange };
+            var queueParam = new QueueParam { Queue = queue };
             var channel = GetReceiverChannel(exchangeParam, queueParam, prefetchCount);
 
             ConsumeEvent(channel, resolve, queueParam.Queue);
@@ -152,7 +152,7 @@ namespace Zaabee.RabbitMQ
 
         public void RepublishDeadLetterEvent<T>(string deadLetterQueueName, ushort prefetchCount = 1)
         {
-            var queueParam = new QueueParam {Queue = deadLetterQueueName};
+            var queueParam = new QueueParam { Queue = deadLetterQueueName };
             var channel = GetReceiverChannel(null, queueParam, prefetchCount);
 
             var consumer = new EventingBasicConsumer(channel);
@@ -162,9 +162,9 @@ namespace Zaabee.RabbitMQ
                 var msg = _serializer.Deserialize<DeadLetterMsg>(body);
 
                 var republishExchangeParam =
-                    new ExchangeParam {Exchange = $"republish-{deadLetterQueueName}", Durable = true};
+                    new ExchangeParam { Exchange = $"republish-{deadLetterQueueName}", Durable = true };
                 var republishQueueParam =
-                    new QueueParam {Queue = FromDeadLetterName(deadLetterQueueName), Durable = true};
+                    new QueueParam { Queue = FromDeadLetterName(deadLetterQueueName), Durable = true };
                 using (var republishChannel = CreatePublisherChannel(republishExchangeParam, republishQueueParam))
                 {
                     var properties = republishChannel.CreateBasicProperties();
@@ -185,8 +185,8 @@ namespace Zaabee.RabbitMQ
         public void ReceiveMessage<T>(Action<T> handle, ushort prefetchCount = 10)
         {
             var messageName = GetTypeName(typeof(T));
-            var exchangeParam = new ExchangeParam {Exchange = messageName, Durable = false};
-            var queueParam = new QueueParam {Queue = messageName, Durable = false};
+            var exchangeParam = new ExchangeParam { Exchange = messageName, Durable = false };
+            var queueParam = new QueueParam { Queue = messageName, Durable = false };
             var channel = GetReceiverChannel(exchangeParam, queueParam, prefetchCount);
 
             ConsumeMessage(channel, handle, messageName);
@@ -195,8 +195,8 @@ namespace Zaabee.RabbitMQ
         public void ReceiveMessage<T>(Func<Action<T>> resolve, ushort prefetchCount = 10)
         {
             var messageName = GetTypeName(typeof(T));
-            var exchangeParam = new ExchangeParam {Exchange = messageName, Durable = false};
-            var queueParam = new QueueParam {Queue = messageName, Durable = false};
+            var exchangeParam = new ExchangeParam { Exchange = messageName, Durable = false };
+            var queueParam = new QueueParam { Queue = messageName, Durable = false };
             var channel = GetReceiverChannel(exchangeParam, queueParam, prefetchCount);
 
             ConsumeMessage(channel, resolve, messageName);
@@ -231,8 +231,8 @@ namespace Zaabee.RabbitMQ
 
         public void SubscribeMessage<T>(string exchange, string queue, Action<T> handle, ushort prefetchCount = 10)
         {
-            var exchangeParam = new ExchangeParam {Exchange = exchange, Durable = false};
-            var queueParam = new QueueParam {Queue = queue, Durable = false};
+            var exchangeParam = new ExchangeParam { Exchange = exchange, Durable = false };
+            var queueParam = new QueueParam { Queue = queue, Durable = false };
             var channel = GetReceiverChannel(exchangeParam, queueParam, prefetchCount);
 
             ConsumeEvent(channel, handle, queueParam.Queue);
@@ -241,8 +241,8 @@ namespace Zaabee.RabbitMQ
         public void SubscribeMessage<T>(string exchange, string queue, Func<Action<T>> resolve,
             ushort prefetchCount = 10)
         {
-            var exchangeParam = new ExchangeParam {Exchange = exchange, Durable = false};
-            var queueParam = new QueueParam {Queue = queue, Durable = false};
+            var exchangeParam = new ExchangeParam { Exchange = exchange, Durable = false };
+            var queueParam = new QueueParam { Queue = queue, Durable = false };
             var channel = GetReceiverChannel(exchangeParam, queueParam, prefetchCount);
 
             ConsumeEvent(channel, resolve, queueParam.Queue);
@@ -254,9 +254,9 @@ namespace Zaabee.RabbitMQ
             var methodFullName =
                 $"{handle.Method.ReflectedType?.FullName}.{handle.Method.Name}[{exchangeName}][{Guid.NewGuid()}]";
 
-            var exchangeParam = new ExchangeParam {Exchange = exchangeName, Durable = false};
+            var exchangeParam = new ExchangeParam { Exchange = exchangeName, Durable = false };
             var queueParam =
-                new QueueParam {Queue = methodFullName, Durable = false, Exclusive = true, AutoDelete = true};
+                new QueueParam { Queue = methodFullName, Durable = false, Exclusive = true, AutoDelete = true };
             var channel = GetReceiverChannel(exchangeParam, queueParam, prefetchCount);
 
             ConsumeMessage(channel, handle, queueParam.Queue);
@@ -330,8 +330,8 @@ namespace Zaabee.RabbitMQ
                         var innermostEx = ex.GetInnestException();
 
                         var dlxName = GetDeadLetterName(queue);
-                        var dlxExchangeParam = new ExchangeParam {Exchange = dlxName};
-                        var dlxQueueParam = new QueueParam {Queue = dlxName};
+                        var dlxExchangeParam = new ExchangeParam { Exchange = dlxName };
+                        var dlxQueueParam = new QueueParam { Queue = dlxName };
 
                         using (var deadLetterMsgChannel = CreatePublisherChannel(dlxExchangeParam, dlxQueueParam))
                         {
@@ -378,8 +378,8 @@ namespace Zaabee.RabbitMQ
                         var innermostEx = ex.GetInnestException();
 
                         var dlxName = GetDeadLetterName(queue);
-                        var dlxExchangeParam = new ExchangeParam {Exchange = dlxName};
-                        var dlxQueueParam = new QueueParam {Queue = dlxName};
+                        var dlxExchangeParam = new ExchangeParam { Exchange = dlxName };
+                        var dlxQueueParam = new QueueParam { Queue = dlxName };
 
                         using (var deadLetterMsgChannel = CreatePublisherChannel(dlxExchangeParam, dlxQueueParam))
                         {
@@ -476,6 +476,15 @@ namespace Zaabee.RabbitMQ
         private static string FromDeadLetterName(string deadLetterName)
         {
             return deadLetterName.Replace("dead-letter-", "");
+        }
+
+        public void Dispose()
+        {
+            foreach (var subscriberChannel in _subscriberChannelDic)
+            {
+                subscriberChannel.Value.Dispose();
+            }
+            _conn.Dispose();
         }
     }
 }
