@@ -225,6 +225,6 @@ The IEvent has two subscribe types and IMessage has three
 
 The differences between IEvent and IMessage is that IEvent will persist messages but IMessage will not.IMessage is designed for performance,thus it will not persist messages in the exchange and queue.
 
-When you send a message at first time it will create default exchange and queue named by the message full class name.The RECEIVE method will get the message from the default queue.The SUBSCRIBE method will create a new queue named by the handle and binding it to the message default exchange.So when you want to extend your service logic you just need to subscribe it and the previous services didn't need to recode or release.
+When you send a message at first time it will create default exchange named by the message full class name.The RECEIVE method will get the message from the queue whitch with the same name as exchange.The SUBSCRIBE method will create a new queue named by the handle and binding it to the message default exchange.So when you want to extend your service logic you just need to subscribe it and the previous services didn't need to recode or release.
 
 The LISTEN method based by the exclusive queue.It is for each node but not the cluster.When you need to refresh the local cache or the config you can use it.When the connection close,the LISTEN queue will be deleted.
