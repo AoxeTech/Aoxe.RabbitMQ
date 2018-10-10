@@ -15,8 +15,7 @@ namespace Demo
         {
 //            _messageBus.ReceiveEvent<TestEvent>(TestEventHandler);
 //            _messageBus.SubscribeEvent<TestEvent>(new Subscriber().TestEventHandler);
-            _messageBus
-                .SubscribeEvent<TestEvent>(() => new Subscriber().TestEventHandler);
+            _messageBus.SubscribeEvent<TestEvent>(() => new Subscriber().TestEventHandler);
 //            _messageBus.ReceiveEvent<TestEvent>(TestEventExceptionHandler);
 //            _messageBus.SubscribeEvent<TestEvent>(TestEventExceptionHandler);
 //            _messageBus.ReceiveEvent<TestEventWithVersion>(TestEventWithVersionHandler);
