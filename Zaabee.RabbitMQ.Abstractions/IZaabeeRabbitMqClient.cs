@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 
 namespace Zaabee.RabbitMQ.Abstractions
 {
@@ -10,6 +11,13 @@ namespace Zaabee.RabbitMQ.Abstractions
                 void PublishMessage<T>(T message);
                 void PublishMessage<T>(string exchangeName, T message);
                 void PublishMessage(string exchangeName, byte[] body);
+                
+                Task PublishEventAsync<T>(T @event);
+                Task PublishEventAsync<T>(string exchangeName, T @event);
+                Task PublishEventAsync(string exchangeName, byte[] body);
+                Task PublishMessageAsync<T>(T message);
+                Task PublishMessageAsync<T>(string exchangeName, T message);
+                Task PublishMessageAsync(string exchangeName, byte[] body);
 
                 /// <summary>
                 /// The subscriber cluster will receive the event by the default queue.
