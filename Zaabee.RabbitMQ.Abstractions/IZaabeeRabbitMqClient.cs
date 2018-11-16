@@ -2,7 +2,7 @@
 
 namespace Zaabee.RabbitMQ.Abstractions
 {
-        public interface IZaabeeRabbitMqClient
+        public interface IZaabeeRabbitMqClient : IDisposable
         {
                 void PublishEvent<T>(T @event);
                 void PublishEvent<T>(string exchangeName, T @event);
