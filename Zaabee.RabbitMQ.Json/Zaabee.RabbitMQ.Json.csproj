@@ -2,8 +2,8 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <PackageVersion>1.1.5</PackageVersion>
-    <Version>1.1.5</Version>
+    <PackageVersion>1.1.6</PackageVersion>
+    <Version>1.1.6</Version>
     <Authors>Mutuduxf</Authors>
     <Company>Mutuduxf</Company>
     <PackageTags>Zaaby Zaabee MessageQueue MQ MessageBus RabbitMQ Json</PackageTags>
@@ -12,7 +12,7 @@
     <PackageLicenseUrl>https://raw.githubusercontent.com/Mutuduxf/Zaabee.RabbitMQ/master/LICENSE</PackageLicenseUrl>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Zaabee.Json" Version="1.1.1" />
+    <PackageReference Include="Zaabee.Json" Version="1.1.2" />
     <PackageReference Include="Zaabee.RabbitMQ.ISerialize" Version="1.0.1.1" />
   </ItemGroup>
 </Project>
