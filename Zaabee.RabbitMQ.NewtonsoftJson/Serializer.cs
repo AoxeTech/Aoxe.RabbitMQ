@@ -1,7 +1,7 @@
-﻿using Zaabee.Json;
+﻿using Zaabee.NewtonsoftJson;
 using Zaabee.RabbitMQ.ISerialize;
 
-namespace Zaabee.RabbitMQ.Json
+namespace Zaabee.RabbitMQ.NewtonsoftJson
 {
     public class Serializer : ISerializer
     {

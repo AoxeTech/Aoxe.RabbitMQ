@@ -10,7 +10,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Zaabee.RabbitMQ.Jil\Zaabee.RabbitMQ.Jil.csproj" />
-    <ProjectReference Include="..\Zaabee.RabbitMQ.Json\Zaabee.RabbitMQ.Json.csproj" />
+    <ProjectReference Include="..\Zaabee.RabbitMQ.NewtonsoftJson\Zaabee.RabbitMQ.NewtonsoftJson.csproj" />
     <ProjectReference Include="..\Zaabee.RabbitMQ\Zaabee.RabbitMQ.csproj" />
   </ItemGroup>
 </Project>

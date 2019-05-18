@@ -7,7 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Zaabee.RabbitMQ;
 using Zaabee.RabbitMQ.Abstractions;
-using Zaabee.RabbitMQ.Json;
+using Zaabee.RabbitMQ.NewtonsoftJson;
 
 namespace Demo
 {
