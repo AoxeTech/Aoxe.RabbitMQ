@@ -11,9 +11,9 @@ RabbitMQ is lightweight and easy to deploy on premises and in the cloud. It supp
 ### NuGet
 
     Install-Package Zaabee.RabbitMQ
-    Install-Package Zaabee.RabbitMQ.Json
+    Install-Package Zaabee.RabbitMQ.NewtonsoftJson
 
-Or you can use another serializer base by [Jil](https://github.com/kevin-montrose/Jil) whitch named Zaaby.RabbitMQ.Jil,it will provide higher performance.
+Otherwise you can use other serializers like [Zaabee.RabbitMQ.Jil](https://github.com/Mutuduxf/Zaabee.RabbitMQ/tree/master/Zaabee.RabbitMQ.Jil) or [Zaabee.RabbitMQ.Utf8Json](https://github.com/Mutuduxf/Zaabee.RabbitMQ/tree/master/Zaabee.RabbitMQ.Utf8Json),they will provide higher performance.
 
 ### Asp.net core
 
@@ -25,7 +25,7 @@ Import reference in startup.cs
 using Zaabee.RabbitMQ;
 using Zaabee.RabbitMQ.Abstractions;
 using Zaabee.RabbitMQ.ISerialize;
-using Zaabee.RabbitMQ.Json;
+using Zaabee.RabbitMQ.NewtonsoftJson;
 ```
 
 Register ZabbyRabbitMqClient in ConfigureServices method
