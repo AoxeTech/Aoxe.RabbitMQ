@@ -12,6 +12,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zaabee.RabbitMQ.Jil", "Zaab
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zaabee.RabbitMQ.NewtonsoftJson", "Zaabee.RabbitMQ.NewtonsoftJson\Zaabee.RabbitMQ.NewtonsoftJson.csproj", "{F7F08855-D179-4A60-94A9-BC71EE4A4E88}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zaabee.RabbitMQ.Utf8Json", "Zaabee.RabbitMQ.Utf8Json\Zaabee.RabbitMQ.Utf8Json.csproj", "{F35434D5-3F53-4FCD-980E-8181A9644855}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -42,5 +44,9 @@ Global
 		{F7F08855-D179-4A60-94A9-BC71EE4A4E88}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F7F08855-D179-4A60-94A9-BC71EE4A4E88}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F7F08855-D179-4A60-94A9-BC71EE4A4E88}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F35434D5-3F53-4FCD-980E-8181A9644855}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F35434D5-3F53-4FCD-980E-8181A9644855}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F35434D5-3F53-4FCD-980E-8181A9644855}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F35434D5-3F53-4FCD-980E-8181A9644855}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

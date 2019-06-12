@@ -9,9 +9,9 @@ namespace Zaabee.RabbitMQ.Jil
             return str != null ? Encoding.UTF8.GetBytes(str) : null;
         }
 
-        public static string DeserializeUtf8(this byte[] stream)
+        public static string DeserializeUtf8(this byte[] bytes)
         {
-            return stream != null ? Encoding.UTF8.GetString(stream) : null;
+            return bytes != null ? Encoding.UTF8.GetString(bytes) : null;
         }
     }
 }

@@ -1,6 +1,6 @@
 ﻿using System.Text;
 
-namespace Zaabee.RabbitMQ.NewtonsoftJson
+namespace Zaabee.RabbitMQ.Utf8Json
 {
     public static class EncodingExtension
     {
