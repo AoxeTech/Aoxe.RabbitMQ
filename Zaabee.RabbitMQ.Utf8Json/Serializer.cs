@@ -1,5 +1,4 @@
-﻿using System;
-using Zaabee.RabbitMQ.ISerialize;
+﻿using Zaabee.RabbitMQ.ISerialize;
 using Zaabee.Utf8Json;
 
 namespace Zaabee.RabbitMQ.Utf8Json
