@@ -30,7 +30,7 @@ namespace Demo
                     AutomaticRecoveryEnabled = true,
                     HeartBeat = 60,
                     NetworkRecoveryInterval = new TimeSpan(60),
-                    Hosts = new List<string>{"192.168.78.152"},
+                    Hosts = new List<string>{"192.168.78.140"},
                     UserName = "guest",
                     Password = "guest"
                 }, new Serializer()));

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Zaabee.RabbitMQ.Abstractions;
 
@@ -34,6 +35,23 @@ namespace Demo.Controllers
 
         [HttpGet]
         [HttpPost]
+        public async Task<long> PublishEventAsync(int quantity)
+        {
+            var sw = Stopwatch.StartNew();
+            for (var i = 0; i < quantity; i++)
+            {
+                await _messageBus.PublishEventAsync(new TestEvent
+                {
+                    Id = Guid.NewGuid(),
+                    Timestamp = DateTimeOffset.Now
+                });
+            }
+
+            return sw.ElapsedMilliseconds;
+        }
+
+        [HttpGet]
+        [HttpPost]
         public long PublishEventWithVersion(int quantity)
         {
             var sw = Stopwatch.StartNew();
@@ -57,6 +75,23 @@ namespace Demo.Controllers
             for (var i = 0; i < quantity; i++)
             {
                 _messageBus.PublishMessage(new TestMessage
+                {
+                    Id = Guid.NewGuid(),
+                    Timestamp = DateTimeOffset.Now
+                });
+            }
+
+            return sw.ElapsedMilliseconds;
+        }
+
+        [HttpGet]
+        [HttpPost]
+        public async Task<long> PublishMessageAsync(int quantity)
+        {
+            var sw = Stopwatch.StartNew();
+            for (var i = 0; i < quantity; i++)
+            {
+                await _messageBus.PublishMessageAsync(new TestMessage
                 {
                     Id = Guid.NewGuid(),
                     Timestamp = DateTimeOffset.Now
