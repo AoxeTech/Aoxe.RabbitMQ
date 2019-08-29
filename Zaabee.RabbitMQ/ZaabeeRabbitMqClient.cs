@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Linq;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
@@ -18,8 +20,8 @@ namespace Zaabee.RabbitMQ
 
         public ZaabeeRabbitMqClient(MqConfig config, ISerializer serializer)
         {
-            if (config == null) throw new ArgumentNullException(nameof(config));
-            if (serializer == null) throw new ArgumentNullException(nameof(serializer));
+            if (config is null) throw new ArgumentNullException(nameof(config));
+            if (serializer is null) throw new ArgumentNullException(nameof(serializer));
             if (config.Hosts.Count == 0) throw new ArgumentNullException(nameof(config.Hosts));
 
             var factory = new ConnectionFactory
@@ -33,6 +35,18 @@ namespace Zaabee.RabbitMQ
             };
 
             _conn = config.Hosts.Any() ? factory.CreateConnection(config.Hosts) : factory.CreateConnection();
+            _serializer = serializer;
+        }
+
+        public ZaabeeRabbitMqClient(IConnectionFactory connectionFactory, ISerializer serializer,
+            IList<string> hosts = null)
+        {
+            if (connectionFactory is null) throw new ArgumentNullException(nameof(connectionFactory));
+            if (serializer is null) throw new ArgumentNullException(nameof(serializer));
+
+            _conn = hosts != null && hosts.Any()
+                ? connectionFactory.CreateConnection(hosts)
+                : connectionFactory.CreateConnection();
             _serializer = serializer;
         }
 
