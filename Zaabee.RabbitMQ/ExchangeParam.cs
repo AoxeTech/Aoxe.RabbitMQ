@@ -5,6 +5,7 @@ namespace Zaabee.RabbitMQ
     internal class ExchangeParam
     {
         private string _exchange;
+
         public string Exchange
         {
             get => _exchange?.Trim();
