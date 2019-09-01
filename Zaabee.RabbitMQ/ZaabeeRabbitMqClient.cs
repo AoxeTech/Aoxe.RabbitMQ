@@ -49,6 +49,12 @@ namespace Zaabee.RabbitMQ
             _serializer = serializer;
         }
 
+        public ZaabeeRabbitMqClient(IConnection connection, ISerializer serializer)
+        {
+            _conn = connection ?? throw new ArgumentNullException(nameof(connection));
+            _serializer = serializer ?? throw new ArgumentNullException(nameof(serializer));
+        }
+
         public void RepublishDeadLetterEvent<T>(string deadLetterQueueName, ushort prefetchCount = 1)
         {
             var queueParam = new QueueParam {Queue = deadLetterQueueName};
