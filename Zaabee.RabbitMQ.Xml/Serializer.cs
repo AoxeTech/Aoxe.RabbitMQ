@@ -1,8 +1,8 @@
 ﻿using System.Text;
-using Zaabee.NewtonsoftJson;
 using Zaabee.RabbitMQ.ISerialize;
+using Zaabee.Xml;
 
-namespace Zaabee.RabbitMQ.NewtonsoftJson
+namespace Zaabee.RabbitMQ.Xml
 {
     public class Serializer : ISerializer
     {
@@ -16,6 +16,6 @@ namespace Zaabee.RabbitMQ.NewtonsoftJson
             bytes != null ? Encoding.UTF8.GetString(bytes) : null;
 
         public T FromText<T>(string bytesToText) =>
-            string.IsNullOrWhiteSpace(bytesToText) ? default(T) : bytesToText.FromJson<T>();
+            string.IsNullOrWhiteSpace(bytesToText) ? default(T) : bytesToText.FromXml<T>();
     }
 }

@@ -284,7 +284,7 @@ namespace Zaabee.RabbitMQ
                     ExMsg = inmostEx.Message,
                     ExStack = inmostEx.StackTrace,
                     ThrowTime = DateTimeOffset.Now,
-                    BodyString = _serializer.BytesToString(ea.Body)
+                    BodyString = _serializer.BytesToText(ea.Body)
                 };
 
                 deadLetterMsgChannel.BasicPublish(dlxExchangeParam.Exchange, routingKey, properties,

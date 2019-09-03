@@ -4,14 +4,10 @@
     {
         byte[] Serialize<T>(T o);
 
-        byte[] StringToBytes(string str);
-
         T Deserialize<T>(byte[] bytes);
 
-        string ToString<T>(T o);
+        string BytesToText(byte[] bytes);
 
-        string BytesToString(byte[] bytes);
-
-        T FromString<T>(string str);
+        T FromText<T>(string text);
     }
 }

@@ -76,7 +76,7 @@ namespace Zaabee.RabbitMQ
                     properties.Persistent = true;
                     var routingKey = republishExchangeParam.Exchange;
 
-                    var deadLetter = _serializer.FromString<T>(msg.BodyString);
+                    var deadLetter = _serializer.FromText<T>(msg.BodyString);
 
                     republishChannel.BasicPublish(republishExchangeParam.Exchange, routingKey, properties,
                         _serializer.Serialize(deadLetter));
