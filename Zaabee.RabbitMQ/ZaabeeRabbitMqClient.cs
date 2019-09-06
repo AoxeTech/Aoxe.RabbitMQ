@@ -102,10 +102,16 @@ namespace Zaabee.RabbitMQ
             return $"{handle.Method.ReflectedType?.FullName}.{handle.Method.Name}[{messageName}]";
         }
 
-        private static string GetDeadLetterName(string name)=>
+        private string GetQueueName<T>(Func<Action<T>> resolve)
+        {
+            var handle = resolve();
+            return GetQueueName(handle);
+        }
+
+        private static string GetDeadLetterName(string name) =>
             $"dead-letter-{name}";
 
-        private static string FromDeadLetterName(string deadLetterName)=>
+        private static string FromDeadLetterName(string deadLetterName) =>
             deadLetterName.Replace("dead-letter-", "");
 
         public void Dispose()

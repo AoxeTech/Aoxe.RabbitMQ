@@ -74,15 +74,12 @@ namespace Zaabee.RabbitMQ
         {
             var channel = _conn.CreateModel();
 
-            exchangeParam.Exchange = exchangeParam.Exchange ?? "UndefinedExchangeName";
-
             channel.ExchangeDeclare(exchange: exchangeParam.Exchange, type: exchangeParam.Type.ToString().ToLower(),
                 durable: exchangeParam.Durable, autoDelete: exchangeParam.AutoDelete,
                 arguments: exchangeParam.Arguments);
 
-            if (queueParam == null) return channel;
+            if (queueParam is null) return channel;
 
-            queueParam.Queue = queueParam.Queue ?? "UndefinedQueueName";
             channel.QueueDeclare(queue: queueParam.Queue, durable: queueParam.Durable,
                 exclusive: queueParam.Exclusive, autoDelete: queueParam.AutoDelete,
                 arguments: queueParam.Arguments);

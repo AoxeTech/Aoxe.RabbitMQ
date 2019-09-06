@@ -4,12 +4,12 @@ namespace Zaabee.RabbitMQ
 {
     internal class ExchangeParam
     {
-        private string _exchange;
+        private string _exchange = "UndefinedExchangeName";
 
         public string Exchange
         {
-            get => _exchange?.Trim();
-            set => _exchange = value;
+            get => _exchange;
+            set => _exchange = value?.Trim() ?? "UndefinedExchangeName";
         }
 
         public ExchangeType Type { get; set; } = ExchangeType.Fanout;

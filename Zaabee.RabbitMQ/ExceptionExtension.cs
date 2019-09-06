@@ -6,7 +6,7 @@ namespace Zaabee.RabbitMQ
     {
         public static Exception GetInmostException(this Exception ex)
         {
-            if (ex.InnerException == null) return ex;
+            if (ex.InnerException is null) return ex;
             var innerEx = ex.InnerException;
             while (innerEx.InnerException != null)
                 innerEx = innerEx.InnerException;

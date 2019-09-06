@@ -38,8 +38,7 @@ namespace Zaabee.RabbitMQ
 
         public void SubscribeEvent<T>(Func<Action<T>> resolve, ushort prefetchCount = 10)
         {
-            var handle = resolve();
-            var methodFullName = GetQueueName(handle);
+            var methodFullName = GetQueueName(resolve);
             SubscribeEvent(methodFullName, resolve, prefetchCount);
         }
 
@@ -102,8 +101,7 @@ namespace Zaabee.RabbitMQ
 
         public void SubscribeMessage<T>(Func<Action<T>> resolve, ushort prefetchCount = 10)
         {
-            var handle = resolve();
-            var methodFullName = GetQueueName(handle);
+            var methodFullName = GetQueueName(resolve);
 
             SubscribeMessage(methodFullName, resolve, prefetchCount);
         }
@@ -160,15 +158,12 @@ namespace Zaabee.RabbitMQ
             {
                 var channel = _conn.CreateModel();
 
-                queueParam.Queue = queueParam.Queue ?? "UndefinedQueueName";
-
                 channel.QueueDeclare(queue: queueParam.Queue, durable: queueParam.Durable,
                     exclusive: queueParam.Exclusive, autoDelete: queueParam.AutoDelete,
                     arguments: queueParam.Arguments);
 
                 if (exchangeParam != null)
                 {
-                    exchangeParam.Exchange = exchangeParam.Exchange ?? "UndefinedExchangeName";
                     channel.ExchangeDeclare(exchange: exchangeParam.Exchange,
                         type: exchangeParam.Type.ToString().ToLower(),
                         durable: exchangeParam.Durable, autoDelete: exchangeParam.AutoDelete,

@@ -7,15 +7,15 @@ namespace Zaabee.RabbitMQ
     /// </summary>
     internal class QueueParam
     {
-        private string _queue;
+        private string _queue = "UndefinedQueueName";
 
         /// <summary>
         /// 队列名
         /// </summary>
         public string Queue
         {
-            get => _queue?.Trim();
-            set => _queue = value;
+            get => _queue;
+            set => _queue = value?.Trim() ?? "UndefinedQueueName";
         }
 
         /// <summary>
