@@ -5,17 +5,11 @@ namespace Zaabee.RabbitMQ
 {
     public partial class ZaabeeRabbitMqClient
     {
-        public void PublishEvent<T>(T @event)
-        {
-            var exchangeName = GetTypeName(typeof(T));
-            PublishEvent(exchangeName, @event);
-        }
+        public void PublishEvent<T>(T @event) =>
+            PublishEvent(GetTypeName(typeof(T)), @event);
 
-        public void PublishEvent<T>(string exchangeName, T @event)
-        {
-            var body = _serializer.Serialize(@event);
-            PublishEvent(exchangeName, body);
-        }
+        public void PublishEvent<T>(string exchangeName, T @event) =>
+            PublishEvent(exchangeName, _serializer.Serialize(@event));
 
         public void PublishEvent(string exchangeName, byte[] body)
         {
@@ -30,17 +24,11 @@ namespace Zaabee.RabbitMQ
             }
         }
 
-        public void PublishMessage<T>(T message)
-        {
-            var exchangeName = GetTypeName(typeof(T));
-            PublishMessage(exchangeName, message);
-        }
+        public void PublishMessage<T>(T message) =>
+            PublishMessage(GetTypeName(typeof(T)), message);
 
-        public void PublishMessage<T>(string exchangeName, T message)
-        {
-            var body = _serializer.Serialize(message);
-            PublishMessage(exchangeName, body);
-        }
+        public void PublishMessage<T>(string exchangeName, T message) =>
+            PublishMessage(exchangeName, _serializer.Serialize(message));
 
         public void PublishMessage(string exchangeName, byte[] body)
         {
