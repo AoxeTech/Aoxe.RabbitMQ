@@ -169,6 +169,14 @@ namespace Zaabee.RabbitMQ.Abstractions
         /// <typeparam name="T"></typeparam>
         void ListenMessage<T>(Action<T> handle, ushort prefetchCount = 10);
 
+        /// <summary>
+        /// The subscriber node will receive the message by its own queue.
+        /// </summary>
+        /// <param name="resolve"></param>
+        /// <param name="prefetchCount"></param>
+        /// <typeparam name="T"></typeparam>
+        void ListenMessage<T>(Func<Action<T>> resolve, ushort prefetchCount = 10);
+
         void RepublishDeadLetterEvent<T>(string deadLetterQueueName, ushort prefetchCount = 10);
     }
 }

@@ -139,15 +139,27 @@ namespace Zaabee.RabbitMQ
         public void ListenMessage<T>(Action<T> handle, ushort prefetchCount = DefaultPrefetchCount)
         {
             var exchangeName = GetTypeName(typeof(T));
-            var methodFullName =
-                $"{handle.Method.ReflectedType?.FullName}.{handle.Method.Name}[{exchangeName}][{Guid.NewGuid()}]";
+            var queueName = $"{GetQueueName(handle)}[{Guid.NewGuid()}]";
 
             var exchangeParam = new ExchangeParam {Exchange = exchangeName, Durable = false};
             var queueParam =
-                new QueueParam {Queue = methodFullName, Durable = false, Exclusive = true, AutoDelete = true};
+                new QueueParam {Queue = queueName, Durable = false, Exclusive = true, AutoDelete = true};
             var channel = GetReceiverChannel(exchangeParam, queueParam, prefetchCount);
 
             ConsumeMessage(channel, handle, queueParam.Queue);
+        }
+
+        public void ListenMessage<T>(Func<Action<T>> resolve, ushort prefetchCount = DefaultPrefetchCount)
+        {
+            var exchangeName = GetTypeName(typeof(T));
+            var queueName = $"{GetQueueName(resolve)}[{Guid.NewGuid()}]";
+
+            var exchangeParam = new ExchangeParam {Exchange = exchangeName, Durable = false};
+            var queueParam =
+                new QueueParam {Queue = queueName, Durable = false, Exclusive = true, AutoDelete = true};
+            var channel = GetReceiverChannel(exchangeParam, queueParam, prefetchCount);
+
+            ConsumeMessage(channel, resolve, queueParam.Queue);
         }
 
         private IModel GetReceiverChannel(ExchangeParam exchangeParam, QueueParam queueParam,
