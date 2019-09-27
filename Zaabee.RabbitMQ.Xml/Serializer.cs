@@ -1,5 +1,4 @@
-﻿using System.Text;
-using Zaabee.RabbitMQ.ISerialize;
+﻿using Zaabee.RabbitMQ.ISerialize;
 using Zaabee.Xml;
 
 namespace Zaabee.RabbitMQ.Xml
@@ -13,9 +12,9 @@ namespace Zaabee.RabbitMQ.Xml
             bytes is null || bytes.Length == 0 ? default(T) : bytes.FromBytes<T>();
 
         public string BytesToText(byte[] bytes) =>
-            bytes != null ? Encoding.UTF8.GetString(bytes) : null;
+            bytes != null ? XmlHelper.DefaultEncoding.GetString(bytes) : null;
 
-        public T FromText<T>(string bytesToText) =>
-            string.IsNullOrWhiteSpace(bytesToText) ? default(T) : bytesToText.FromXml<T>();
+        public T FromText<T>(string text) =>
+            string.IsNullOrWhiteSpace(text) ? default(T) : text.FromXml<T>();
     }
 }

@@ -15,7 +15,7 @@ namespace Zaabee.RabbitMQ.Utf8Json
         public string BytesToText(byte[] bytes) =>
             bytes != null ? Encoding.UTF8.GetString(bytes) : null;
 
-        public T FromText<T>(string bytesToText) =>
-            string.IsNullOrWhiteSpace(bytesToText) ? default(T) : bytesToText.FromJson<T>();
+        public T FromText<T>(string text) =>
+            string.IsNullOrWhiteSpace(text) ? default(T) : text.FromJson<T>();
     }
 }

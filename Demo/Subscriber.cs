@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 
 namespace Demo
 {
@@ -8,6 +9,11 @@ namespace Demo
         public void TestEventHandler(TestEvent testEvent)
         {
 
+        }
+
+        public Task TestEventHandlerAsync(TestEvent testEvent)
+        {
+            return Task.CompletedTask;
         }
 
         public void TestEventExceptionHandler(TestEvent testEvent)
