@@ -60,7 +60,7 @@ namespace Zaabee.RabbitMQ
 
         private IModel GetPublisherChannel(ExchangeParam exchangeParam, QueueParam queueParam)
         {
-            var channel = _conn.CreateModel();
+            var channel = _publishConn.CreateModel();
 
             channel.ExchangeDeclare(exchange: exchangeParam.Exchange, type: exchangeParam.Type.ToString().ToLower(),
                 durable: exchangeParam.Durable, autoDelete: exchangeParam.AutoDelete,

@@ -11,7 +11,8 @@ namespace Zaabee.RabbitMQ
 {
     public partial class ZaabeeRabbitMqClient : IZaabeeRabbitMqClient
     {
-        private readonly IConnection _conn;
+        private readonly IConnection _publishConn;
+        private readonly IConnection _subscribeConn;
         private readonly ISerializer _serializer;
 
         private readonly ConcurrentDictionary<Type, string> _queueNameDic =
@@ -33,26 +34,57 @@ namespace Zaabee.RabbitMQ
                 VirtualHost = string.IsNullOrWhiteSpace(config.VirtualHost) ? "/" : config.VirtualHost,
             };
 
-            _conn = config.Hosts.Any() ? factory.CreateConnection(config.Hosts) : factory.CreateConnection();
+            _publishConn = config.Hosts.Any() ? factory.CreateConnection(config.Hosts) : factory.CreateConnection();
+            _subscribeConn = config.Hosts.Any() ? factory.CreateConnection(config.Hosts) : factory.CreateConnection();
             _serializer = serializer;
         }
 
-        public ZaabeeRabbitMqClient(IConnectionFactory connectionFactory, ISerializer serializer,
-            IList<string> hosts = null)
+        public ZaabeeRabbitMqClient(IConnectionFactory connectionFactory, ISerializer serializer)
         {
             if (connectionFactory is null) throw new ArgumentNullException(nameof(connectionFactory));
-            if (serializer is null) throw new ArgumentNullException(nameof(serializer));
+            _serializer = serializer ?? throw new ArgumentNullException(nameof(serializer));
 
-            _conn = hosts != null && hosts.Any()
-                ? connectionFactory.CreateConnection(hosts)
-                : connectionFactory.CreateConnection();
-            _serializer = serializer;
+            _publishConn = connectionFactory.CreateConnection();
+            _subscribeConn = connectionFactory.CreateConnection();
         }
 
-        public ZaabeeRabbitMqClient(IConnection connection, ISerializer serializer)
+        public ZaabeeRabbitMqClient(IConnectionFactory connectionFactory, string clientProvidedName,
+            ISerializer serializer)
         {
-            _conn = connection ?? throw new ArgumentNullException(nameof(connection));
+            if (connectionFactory is null) throw new ArgumentNullException(nameof(connectionFactory));
             _serializer = serializer ?? throw new ArgumentNullException(nameof(serializer));
+
+            _publishConn = connectionFactory.CreateConnection(clientProvidedName);
+            _subscribeConn = connectionFactory.CreateConnection(clientProvidedName);
+        }
+
+        public ZaabeeRabbitMqClient(IConnectionFactory connectionFactory, IList<string> hosts, ISerializer serializer)
+        {
+            if (connectionFactory is null) throw new ArgumentNullException(nameof(connectionFactory));
+            _serializer = serializer ?? throw new ArgumentNullException(nameof(serializer));
+
+            _publishConn = connectionFactory.CreateConnection(hosts);
+            _subscribeConn = connectionFactory.CreateConnection(hosts);
+        }
+
+        public ZaabeeRabbitMqClient(IConnectionFactory connectionFactory, IList<string> hosts,
+            string clientProvidedName, ISerializer serializer)
+        {
+            if (connectionFactory is null) throw new ArgumentNullException(nameof(connectionFactory));
+            _serializer = serializer ?? throw new ArgumentNullException(nameof(serializer));
+
+            _publishConn = connectionFactory.CreateConnection(hosts, clientProvidedName);
+            _subscribeConn = connectionFactory.CreateConnection(hosts, clientProvidedName);
+        }
+
+        public ZaabeeRabbitMqClient(IConnectionFactory connectionFactory, IList<AmqpTcpEndpoint> endpoints,
+            ISerializer serializer)
+        {
+            if (connectionFactory is null) throw new ArgumentNullException(nameof(connectionFactory));
+            _serializer = serializer ?? throw new ArgumentNullException(nameof(serializer));
+
+            _publishConn = connectionFactory.CreateConnection(endpoints);
+            _subscribeConn = connectionFactory.CreateConnection(endpoints);
         }
 
         public void RepublishDeadLetterEvent<T>(string deadLetterQueueName, ushort prefetchCount = 1)
@@ -118,8 +150,8 @@ namespace Zaabee.RabbitMQ
         {
             foreach (var keyValuePair in _subscriberChannelDic)
                 keyValuePair.Value.Dispose();
-
-            _conn.Dispose();
+            _publishConn.Dispose();
+            _subscribeConn.Dispose();
         }
     }
 }

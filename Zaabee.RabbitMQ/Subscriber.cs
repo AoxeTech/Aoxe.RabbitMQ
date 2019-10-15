@@ -167,7 +167,7 @@ namespace Zaabee.RabbitMQ
         {
             return _subscriberChannelDic.GetOrAdd(queueParam.Queue, key =>
             {
-                var channel = _conn.CreateModel();
+                var channel = _subscribeConn.CreateModel();
 
                 channel.QueueDeclare(queue: queueParam.Queue, durable: queueParam.Durable,
                     exclusive: queueParam.Exclusive, autoDelete: queueParam.AutoDelete,
