@@ -9,7 +9,7 @@ namespace Zaabee.RabbitMQ
         public string Exchange
         {
             get => _exchange;
-            set => _exchange = value?.Trim() ?? "UndefinedExchangeName";
+            set => _exchange = string.IsNullOrWhiteSpace(value) ? _exchange : value.Trim();
         }
 
         public ExchangeType Type { get; set; } = ExchangeType.Fanout;

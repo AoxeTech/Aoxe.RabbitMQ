@@ -15,7 +15,7 @@ namespace Zaabee.RabbitMQ
         public string Queue
         {
             get => _queue;
-            set => _queue = value?.Trim() ?? "UndefinedQueueName";
+            set => _queue = string.IsNullOrWhiteSpace(value) ? _queue : value.Trim();
         }
 
         /// <summary>
