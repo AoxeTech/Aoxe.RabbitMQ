@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Zaabee.RabbitMQ;
@@ -24,7 +22,7 @@ namespace Demo
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
-            services.AddSingleton<IZaabeeRabbitMqClient, ZaabeeRabbitMqClient>(p =>
+            services.AddSingleton<IZaabeeRabbitMqClient>(p =>
                 new ZaabeeRabbitMqClient(new MqConfig
                 {
                     AutomaticRecoveryEnabled = true,
