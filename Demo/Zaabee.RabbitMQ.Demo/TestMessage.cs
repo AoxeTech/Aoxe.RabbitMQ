@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Demo
+namespace Zaabee.RabbitMQ.Demo
 {
     public class TestMessage
     {

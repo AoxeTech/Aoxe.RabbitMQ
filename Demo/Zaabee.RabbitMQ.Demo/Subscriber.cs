@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 
-namespace Demo
+namespace Zaabee.RabbitMQ.Demo
 {
     public class Subscriber
     {

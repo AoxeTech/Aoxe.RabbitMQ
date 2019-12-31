@@ -1,6 +1,6 @@
 ﻿using Zaabee.RabbitMQ.Abstractions;
 
-namespace Demo
+namespace Zaabee.RabbitMQ.Demo
 {
     public class ServiceRunner
     {

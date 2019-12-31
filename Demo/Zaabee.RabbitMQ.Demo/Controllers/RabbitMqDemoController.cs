@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Zaabee.RabbitMQ.Abstractions;
+using Zaabee.RabbitMQ.Demo;
 
 namespace Demo.Controllers
 {

@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 
-namespace Demo
+namespace Zaabee.RabbitMQ.Demo
 {
     public class Program
     {

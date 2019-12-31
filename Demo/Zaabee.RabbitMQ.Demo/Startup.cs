@@ -3,11 +3,10 @@ using System.Collections.Generic;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Zaabee.RabbitMQ;
 using Zaabee.RabbitMQ.Abstractions;
 using Zaabee.RabbitMQ.NewtonsoftJson;
 
-namespace Demo
+namespace Zaabee.RabbitMQ.Demo
 {
     public class Startup
     {
