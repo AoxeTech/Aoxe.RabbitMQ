@@ -1,0 +1,12 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+    <PropertyGroup>
+        <TargetFramework>netcoreapp3.1</TargetFramework>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\src\Zaabee.RabbitMQ.NewtonsoftJson\Zaabee.RabbitMQ.NewtonsoftJson.csproj" />
+      <ProjectReference Include="..\..\src\Zaabee.RabbitMQ\Zaabee.RabbitMQ.csproj" />
+    </ItemGroup>
+
+</Project>
