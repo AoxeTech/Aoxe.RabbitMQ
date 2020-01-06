@@ -10,8 +10,10 @@ RabbitMQ is lightweight and easy to deploy on premises and in the cloud. It supp
 
 ### NuGet
 
+```CLI
 Install-Package Zaabee.RabbitMQ
 Install-Package Zaabee.RabbitMQ.NewtonsoftJson
+```
 
 Otherwise you can use other serializers like [Zaabee.RabbitMQ.Jil](https://github.com/Mutuduxf/Zaabee.RabbitMQ/tree/master/Zaabee.RabbitMQ.Jil) or [Zaabee.RabbitMQ.Utf8Json](https://github.com/Mutuduxf/Zaabee.RabbitMQ/tree/master/Zaabee.RabbitMQ.Utf8Json),they will provide higher performance.
 
