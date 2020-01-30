@@ -3,19 +3,20 @@
     <PropertyGroup>
         <TargetFramework>netstandard2.0</TargetFramework>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-        <PackageVersion>1.2.2</PackageVersion>
-        <Version>1.2.2</Version>
+        <PackageVersion>2.0.0</PackageVersion>
+        <Version>2.0.0</Version>
         <Authors>Mutuduxf</Authors>
         <Company>Mutuduxf</Company>
         <PackageTags>Zaabee MessageQueue MQ RabbitMQ Json Utf8Json</PackageTags>
-        <Description>The serializer for Zaabee.RabbitMQ by Zaabee.RabbitMQ.ISerialize</Description>
+        <Description>The serializer for Zaabee.RabbitMQ base by Utf8Json</Description>
         <PackageProjectUrl>https://github.com/Mutuduxf/Zaabee.RabbitMQ</PackageProjectUrl>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <LangVersion>8.0</LangVersion>
     </PropertyGroup>
 
     <ItemGroup>
+      <PackageReference Include="Utf8Json" Version="1.3.7" />
       <PackageReference Include="Zaabee.RabbitMQ.ISerialize" Version="1.1.1" />
-      <PackageReference Include="Zaabee.Utf8Json" Version="2.2.0" />
     </ItemGroup>
 
 </Project>

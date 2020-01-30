@@ -27,7 +27,7 @@ namespace Zaabee.RabbitMQ.Demo
                     AutomaticRecoveryEnabled = true,
                     HeartBeat = 60,
                     NetworkRecoveryInterval = new TimeSpan(60),
-                    Hosts = new List<string> {"192.168.78.140", "192.168.78.141", "192.168.78.142"},
+                    Hosts = new List<string> {"192.168.78.150"},
                     UserName = "admin",
                     Password = "123"
                 }, new Serializer()));
