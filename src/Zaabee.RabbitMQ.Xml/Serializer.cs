@@ -1,4 +1,6 @@
-﻿using System.IO;
+﻿using System;
+using System.Collections.Concurrent;
+using System.IO;
 using System.Text;
 using System.Xml.Serialization;
 using Zaabee.RabbitMQ.ISerialize;
@@ -8,6 +10,9 @@ namespace Zaabee.RabbitMQ.Xml
     public class Serializer : ISerializer
     {
         private static Encoding _encoding = Encoding.UTF8;
+
+        private static readonly ConcurrentDictionary<Type, XmlSerializer> SerializerCache =
+            new ConcurrentDictionary<Type, XmlSerializer>();
 
         public static Encoding DefaultEncoding
         {
@@ -23,7 +28,8 @@ namespace Zaabee.RabbitMQ.Xml
         public byte[] Serialize<T>(T t)
         {
             if (t is null) return new byte[0];
-            var serializer = new XmlSerializer(typeof(T));
+            var type = typeof(T);
+            var serializer = SerializerCache.GetOrAdd(type, new XmlSerializer(type));
             using var stream = new MemoryStream();
             serializer.Serialize(stream, t);
             var bytes = new byte[stream.Length];
@@ -35,9 +41,10 @@ namespace Zaabee.RabbitMQ.Xml
         public T Deserialize<T>(byte[] bytes)
         {
             if (bytes is null || bytes.Length == 0) return default;
-            var xmlSerializer = new XmlSerializer(typeof(T));
+            var type = typeof(T);
+            var serializer = SerializerCache.GetOrAdd(type, new XmlSerializer(type));
             using var ms = new MemoryStream(bytes);
-            return (T) xmlSerializer.Deserialize(ms);
+            return (T) serializer.Deserialize(ms);
         }
 
         public string BytesToText(byte[] bytes) =>
@@ -46,9 +53,10 @@ namespace Zaabee.RabbitMQ.Xml
         public T FromText<T>(string text)
         {
             if (string.IsNullOrWhiteSpace(text)) return default;
-            var xmlSerializer = new XmlSerializer(typeof(T));
+            var type = typeof(T);
+            var serializer = SerializerCache.GetOrAdd(type, new XmlSerializer(type));
             using var ms = new MemoryStream(DefaultEncoding.GetBytes(text));
-            return (T) xmlSerializer.Deserialize(ms);
+            return (T) serializer.Deserialize(ms);
         }
     }
 }
