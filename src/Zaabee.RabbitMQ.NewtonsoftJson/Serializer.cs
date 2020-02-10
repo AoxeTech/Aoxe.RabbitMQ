@@ -1,41 +1,27 @@
 ﻿using System.Text;
 using Newtonsoft.Json;
+using Zaabee.NewtonsoftJson;
 using Zaabee.RabbitMQ.ISerialize;
 
 namespace Zaabee.RabbitMQ.NewtonsoftJson
 {
     public class Serializer : ISerializer
     {
-        private static Encoding _encoding = Encoding.UTF8;
+        private static Encoding _encoding;
+        private static JsonSerializerSettings _settings;
 
-        public static Encoding DefaultEncoding
+        public Serializer(Encoding encoding = null, JsonSerializerSettings settings = null)
         {
-            get => _encoding;
-            set => _encoding = value ?? _encoding;
+            _encoding = encoding ?? Encoding.UTF8;
+            _settings = settings;
         }
 
-        public static JsonSerializerSettings DefaultSettings;
+        public byte[] Serialize<T>(T t) => NewtonsoftJsonSerializer.Serialize(t, _settings, _encoding);
 
-        public Serializer(Encoding defaultEncoding = null, JsonSerializerSettings defaultSettings = null)
-        {
-            DefaultEncoding = defaultEncoding;
-            DefaultSettings = defaultSettings;
-        }
+        public T Deserialize<T>(byte[] bytes) => NewtonsoftJsonSerializer.Deserialize<T>(bytes, _settings, _encoding);
 
-        public byte[] Serialize<T>(T t) =>
-            t is null
-                ? new byte[0]
-                : DefaultEncoding.GetBytes(JsonConvert.SerializeObject(t, DefaultSettings));
+        public string BytesToText(byte[] bytes) => _encoding.GetString(bytes);
 
-        public T Deserialize<T>(byte[] bytes) =>
-            bytes is null || bytes.Length == 0
-                ? default
-                : JsonConvert.DeserializeObject<T>(DefaultEncoding.GetString(bytes), DefaultSettings);
-
-        public string BytesToText(byte[] bytes) =>
-            bytes is null ? null : DefaultEncoding.GetString(bytes);
-
-        public T FromText<T>(string text) =>
-            string.IsNullOrWhiteSpace(text) ? default : JsonConvert.DeserializeObject<T>(text, DefaultSettings);
+        public T FromText<T>(string text) => NewtonsoftJsonSerializer.Deserialize<T>(text, _settings);
     }
 }
