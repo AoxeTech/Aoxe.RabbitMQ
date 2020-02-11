@@ -1,43 +1,26 @@
 ﻿using System.Text;
 using System.Text.Json;
 using Zaabee.RabbitMQ.ISerialize;
+using Zaabee.SystemTextJson;
 
 namespace Zaabee.RabbitMQ.SystemTextJson
 {
     public class Serializer : ISerializer
     {
-        private static Encoding _encoding = Encoding.UTF8;
+        private static readonly Encoding Encoding = Encoding.UTF8;
+        private static JsonSerializerOptions _jsonSerializerOptions;
 
-        public static Encoding DefaultEncoding
+        public Serializer(JsonSerializerOptions jsonSerializerOptions = null)
         {
-            get => _encoding;
-            set => _encoding = value ?? _encoding;
+            _jsonSerializerOptions = jsonSerializerOptions;
         }
 
-        public static JsonSerializerOptions DefaultJsonSerializerOptions;
+        public byte[] Serialize<T>(T t) => SystemTextJsonSerializer.Serialize(t, _jsonSerializerOptions);
 
-        public Serializer(Encoding defaultEncoding = null, JsonSerializerOptions defaultJsonSerializerOptions = null)
-        {
-            DefaultEncoding = defaultEncoding;
-            DefaultJsonSerializerOptions = defaultJsonSerializerOptions;
-        }
+        public T Deserialize<T>(byte[] bytes) => SystemTextJsonSerializer.Deserialize<T>(bytes, _jsonSerializerOptions);
 
-        public byte[] Serialize<T>(T t) =>
-            t is null
-                ? new byte[0]
-                : DefaultEncoding.GetBytes(JsonSerializer.Serialize(t, DefaultJsonSerializerOptions));
+        public string BytesToText(byte[] bytes) => Encoding.GetString(bytes);
 
-        public T Deserialize<T>(byte[] bytes) =>
-            bytes is null || bytes.Length == 0
-                ? default
-                : JsonSerializer.Deserialize<T>(DefaultEncoding.GetString(bytes), DefaultJsonSerializerOptions);
-
-        public string BytesToText(byte[] bytes) =>
-            bytes is null ? null : DefaultEncoding.GetString(bytes);
-
-        public T FromText<T>(string text) =>
-            string.IsNullOrWhiteSpace(text)
-                ? default
-                : JsonSerializer.Deserialize<T>(text, DefaultJsonSerializerOptions);
+        public T FromText<T>(string text) => SystemTextJsonSerializer.Deserialize<T>(text, _jsonSerializerOptions);
     }
 }
