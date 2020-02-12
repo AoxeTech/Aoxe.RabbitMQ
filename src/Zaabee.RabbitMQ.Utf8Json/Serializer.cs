@@ -1,28 +1,25 @@
 ﻿using System.Text;
 using Utf8Json;
 using Zaabee.RabbitMQ.ISerialize;
+using Zaabee.Utf8Json;
 
 namespace Zaabee.RabbitMQ.Utf8Json
 {
     public class Serializer : ISerializer
     {
-        public IJsonFormatterResolver DefaultResolver { get; set; }
+        private readonly IJsonFormatterResolver _defaultResolver;
 
         public Serializer(IJsonFormatterResolver defaultResolver = null)
         {
-            DefaultResolver = defaultResolver;
+            _defaultResolver = defaultResolver;
         }
 
-        public byte[] Serialize<T>(T t) =>
-            JsonSerializer.Serialize(t, DefaultResolver);
+        public byte[] Serialize<T>(T t) => Utf8JsonSerializer.Serialize(t, _defaultResolver);
 
-        public T Deserialize<T>(byte[] bytes) =>
-            bytes is null || bytes.Length == 0 ? default : JsonSerializer.Deserialize<T>(bytes, DefaultResolver);
+        public T Deserialize<T>(byte[] bytes) => Utf8JsonSerializer.Deserialize<T>(bytes, _defaultResolver);
 
-        public string BytesToText(byte[] bytes) =>
-            bytes is null ? null : Encoding.UTF8.GetString(bytes);
+        public string BytesToText(byte[] bytes) => Encoding.UTF8.GetString(bytes);
 
-        public T FromText<T>(string text) =>
-            string.IsNullOrWhiteSpace(text) ? default : JsonSerializer.Deserialize<T>(text, DefaultResolver);
+        public T FromText<T>(string text) => Utf8JsonSerializer.Deserialize<T>(text, _defaultResolver);
     }
 }
