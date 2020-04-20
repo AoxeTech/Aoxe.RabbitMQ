@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System;
+using System.Text;
 using Jil;
 using Zaabee.Jil;
 using Zaabee.RabbitMQ.ISerialize;
@@ -16,12 +17,16 @@ namespace Zaabee.RabbitMQ.Jil
             _options = options;
         }
 
-        public byte[] Serialize<T>(T t) => JilSerializer.Serialize(t, _options, _encoding);
+        public ReadOnlyMemory<byte> Serialize<T>(T t) =>
+            JilSerializer.Serialize(t, _options, _encoding);
 
-        public T Deserialize<T>(byte[] bytes) => JilSerializer.Deserialize<T>(bytes, _options, _encoding);
+        public T Deserialize<T>(ReadOnlyMemory<byte> bytes) =>
+            JilSerializer.Deserialize<T>(bytes.ToArray(), _options, _encoding);
 
-        public string BytesToText(byte[] bytes) => _encoding.GetString(bytes);
+        public string BytesToText(ReadOnlyMemory<byte> bytes) =>
+            _encoding.GetString(bytes.ToArray());
 
-        public T FromText<T>(string text) => JilSerializer.Deserialize<T>(text, _options);
+        public T FromText<T>(string text) =>
+            JilSerializer.Deserialize<T>(text, _options);
     }
 }

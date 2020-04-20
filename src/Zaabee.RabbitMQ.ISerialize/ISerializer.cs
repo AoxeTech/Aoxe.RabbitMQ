@@ -1,12 +1,14 @@
-﻿namespace Zaabee.RabbitMQ.ISerialize
+﻿using System;
+
+namespace Zaabee.RabbitMQ.ISerialize
 {
     public interface ISerializer
     {
-        byte[] Serialize<T>(T o);
+        ReadOnlyMemory<byte> Serialize<T>(T o);
 
-        T Deserialize<T>(byte[] bytes);
+        T Deserialize<T>(ReadOnlyMemory<byte> bytes);
 
-        string BytesToText(byte[] bytes);
+        string BytesToText(ReadOnlyMemory<byte> bytes);
 
         T FromText<T>(string text);
     }

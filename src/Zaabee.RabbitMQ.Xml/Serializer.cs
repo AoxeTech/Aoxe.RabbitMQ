@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System;
+using System.Text;
 using Zaabee.RabbitMQ.ISerialize;
 
 namespace Zaabee.RabbitMQ.Xml
@@ -12,12 +13,16 @@ namespace Zaabee.RabbitMQ.Xml
             _encoding = defaultEncoding ?? Encoding.UTF8;
         }
 
-        public byte[] Serialize<T>(T t) => Zaabee.Xml.XmlSerializer.Serialize(t);
+        public ReadOnlyMemory<byte> Serialize<T>(T t) =>
+            Zaabee.Xml.XmlSerializer.Serialize(t);
 
-        public T Deserialize<T>(byte[] bytes) => Zaabee.Xml.XmlSerializer.Deserialize<T>(bytes);
+        public T Deserialize<T>(ReadOnlyMemory<byte> bytes) =>
+            Zaabee.Xml.XmlSerializer.Deserialize<T>(bytes.ToArray());
 
-        public string BytesToText(byte[] bytes) => _encoding.GetString(bytes);
+        public string BytesToText(ReadOnlyMemory<byte> bytes) =>
+            _encoding.GetString(bytes.ToArray());
 
-        public T FromText<T>(string text) => Zaabee.Xml.XmlSerializer.Deserialize<T>(text, _encoding);
+        public T FromText<T>(string text) =>
+            Zaabee.Xml.XmlSerializer.Deserialize<T>(text, _encoding);
     }
 }

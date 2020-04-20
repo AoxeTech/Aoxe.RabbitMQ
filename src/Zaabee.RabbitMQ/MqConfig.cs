@@ -17,12 +17,12 @@ namespace Zaabee.RabbitMQ
 
         public string Password { get; set; }
 
-        private ushort _heartBeat = 60;
+        private TimeSpan _heartBeat = TimeSpan.FromMinutes(1);
 
-        public ushort HeartBeat
+        public TimeSpan HeartBeat
         {
             get => _heartBeat;
-            set => _heartBeat = value is 0 ? _heartBeat : value;
+            set => _heartBeat = value == TimeSpan.Zero ? _heartBeat : value;
         }
 
         public bool AutomaticRecoveryEnabled { get; set; } = true;

@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System;
+using System.Text;
 using Newtonsoft.Json;
 using Zaabee.NewtonsoftJson;
 using Zaabee.RabbitMQ.ISerialize;
@@ -16,12 +17,16 @@ namespace Zaabee.RabbitMQ.NewtonsoftJson
             _settings = settings;
         }
 
-        public byte[] Serialize<T>(T t) => NewtonsoftJsonSerializer.Serialize(t, _settings, _encoding);
+        public ReadOnlyMemory<byte> Serialize<T>(T t) =>
+            NewtonsoftJsonSerializer.Serialize(t, _settings, _encoding);
 
-        public T Deserialize<T>(byte[] bytes) => NewtonsoftJsonSerializer.Deserialize<T>(bytes, _settings, _encoding);
+        public T Deserialize<T>(ReadOnlyMemory<byte> bytes) =>
+            NewtonsoftJsonSerializer.Deserialize<T>(bytes.ToArray(), _settings, _encoding);
 
-        public string BytesToText(byte[] bytes) => _encoding.GetString(bytes);
+        public string BytesToText(ReadOnlyMemory<byte> bytes) =>
+            _encoding.GetString(bytes.ToArray());
 
-        public T FromText<T>(string text) => NewtonsoftJsonSerializer.Deserialize<T>(text, _settings);
+        public T FromText<T>(string text) =>
+            NewtonsoftJsonSerializer.Deserialize<T>(text, _settings);
     }
 }

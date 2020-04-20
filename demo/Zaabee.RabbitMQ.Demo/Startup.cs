@@ -25,7 +25,7 @@ namespace Zaabee.RabbitMQ.Demo
                 new ZaabeeRabbitMqClient(new MqConfig
                 {
                     AutomaticRecoveryEnabled = true,
-                    HeartBeat = 60,
+                    HeartBeat = TimeSpan.FromMinutes(1),
                     NetworkRecoveryInterval = new TimeSpan(60),
                     Hosts = new List<string> {"192.168.78.150"},
                     UserName = "admin",
