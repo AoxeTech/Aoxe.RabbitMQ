@@ -95,26 +95,32 @@ namespace Zaabee.RabbitMQ
             var consumer = new EventingBasicConsumer(channel);
             consumer.Received += (model, ea) =>
             {
-                var body = ea.Body;
-                var msg = _serializer.Deserialize<DeadLetterMsg>(body);
-
-                var republishExchangeParam =
-                    new ExchangeParam {Exchange = $"republish-{deadLetterQueueName}", Durable = true};
-                var republishQueueParam =
-                    new QueueParam {Queue = FromDeadLetterName(deadLetterQueueName), Durable = true};
-                using (var republishChannel = GetPublisherChannel(republishExchangeParam, republishQueueParam))
+                try
                 {
-                    var properties = republishChannel.CreateBasicProperties();
-                    properties.Persistent = true;
-                    var routingKey = republishExchangeParam.Exchange;
+                    var body = ea.Body;
+                    var msg = _serializer.Deserialize<DeadLetterMsg>(body);
 
-                    var deadLetter = _serializer.FromText<T>(msg.BodyString);
+                    var republishExchangeParam =
+                        new ExchangeParam {Exchange = $"republish-{deadLetterQueueName}", Durable = true};
+                    var republishQueueParam =
+                        new QueueParam {Queue = FromDeadLetterName(deadLetterQueueName), Durable = true};
+                    using (var republishChannel = GetPublisherChannel(republishExchangeParam, republishQueueParam))
+                    {
+                        var properties = republishChannel.CreateBasicProperties();
+                        properties.Persistent = true;
+                        var routingKey = republishExchangeParam.Exchange;
 
-                    republishChannel.BasicPublish(republishExchangeParam.Exchange, routingKey, properties,
-                        _serializer.Serialize(deadLetter));
+                        var deadLetter = _serializer.FromText<T>(msg.BodyString);
+
+                        republishChannel.BasicPublish(republishExchangeParam.Exchange, routingKey, properties,
+                            _serializer.Serialize(deadLetter));
+                    }
+                    channel.BasicAck(ea.DeliveryTag, false);
                 }
-
-                channel.BasicAck(ea.DeliveryTag, false);
+                catch
+                {
+                    channel.BasicNack(ea.DeliveryTag, false, true);
+                }
             };
             channel.BasicConsume(queue: deadLetterQueueName, autoAck: false, consumer: consumer);
         }

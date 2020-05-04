@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using RabbitMQ.Client;
 
@@ -11,7 +12,7 @@ namespace Zaabee.RabbitMQ
         public void PublishEvent<T>(string exchangeName, T @event) =>
             PublishEvent(exchangeName, _serializer.Serialize(@event));
 
-        public void PublishEvent(string exchangeName, byte[] body)
+        public void PublishEvent(string exchangeName, ReadOnlyMemory<byte> body)
         {
             var exchangeParam = new ExchangeParam {Exchange = exchangeName};
             using (var channel = GetPublisherChannel(exchangeParam, null))
@@ -30,7 +31,7 @@ namespace Zaabee.RabbitMQ
         public void PublishMessage<T>(string exchangeName, T message) =>
             PublishMessage(exchangeName, _serializer.Serialize(message));
 
-        public void PublishMessage(string exchangeName, byte[] body)
+        public void PublishMessage(string exchangeName, ReadOnlyMemory<byte> body)
         {
             var exchangeParam = new ExchangeParam {Exchange = exchangeName, Durable = false};
             using (var channel = GetPublisherChannel(exchangeParam, null))
@@ -46,7 +47,7 @@ namespace Zaabee.RabbitMQ
         public async Task PublishEventAsync<T>(string exchangeName, T @event) =>
             await Task.Run(() => { PublishEvent(exchangeName, @event); });
 
-        public async Task PublishEventAsync(string exchangeName, byte[] body) =>
+        public async Task PublishEventAsync(string exchangeName, ReadOnlyMemory<byte> body) =>
             await Task.Run(() => { PublishEvent(exchangeName, body); });
 
         public async Task PublishMessageAsync<T>(T message) =>
@@ -55,10 +56,10 @@ namespace Zaabee.RabbitMQ
         public async Task PublishMessageAsync<T>(string exchangeName, T message) =>
             await Task.Run(() => { PublishMessage(exchangeName, message); });
 
-        public async Task PublishMessageAsync(string exchangeName, byte[] body) =>
+        public async Task PublishMessageAsync(string exchangeName, ReadOnlyMemory<byte> body) =>
             await Task.Run(() => { PublishMessage(exchangeName, body); });
 
-        private IModel GetPublisherChannel(ExchangeParam exchangeParam, QueueParam queueParam)
+        private IModel GetPublisherChannel(ExchangeParam exchangeParam, QueueParam queueParam, string routingKey = null)
         {
             var channel = _publishConn.CreateModel();
 
@@ -72,7 +73,7 @@ namespace Zaabee.RabbitMQ
                 exclusive: queueParam.Exclusive, autoDelete: queueParam.AutoDelete,
                 arguments: queueParam.Arguments);
             channel.QueueBind(queue: queueParam.Queue, exchange: exchangeParam.Exchange,
-                routingKey: queueParam.Queue);
+                routingKey: routingKey ?? queueParam.Queue);
 
             return channel;
         }
