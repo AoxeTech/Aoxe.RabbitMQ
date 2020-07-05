@@ -3,8 +3,8 @@
     <PropertyGroup>
         <TargetFrameworks>netstandard2.0;netstandard2.1</TargetFrameworks>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-        <PackageVersion>2020.1.0</PackageVersion>
-        <Version>2020.1.0</Version>
+        <PackageVersion>2020.1.2</PackageVersion>
+        <Version>2020.1.2</Version>
         <Authors>Mutuduxf</Authors>
         <Company>Mutuduxf</Company>
         <PackageTags>Zaaby Zaabee MessageQueue MQ MessageBus RabbitMQ</PackageTags>
@@ -17,7 +17,7 @@
     <ItemGroup>
         <PackageReference Include="RabbitMQ.Client" Version="6.1.0" />
         <PackageReference Include="Zaabee.RabbitMQ.Abstractions" Version="2020.1.0" />
-        <PackageReference Include="Zaabee.RabbitMQ.ISerialize" Version="2020.1.0" />
+        <PackageReference Include="Zaabee.RabbitMQ.Serializer.Abstraction" Version="2020.1.0" />
     </ItemGroup>
     
 </Project>

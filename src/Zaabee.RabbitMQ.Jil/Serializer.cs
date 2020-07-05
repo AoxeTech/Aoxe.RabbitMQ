@@ -2,7 +2,7 @@
 using System.Text;
 using Jil;
 using Zaabee.Jil;
-using Zaabee.RabbitMQ.ISerialize;
+using Zaabee.RabbitMQ.Serializer.Abstraction;
 
 namespace Zaabee.RabbitMQ.Jil
 {

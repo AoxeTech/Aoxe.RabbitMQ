@@ -5,7 +5,7 @@ using System.Linq;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using Zaabee.RabbitMQ.Abstractions;
-using Zaabee.RabbitMQ.ISerialize;
+using Zaabee.RabbitMQ.Serializer.Abstraction;
 
 namespace Zaabee.RabbitMQ
 {
@@ -125,6 +125,7 @@ namespace Zaabee.RabbitMQ
                         republishChannel.BasicPublish(republishExchangeParam.Exchange, routingKey, properties,
                             _serializer.Serialize(deadLetter));
                     }
+
                     channel.BasicAck(ea.DeliveryTag, false);
                 }
                 catch
@@ -138,7 +139,7 @@ namespace Zaabee.RabbitMQ
         private string GetTypeName(Type type)
         {
             return _queueNameDic.GetOrAdd(type,
-                key => !(type.GetCustomAttributes(typeof(MessageVersionAttribute), false).FirstOrDefault() is
+                _ => !(type.GetCustomAttributes(typeof(MessageVersionAttribute), false).FirstOrDefault() is
                     MessageVersionAttribute msgVerAttr)
                     ? type.ToString()
                     : $"{type}[{msgVerAttr.Version}]");

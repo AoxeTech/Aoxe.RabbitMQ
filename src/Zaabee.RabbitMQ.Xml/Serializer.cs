@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Text;
-using Zaabee.RabbitMQ.ISerialize;
+using Zaabee.RabbitMQ.Serializer.Abstraction;
 
 namespace Zaabee.RabbitMQ.Xml
 {

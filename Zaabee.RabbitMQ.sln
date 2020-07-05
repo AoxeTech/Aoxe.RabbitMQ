@@ -6,7 +6,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zaabee.RabbitMQ", "src\Zaab
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zaabee.RabbitMQ.Abstractions", "src\Zaabee.RabbitMQ.Abstractions\Zaabee.RabbitMQ.Abstractions.csproj", "{6B557975-5394-4DA2-9254-B87817BE156D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zaabee.RabbitMQ.ISerialize", "src\Zaabee.RabbitMQ.ISerialize\Zaabee.RabbitMQ.ISerialize.csproj", "{8738F1D9-D9A8-4EF7-8B7B-DC169EA01467}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zaabee.RabbitMQ.Serializer.Abstraction", "src\Zaabee.RabbitMQ.Serializer.Abstraction\Zaabee.RabbitMQ.Serializer.Abstraction.csproj", "{8738F1D9-D9A8-4EF7-8B7B-DC169EA01467}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zaabee.RabbitMQ.Jil", "src\Zaabee.RabbitMQ.Jil\Zaabee.RabbitMQ.Jil.csproj", "{683946B0-90D8-4E7E-8B1D-3CF4C60E63D7}"
 EndProject

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Text;
 using Utf8Json;
-using Zaabee.RabbitMQ.ISerialize;
+using Zaabee.RabbitMQ.Serializer.Abstraction;
 using Zaabee.Utf8Json;
 
 namespace Zaabee.RabbitMQ.Utf8Json

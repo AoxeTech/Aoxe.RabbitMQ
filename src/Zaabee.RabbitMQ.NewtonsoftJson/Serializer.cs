@@ -2,7 +2,7 @@
 using System.Text;
 using Newtonsoft.Json;
 using Zaabee.NewtonsoftJson;
-using Zaabee.RabbitMQ.ISerialize;
+using Zaabee.RabbitMQ.Serializer.Abstraction;
 
 namespace Zaabee.RabbitMQ.NewtonsoftJson
 {

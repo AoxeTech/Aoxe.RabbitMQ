@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Zaabee.RabbitMQ.ISerialize
+namespace Zaabee.RabbitMQ.Serializer.Abstraction
 {
     public interface ISerializer
     {
