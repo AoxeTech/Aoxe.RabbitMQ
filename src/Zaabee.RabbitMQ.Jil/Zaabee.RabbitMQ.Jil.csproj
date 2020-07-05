@@ -1,19 +1,22 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;netstandard2.1</TargetFrameworks>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <PackageVersion>3.2.1</PackageVersion>
-    <Version>3.2.1</Version>
-    <Authors>Mutuduxf</Authors>
-    <Company>Mutuduxf</Company>
-    <PackageTags>Zaaby Zaabee MessageQueue MQ MessageBus RabbitMQ Json Jil</PackageTags>
-    <Description>The json serializer for Zaaby.RabbitMQ base by Jil</Description>
-    <PackageProjectUrl>https://github.com/Mutuduxf/Zaabee.RabbitMQ</PackageProjectUrl>
-    <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <LangVersion>8.0</LangVersion>
-  </PropertyGroup>
-  <ItemGroup>
-    <PackageReference Include="Zaabee.Jil" Version="3.2.1" />
-    <PackageReference Include="Zaabee.RabbitMQ.ISerialize" Version="1.2.0" />
-  </ItemGroup>
+  
+    <PropertyGroup>
+        <TargetFramework>netstandard2.0</TargetFramework>
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+        <PackageVersion>2020.1.1</PackageVersion>
+        <Version>2020.1.1</Version>
+        <Authors>Mutuduxf</Authors>
+        <Company>Mutuduxf</Company>
+        <PackageTags>Zaaby Zaabee MessageQueue MQ MessageBus RabbitMQ Json Jil</PackageTags>
+        <Description>The json serializer for Zaaby.RabbitMQ base by Jil</Description>
+        <PackageProjectUrl>https://github.com/Mutuduxf/Zaabee.RabbitMQ</PackageProjectUrl>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <LangVersion>Latest</LangVersion>
+    </PropertyGroup>
+    
+    <ItemGroup>
+        <PackageReference Include="Zaabee.Jil" Version="2020.1.0" />
+        <PackageReference Include="Zaabee.RabbitMQ.ISerialize" Version="2020.1.0" />
+    </ItemGroup>
+  
 </Project>

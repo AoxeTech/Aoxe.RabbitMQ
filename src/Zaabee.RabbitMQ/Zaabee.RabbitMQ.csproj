@@ -1,20 +1,23 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;netstandard2.1</TargetFrameworks>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <PackageVersion>2.0.0</PackageVersion>
-    <Version>2.0.0</Version>
-    <Authors>Mutuduxf</Authors>
-    <Company>Mutuduxf</Company>
-    <PackageTags>Zaaby Zaabee MessageQueue MQ MessageBus RabbitMQ</PackageTags>
-    <PackageProjectUrl>https://github.com/Mutuduxf/Zaabee.RabbitMQ</PackageProjectUrl>
-    <Description>Rabbit client wrapper for asp.net core or Zaaby</Description>
-    <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <PackageReleaseNotes>Remove static members.</PackageReleaseNotes>
-  </PropertyGroup>
-  <ItemGroup>
-    <PackageReference Include="RabbitMQ.Client" Version="6.0.0" />
-    <PackageReference Include="Zaabee.RabbitMQ.Abstractions" Version="2.0.0" />
-    <PackageReference Include="Zaabee.RabbitMQ.ISerialize" Version="1.2.0" />
-  </ItemGroup>
+    
+    <PropertyGroup>
+        <TargetFrameworks>netstandard2.0;netstandard2.1</TargetFrameworks>
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+        <PackageVersion>2020.1.0</PackageVersion>
+        <Version>2020.1.0</Version>
+        <Authors>Mutuduxf</Authors>
+        <Company>Mutuduxf</Company>
+        <PackageTags>Zaaby Zaabee MessageQueue MQ MessageBus RabbitMQ</PackageTags>
+        <PackageProjectUrl>https://github.com/Mutuduxf/Zaabee.RabbitMQ</PackageProjectUrl>
+        <Description>Rabbit client wrapper for asp.net core or Zaaby</Description>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <LangVersion>Latest</LangVersion>
+    </PropertyGroup>
+    
+    <ItemGroup>
+        <PackageReference Include="RabbitMQ.Client" Version="6.1.0" />
+        <PackageReference Include="Zaabee.RabbitMQ.Abstractions" Version="2020.1.0" />
+        <PackageReference Include="Zaabee.RabbitMQ.ISerialize" Version="2020.1.0" />
+    </ItemGroup>
+    
 </Project>

@@ -22,7 +22,7 @@ namespace Zaabee.RabbitMQ
         {
             if (config is null) throw new ArgumentNullException(nameof(config));
             if (serializer is null) throw new ArgumentNullException(nameof(serializer));
-            if (config.Hosts.Count == 0) throw new ArgumentNullException(nameof(config.Hosts));
+            if (config.Hosts.Count is 0) throw new ArgumentNullException(nameof(config.Hosts));
 
             var factory = new ConnectionFactory
             {
@@ -85,6 +85,16 @@ namespace Zaabee.RabbitMQ
 
             _publishConn = connectionFactory.CreateConnection(endpoints);
             _subscribeConn = connectionFactory.CreateConnection(endpoints);
+        }
+
+        public ZaabeeRabbitMqClient(IConnectionFactory connectionFactory, IList<AmqpTcpEndpoint> endpoints,
+            string clientProvidedName, ISerializer serializer)
+        {
+            if (connectionFactory is null) throw new ArgumentNullException(nameof(connectionFactory));
+            _serializer = serializer ?? throw new ArgumentNullException(nameof(serializer));
+
+            _publishConn = connectionFactory.CreateConnection(endpoints, clientProvidedName);
+            _subscribeConn = connectionFactory.CreateConnection(endpoints, clientProvidedName);
         }
 
         public void RepublishDeadLetterEvent<T>(string deadLetterQueueName, ushort prefetchCount = 1)

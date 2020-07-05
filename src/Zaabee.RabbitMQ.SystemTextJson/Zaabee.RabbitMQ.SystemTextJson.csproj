@@ -1,22 +1,22 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFrameworks>netstandard2.0;netstandard2.1</TargetFrameworks>
+        <TargetFrameworks>netstandard2.0;netcoreapp3.1</TargetFrameworks>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-        <PackageVersion>3.2.0</PackageVersion>
-        <Version>3.2.0</Version>
+        <PackageVersion>2020.1.1</PackageVersion>
+        <Version>2020.1.1</Version>
         <Authors>Mutuduxf</Authors>
         <Company>Mutuduxf</Company>
         <PackageTags>Zaabee MessageQueue MQ RabbitMQ Json System.Text.Json</PackageTags>
         <Description>The serializer for Zaabee.RabbitMQ base by System.Text.Json</Description>
         <PackageProjectUrl>https://github.com/Mutuduxf/Zaabee.RabbitMQ</PackageProjectUrl>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
-        <LangVersion>8.0</LangVersion>
+        <LangVersion>Latest</LangVersion>
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="Zaabee.RabbitMQ.ISerialize" Version="1.2.0" />
-      <PackageReference Include="Zaabee.SystemTextJson" Version="3.2.0" />
+      <PackageReference Include="Zaabee.RabbitMQ.ISerialize" Version="2020.1.0" />
+      <PackageReference Include="Zaabee.SystemTextJson" Version="2020.1.0" />
     </ItemGroup>
 
 </Project>
