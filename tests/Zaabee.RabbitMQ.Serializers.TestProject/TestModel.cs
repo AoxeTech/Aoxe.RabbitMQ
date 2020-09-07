@@ -1,6 +1,6 @@
 ﻿﻿using System;
 
- namespace SerializerTestProject
+ namespace Zaabee.RabbitMQ.Serializers.TestProject
 {
     public class TestModel
     {

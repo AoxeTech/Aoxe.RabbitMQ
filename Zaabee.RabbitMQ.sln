@@ -24,7 +24,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "demo", "demo", "{AB08860D-B
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zaabee.RabbitMQ.Demo", "demo\Zaabee.RabbitMQ.Demo\Zaabee.RabbitMQ.Demo.csproj", "{CFDB36C5-A8D7-498F-8CF7-D3174A08EA94}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SerializerTestProject", "tests\SerializerTestProject\SerializerTestProject.csproj", "{18572AD7-1E8A-4F51-AEF4-E68DD426D161}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zaabee.RabbitMQ.Serializers.TestProject", "tests\Zaabee.RabbitMQ.Serializers.TestProject\Zaabee.RabbitMQ.Serializers.TestProject.csproj", "{18572AD7-1E8A-4F51-AEF4-E68DD426D161}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
