@@ -8,11 +8,12 @@ namespace Zaabee.RabbitMQ.SystemTextJson
 {
     public class Serializer : ISerializer
     {
-        private static readonly Encoding Encoding = Encoding.UTF8;
+        private static Encoding _encoding;
         private static JsonSerializerOptions _jsonSerializerOptions;
 
-        public Serializer(JsonSerializerOptions jsonSerializerOptions = null)
+        public Serializer(Encoding encoding = null, JsonSerializerOptions jsonSerializerOptions = null)
         {
+            _encoding = encoding ?? Encoding.UTF8;
             _jsonSerializerOptions = jsonSerializerOptions;
         }
 
@@ -23,7 +24,7 @@ namespace Zaabee.RabbitMQ.SystemTextJson
             SystemTextJsonSerializer.Deserialize<T>(bytes.ToArray(), _jsonSerializerOptions);
 
         public string BytesToText(ReadOnlyMemory<byte> bytes) =>
-            Encoding.GetString(bytes.ToArray());
+            _encoding.GetString(bytes.ToArray());
 
         public T FromText<T>(string text) =>
             SystemTextJsonSerializer.Deserialize<T>(text, _jsonSerializerOptions);
