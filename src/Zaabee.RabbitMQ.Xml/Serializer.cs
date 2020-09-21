@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Text;
 using Zaabee.RabbitMQ.Serializer.Abstraction;
+using Zaabee.Xml;
 
 namespace Zaabee.RabbitMQ.Xml
 {
@@ -14,15 +15,15 @@ namespace Zaabee.RabbitMQ.Xml
         }
 
         public ReadOnlyMemory<byte> Serialize<T>(T t) =>
-            Zaabee.Xml.XmlSerializer.Serialize(t);
+            XmlSerializer.Serialize(t);
 
         public T Deserialize<T>(ReadOnlyMemory<byte> bytes) =>
-            Zaabee.Xml.XmlSerializer.Deserialize<T>(bytes.ToArray());
+            XmlSerializer.Deserialize<T>(bytes.ToArray());
 
         public string BytesToText(ReadOnlyMemory<byte> bytes) =>
             _encoding.GetString(bytes.ToArray());
 
         public T FromText<T>(string text) =>
-            Zaabee.Xml.XmlSerializer.Deserialize<T>(text, _encoding);
+            XmlSerializer.Deserialize<T>(text, _encoding);
     }
 }
