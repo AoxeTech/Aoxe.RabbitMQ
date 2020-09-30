@@ -3,9 +3,8 @@ using System.Diagnostics;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Zaabee.RabbitMQ.Abstractions;
-using Zaabee.RabbitMQ.Demo;
 
-namespace Demo.Controllers
+namespace Zaabee.RabbitMQ.Demo.Controllers
 {
     [Route("api/[controller]/[action]")]
     public class RabbitMqDemoController : Controller
@@ -19,7 +18,7 @@ namespace Demo.Controllers
 
         [HttpGet]
         [HttpPost]
-        public long PublishEvent(int quantity)
+        public long PublishEventSync(int quantity)
         {
             var sw = Stopwatch.StartNew();
             for (var i = 0; i < quantity; i++)
@@ -70,7 +69,7 @@ namespace Demo.Controllers
 
         [HttpGet]
         [HttpPost]
-        public long PublishMessage(int quantity)
+        public long PublishMessageSync(int quantity)
         {
             var sw = Stopwatch.StartNew();
             for (var i = 0; i < quantity; i++)

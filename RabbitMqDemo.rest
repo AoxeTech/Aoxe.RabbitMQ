@@ -1,0 +1,17 @@
+GET  http://localhost:5000/api/RabbitMqDemo/PublishEvent?quantity=1000 HTTP/1.1
+Content-Type: application/json
+
+###
+
+GET  http://localhost:5000/api/RabbitMqDemo/PublishEventSync?quantity=1000 HTTP/1.1
+Content-Type: application/json
+
+###
+
+GET  http://localhost:5000/api/RabbitMqDemo/PublishMessage?quantity=1000 HTTP/1.1
+Content-Type: application/json
+
+###
+
+GET  http://localhost:5000/api/RabbitMqDemo/PublishMessageSync?quantity=1000 HTTP/1.1
+Content-Type: application/json
