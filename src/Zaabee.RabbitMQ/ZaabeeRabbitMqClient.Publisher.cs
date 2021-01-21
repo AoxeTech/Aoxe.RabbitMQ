@@ -104,9 +104,8 @@ namespace Zaabee.RabbitMQ
 
             if (queueParam is null) return channel;
 
-            channel.QueueDeclare(queue: queueParam.Queue, durable: queueParam.Durable,
-                exclusive: queueParam.Exclusive, autoDelete: queueParam.AutoDelete,
-                arguments: queueParam.Arguments);
+            channel.QueueDeclare(queue: queueParam.Queue, durable: queueParam.Durable, exclusive: queueParam.Exclusive,
+                autoDelete: queueParam.AutoDelete, arguments: queueParam.Arguments);
             channel.QueueBind(queue: queueParam.Queue, exchange: exchangeParam.Exchange,
                 routingKey: routingKey ?? queueParam.Queue);
 
