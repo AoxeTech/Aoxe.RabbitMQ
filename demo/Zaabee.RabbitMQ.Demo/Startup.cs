@@ -19,6 +19,7 @@ namespace Zaabee.RabbitMQ.Demo
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddSwaggerDocument();
             services.AddControllers();
             services.AddSingleton<IZaabeeRabbitMqClient>(p =>
                 new ZaabeeRabbitMqClient(new MqConfig
@@ -36,6 +37,8 @@ namespace Zaabee.RabbitMQ.Demo
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app)
         {
+            app.UseOpenApi();
+            app.UseSwaggerUi3();
             app.UseHttpsRedirection();
             app.UseRouting();
             app.UseEndpoints(endpoints => endpoints.MapControllers());
