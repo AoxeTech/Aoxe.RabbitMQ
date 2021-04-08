@@ -201,7 +201,7 @@ namespace Zaabee.RabbitMQ
                     exclusive: queueParam.Exclusive, autoDelete: queueParam.AutoDelete,
                     arguments: queueParam.Arguments);
 
-                if (exchangeParam != null)
+                if (exchangeParam is not null)
                 {
                     channel.ExchangeDeclare(exchange: exchangeParam.Exchange,
                         type: exchangeParam.Type.ToString().ToLower(),
