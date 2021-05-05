@@ -148,9 +148,9 @@ Create a class named ServiceRunner.cs
 ```CSharp
 public class ServiceRunner
 {
-    private readonly IEventBus _mqHandler;
+    private readonly IZaabeeRabbitMqClient _mqHandler;
 
-    public ServiceRunner(IEventBus handler)
+    public ServiceRunner(IZaabeeRabbitMqClient handler)
     {
         _mqHandler = handler;
     }
