@@ -185,7 +185,7 @@ namespace Zaabee.RabbitMQ.Demo
 }
 ```
 
-Register it in the ConfigureServices method(Start.cs)
+Add the host service in the ConfigureServices method(Start.cs)
 
 ```CSharp
 services.AddHostedService<RabbitMqBackgroundService>();
@@ -197,12 +197,13 @@ Debug the webapi project you can see the message in the queues will be subscribe
 
 The IEvent has two subscribe types and IMessage has three
 
-ReceiveEvent
-SubscribeEvent
+* ReceiveEvent
+* SubscribeEvent
 
-ReceiveMessage
-SubscribeMessage
-ListenMessage
+* ReceiveMessage
+* SubscribeMessage
+* ListenMessage
+
 The differences between IEvent and IMessage is that IEvent will persist messages but IMessage will not.IMessage is designed for performance,thus it will not persist messages in the exchange and queue.
 
 When you send a message at first time it will create default exchange named by the message full class name.The RECEIVE method will get the message from the queue whitch with the same name as exchange.The SUBSCRIBE method will create a new queue named by the handle and binding it to the message default exchange.So when you want to extend your service logic you just need to subscribe it and the previous services didn't need to recode or release.
