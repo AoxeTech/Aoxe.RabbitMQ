@@ -34,5 +34,11 @@ namespace Zaabee.RabbitMQ.Demo
             _messageBus.RepublishDeadLetterEvent<TestEvent>(
                 "dead-letter-Demo.TestEvent");
         }
+
+        public override async Task StopAsync(CancellationToken cancellationToken)
+        {
+            await base.StopAsync(cancellationToken);
+            _messageBus.Dispose();
+        }
     }
 }
