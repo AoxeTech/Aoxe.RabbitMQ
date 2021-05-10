@@ -33,17 +33,16 @@ using Zaabee.RabbitMQ.NewtonsoftJson;
 Register ZabbyRabbitMqClient in ConfigureServices method
 
 ```CSharp
-services.AddSingleton<ISerializer, Serializer>();
-services.AddSingleton<IZaabeeRabbitMqClient, ZaabeeRabbitMqClient>(p =>
+services.AddSingleton<IZaabeeRabbitMqClient>(p =>
     new ZaabeeRabbitMqClient(new MqConfig
     {
         AutomaticRecoveryEnabled = true,
-        HeartBeat = 60,
+        HeartBeat = TimeSpan.FromMinutes(1),
         NetworkRecoveryInterval = new TimeSpan(60),
-        Hosts = new List<string>{"192.168.78.152"},
+        Hosts = new List<string> {"192.168.78.150"},
         UserName = "admin",
-        Password = "admin"
-    }, services.BuildServiceProvider().GetService<ISerializer>()));
+        Password = "123"
+    }, new NewtonsoftJson.Serializer()));
 ```
 
 Create classes that implementate the IEvent or IMessage.IEvent means the message will be persisted both in exchange and queue for the RabbitMQ.When the handle throw exception it will be republished to the dead letter queue.
@@ -146,47 +145,42 @@ You can send request to these actions and the queues will show in the Rabbitmq M
 Create a class named ServiceRunner.cs
 
 ```CSharp
-public class ServiceRunner
+using System.Threading;
+using System.Threading.Tasks;
+using Microsoft.Extensions.Hosting;
+using Zaabee.RabbitMQ.Abstractions;
+
+namespace Zaabee.RabbitMQ.Demo
 {
-    private readonly IEventBus _mqHandler;
-
-    public ServiceRunner(IEventBus handler)
+    public class RabbitMqBackgroundService : BackgroundService
     {
-        _mqHandler = handler;
-    }
+        private readonly IZaabeeRabbitMqClient _messageBus;
 
-    public void Start()
-    {
-        _mqHandler.ReceiveEvent<TestEvent>(TestEventHandler);
-        _mqHandler.ReceiveEvent<TestEvent>(TestEventExceptionHandler);
-        _mqHandler.ReceiveEvent<TestEventWithVersion>(TestEventWithVersionHandler);
-        _mqHandler.ReceiveEvent<TestEventWithVersion>(TestEventExceptionWithVersionHandler);
-        _mqHandler.ReceiveMessage<TestMessage>(TestMessageHandler);
-    }
+        public RabbitMqBackgroundService(IZaabeeRabbitMqClient messageBus)
+        {
+            _messageBus = messageBus;
+        }
 
-    public void TestEventHandler(TestEvent testEvent)
-    {
+        protected override async Task ExecuteAsync(CancellationToken stoppingToken)
+        {
+            _messageBus.ReceiveEvent<TestEvent>(TestEventHandler);
+            _messageBus.SubscribeEvent<TestEvent>(new Subscriber().TestEventHandler);
 
-    }
-
-    public void TestEventExceptionHandler(TestEvent testEvent)
-    {
-        throw new Exception("Test");
-    }
-
-    public void TestEventWithVersionHandler(TestEventWithVersion testEventWithVersion)
-    {
-
-    }
-
-    public void TestEventExceptionWithVersionHandler(TestEventWithVersion testEventWithVersion)
-    {
-        throw new Exception("Test");
-    }
-
-    public void TestMessageHandler(TestMessage testMessage)
-    {
-
+            _messageBus.SubscribeEvent<TestEvent>(new Subscriber().TestEventHandler);
+            _messageBus.SubscribeEvent<TestEvent>(() => new Subscriber().TestEventHandler, 30);
+            _messageBus.ReceiveEvent<TestEvent>(TestEventExceptionHandler);
+            _messageBus.SubscribeEvent<TestEvent>(TestEventExceptionHandler);
+            _messageBus.ReceiveEvent<TestEventWithVersion>(TestEventWithVersionHandler);
+            _messageBus.ReceiveEvent<TestEventWithVersion>(TestEventExceptionWithVersionHandler, 20);
+            _messageBus.ReceiveMessage<TestMessage>(TestMessageHandler);
+            _messageBus.SubscribeMessage<TestMessage>(new Subscriber().TestMessageHandler);
+            _messageBus.SubscribeMessage<TestMessage>(() => new Subscriber().TestMessageHandler);
+            _messageBus.ListenMessage<TestMessage>(TestMessageHandler);
+            _messageBus.RepublishDeadLetterEvent<TestEvent>(
+                "dead-letter-EmailApplication.EmailEventHandler.Handle[EmailContract.EmailCommand]");
+            _messageBus.RepublishDeadLetterEvent<TestEvent>(
+                "dead-letter-Demo.TestEvent");
+        }
     }
 }
 ```
@@ -194,22 +188,7 @@ public class ServiceRunner
 Register it in the ConfigureServices method(Start.cs)
 
 ```CSharp
-services.AddSingleton<ServiceRunner>();
-```
-
-Modify the Configure method like this
-
-```CSharp
-public void Configure(IApplicationBuilder app, IHostingEnvironment env, ServiceRunner runner)
-{
-    if (env.IsDevelopment())
-    {
-        app.UseDeveloperExceptionPage();
-    }
-
-    app.UseMvc();
-    runner.Start();
-}
+services.AddHostedService<RabbitMqBackgroundService>();
 ```
 
 Debug the webapi project you can see the message in the queues will be subscribed.And some of them will be republished to the dead letter queues.
@@ -218,13 +197,12 @@ Debug the webapi project you can see the message in the queues will be subscribe
 
 The IEvent has two subscribe types and IMessage has three
 
-    ReceiveEvent
-    SubscribeEvent
+ReceiveEvent
+SubscribeEvent
 
-    ReceiveMessage
-    SubscribeMessage
-    ListenMessage
-
+ReceiveMessage
+SubscribeMessage
+ListenMessage
 The differences between IEvent and IMessage is that IEvent will persist messages but IMessage will not.IMessage is designed for performance,thus it will not persist messages in the exchange and queue.
 
 When you send a message at first time it will create default exchange named by the message full class name.The RECEIVE method will get the message from the queue whitch with the same name as exchange.The SUBSCRIBE method will create a new queue named by the handle and binding it to the message default exchange.So when you want to extend your service logic you just need to subscribe it and the previous services didn't need to recode or release.

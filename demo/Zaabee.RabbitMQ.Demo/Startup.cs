@@ -31,7 +31,7 @@ namespace Zaabee.RabbitMQ.Demo
                     UserName = "admin",
                     Password = "123"
                 }, new NewtonsoftJson.Serializer()));
-            services.AddSingleton<ServiceRunner>();
+            services.AddHostedService<RabbitMqBackgroundService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -42,8 +42,6 @@ namespace Zaabee.RabbitMQ.Demo
             app.UseHttpsRedirection();
             app.UseRouting();
             app.UseEndpoints(endpoints => endpoints.MapControllers());
-            var runner = app.ApplicationServices.GetService<ServiceRunner>();
-            runner?.Start();
         }
     }
 }

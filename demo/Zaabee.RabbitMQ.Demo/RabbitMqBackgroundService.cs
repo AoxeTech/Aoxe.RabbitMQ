@@ -1,17 +1,20 @@
-﻿using Zaabee.RabbitMQ.Abstractions;
+﻿using System.Threading;
+using System.Threading.Tasks;
+using Microsoft.Extensions.Hosting;
+using Zaabee.RabbitMQ.Abstractions;
 
 namespace Zaabee.RabbitMQ.Demo
 {
-    public class ServiceRunner
+    public class RabbitMqBackgroundService : BackgroundService
     {
         private readonly IZaabeeRabbitMqClient _messageBus;
 
-        public ServiceRunner(IZaabeeRabbitMqClient messageBus)
+        public RabbitMqBackgroundService(IZaabeeRabbitMqClient messageBus)
         {
             _messageBus = messageBus;
         }
 
-        public void Start()
+        protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
             // _messageBus.ReceiveEvent<TestEvent>(TestEventHandler);
             _messageBus.SubscribeEvent<TestEvent>(new Subscriber().TestEventHandler);
