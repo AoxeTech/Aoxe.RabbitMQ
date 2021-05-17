@@ -7,13 +7,6 @@ namespace Zaabee.RabbitMQ.Xml
 {
     public class Serializer : ISerializer
     {
-        private static Encoding _encoding;
-
-        public Serializer(Encoding defaultEncoding = null)
-        {
-            _encoding = defaultEncoding ?? Encoding.UTF8;
-        }
-
         public ReadOnlyMemory<byte> Serialize<T>(T t) =>
             XmlSerializer.Serialize(t);
 
@@ -21,9 +14,9 @@ namespace Zaabee.RabbitMQ.Xml
             XmlSerializer.Deserialize<T>(bytes.ToArray());
 
         public string BytesToText(ReadOnlyMemory<byte> bytes) =>
-            _encoding.GetString(bytes.ToArray());
+            Encoding.UTF8.GetString(bytes.ToArray());
 
         public T FromText<T>(string text) =>
-            XmlSerializer.Deserialize<T>(text, _encoding);
+            XmlSerializer.Deserialize<T>(text);
     }
 }
