@@ -15,12 +15,16 @@ namespace Zaabee.RabbitMQ.Utf8Json
             _jsonFormatterResolver = jsonFormatterResolver;
         }
 
-        public ReadOnlyMemory<byte> Serialize<T>(T t) => t.ToBytes(_jsonFormatterResolver);
+        public ReadOnlyMemory<byte> Serialize<T>(T t) =>
+            Utf8JsonSerializer.Serialize(t, _jsonFormatterResolver);
 
-        public T Deserialize<T>(ReadOnlyMemory<byte> bytes) => bytes.ToArray().FromBytes<T>(_jsonFormatterResolver);
+        public T Deserialize<T>(ReadOnlyMemory<byte> bytes) =>
+            Utf8JsonSerializer.Deserialize<T>(bytes.ToArray(), _jsonFormatterResolver);
 
-        public string BytesToText(ReadOnlyMemory<byte> bytes) => Encoding.UTF8.GetString(bytes.ToArray());
+        public string BytesToText(ReadOnlyMemory<byte> bytes) =>
+            Encoding.UTF8.GetString(bytes.ToArray());
 
-        public T FromText<T>(string text) => text.FromJson<T>(_jsonFormatterResolver);
+        public T FromText<T>(string text) =>
+            Utf8JsonSerializer.Deserialize<T>(text, _jsonFormatterResolver);
     }
 }

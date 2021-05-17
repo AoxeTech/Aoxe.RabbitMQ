@@ -15,12 +15,16 @@ namespace Zaabee.RabbitMQ.SystemTextJson
             _jsonSerializerOptions = jsonSerializerOptions;
         }
 
-        public ReadOnlyMemory<byte> Serialize<T>(T t) => t.ToBytes(_jsonSerializerOptions);
+        public ReadOnlyMemory<byte> Serialize<T>(T t) =>
+            SystemTextJsonSerializer.Serialize(t, _jsonSerializerOptions);
 
-        public T Deserialize<T>(ReadOnlyMemory<byte> bytes) => bytes.ToArray().FromBytes<T>(_jsonSerializerOptions);
+        public T Deserialize<T>(ReadOnlyMemory<byte> bytes) =>
+            SystemTextJsonSerializer.Deserialize<T>(bytes.ToArray(), _jsonSerializerOptions);
 
-        public string BytesToText(ReadOnlyMemory<byte> bytes) => Encoding.UTF8.GetString(bytes.ToArray());
+        public string BytesToText(ReadOnlyMemory<byte> bytes) =>
+            Encoding.UTF8.GetString(bytes.ToArray());
 
-        public T FromText<T>(string text) => text.FromJson<T>(_jsonSerializerOptions);
+        public T FromText<T>(string text) =>
+            SystemTextJsonSerializer.Deserialize<T>(text, _jsonSerializerOptions);
     }
 }

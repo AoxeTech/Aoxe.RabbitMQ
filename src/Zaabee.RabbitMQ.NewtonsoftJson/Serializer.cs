@@ -17,12 +17,16 @@ namespace Zaabee.RabbitMQ.NewtonsoftJson
             _settings = settings;
         }
 
-        public ReadOnlyMemory<byte> Serialize<T>(T t) => t.ToBytes(_settings, _encoding);
+        public ReadOnlyMemory<byte> Serialize<T>(T t) =>
+            NewtonsoftJsonSerializer.Serialize(t, _settings, _encoding);
 
-        public T Deserialize<T>(ReadOnlyMemory<byte> bytes) => bytes.ToArray().FromBytes<T>(_settings, _encoding);
+        public T Deserialize<T>(ReadOnlyMemory<byte> bytes) =>
+            NewtonsoftJsonSerializer.Deserialize<T>(bytes.ToArray(), _settings, _encoding);
 
-        public string BytesToText(ReadOnlyMemory<byte> bytes) => _encoding.GetString(bytes.ToArray());
+        public string BytesToText(ReadOnlyMemory<byte> bytes) =>
+            _encoding.GetString(bytes.ToArray());
 
-        public T FromText<T>(string text) => text.FromJson<T>(_settings);
+        public T FromText<T>(string text) =>
+            NewtonsoftJsonSerializer.Deserialize<T>(text, _settings);
     }
 }

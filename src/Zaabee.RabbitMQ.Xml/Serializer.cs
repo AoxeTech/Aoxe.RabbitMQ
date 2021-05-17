@@ -7,12 +7,16 @@ namespace Zaabee.RabbitMQ.Xml
 {
     public class Serializer : ISerializer
     {
-        public ReadOnlyMemory<byte> Serialize<T>(T t) => t.ToBytes();
+        public ReadOnlyMemory<byte> Serialize<T>(T t) =>
+            XmlSerializer.Serialize(t);
 
-        public T Deserialize<T>(ReadOnlyMemory<byte> bytes) => bytes.ToArray().FromBytes<T>();
+        public T Deserialize<T>(ReadOnlyMemory<byte> bytes) =>
+            XmlSerializer.Deserialize<T>(bytes.ToArray());
 
-        public string BytesToText(ReadOnlyMemory<byte> bytes) => Encoding.UTF8.GetString(bytes.ToArray());
+        public string BytesToText(ReadOnlyMemory<byte> bytes) =>
+            Encoding.UTF8.GetString(bytes.ToArray());
 
-        public T FromText<T>(string text) => text.FromXml<T>();
+        public T FromText<T>(string text) =>
+            XmlSerializer.Deserialize<T>(text);
     }
 }
