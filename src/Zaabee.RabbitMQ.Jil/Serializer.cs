@@ -17,16 +17,12 @@ namespace Zaabee.RabbitMQ.Jil
             _options = options;
         }
 
-        public ReadOnlyMemory<byte> Serialize<T>(T t) =>
-            JilSerializer.Serialize(t, _options, _encoding);
+        public ReadOnlyMemory<byte> Serialize<T>(T t) => t.ToBytes(_options, _encoding);
 
-        public T Deserialize<T>(ReadOnlyMemory<byte> bytes) =>
-            JilSerializer.Deserialize<T>(bytes.ToArray(), _options, _encoding);
+        public T Deserialize<T>(ReadOnlyMemory<byte> bytes) => bytes.ToArray().FromBytes<T>(_options, _encoding);
 
-        public string BytesToText(ReadOnlyMemory<byte> bytes) =>
-            _encoding.GetString(bytes.ToArray());
+        public string BytesToText(ReadOnlyMemory<byte> bytes) => _encoding.GetString(bytes.ToArray());
 
-        public T FromText<T>(string text) =>
-            JilSerializer.Deserialize<T>(text, _options);
+        public T FromText<T>(string text) => text.FromJson<T>(_options);
     }
 }
