@@ -15,8 +15,7 @@ namespace Zaabee.RabbitMQ
         private readonly IConnection _subscribeConn;
         private readonly ISerializer _serializer;
 
-        private readonly ConcurrentDictionary<Type, string> _queueNameDic =
-            new ConcurrentDictionary<Type, string>();
+        private readonly ConcurrentDictionary<Type, string> _queueNameDic = new ();
 
         public ZaabeeRabbitMqClient(MqConfig config, ISerializer serializer)
         {
@@ -136,14 +135,12 @@ namespace Zaabee.RabbitMQ
             channel.BasicConsume(queue: deadLetterQueueName, autoAck: false, consumer: consumer);
         }
 
-        private string GetTypeName(Type type)
-        {
-            return _queueNameDic.GetOrAdd(type,
-                _ => !(type.GetCustomAttributes(typeof(MessageVersionAttribute), false).FirstOrDefault() is
-                    MessageVersionAttribute msgVerAttr)
-                    ? type.ToString()
-                    : $"{type}[{msgVerAttr.Version}]");
-        }
+        private string GetTypeName(Type type) =>
+            _queueNameDic.GetOrAdd(type,
+                _ => type.GetCustomAttributes(typeof(MessageVersionAttribute), false).FirstOrDefault()
+                    is MessageVersionAttribute msgVerAttr
+                    ? $"{type}[{msgVerAttr.Version}]"
+                    : type.ToString());
 
         private string GetQueueName<T>(Action<T> handle)
         {
