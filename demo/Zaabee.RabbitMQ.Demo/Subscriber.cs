@@ -33,7 +33,8 @@ namespace Zaabee.RabbitMQ.Demo
 
         public void TestMessageHandler(TestMessage testMessage)
         {
-
+            var i = testMessage;
+            i.Timestamp=DateTimeOffset.Now;
         }
     }
 }
