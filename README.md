@@ -12,10 +12,26 @@ RabbitMQ is lightweight and easy to deploy on premises and in the cloud. It supp
 
 ```CLI
 Install-Package Zaabee.RabbitMQ
-Install-Package Zaabee.RabbitMQ.NewtonsoftJson
+Install-Package Zaabee.NewtonsoftJson
 ```
 
-Otherwise you can use other serializers like [Zaabee.RabbitMQ.Jil](https://github.com/Mutuduxf/Zaabee.RabbitMQ/tree/master/Zaabee.RabbitMQ.Jil) or [Zaabee.RabbitMQ.Utf8Json](https://github.com/Mutuduxf/Zaabee.RabbitMQ/tree/master/Zaabee.RabbitMQ.Utf8Json),they will provide higher performance.
+Otherwise we have other serializers:
+
+[Zaabee.Binary](https://github.com/Mutuduxf/Zaabee.Serializers/tree/master/src/Zaabee.Binary)
+
+[Zaabee.Jil](https://github.com/Mutuduxf/Zaabee.Serializers/tree/master/src/Zaabee.Jil)
+
+[Zaabee.MsgPack](https://github.com/Mutuduxf/Zaabee.Serializers/tree/master/src/Zaabee.MsgPack)
+
+[Zaabee.Protobuf](https://github.com/Mutuduxf/Zaabee.Serializers/tree/master/src/Zaabee.Protobuf)
+
+[Zaabee.SystemTextJson](https://github.com/Mutuduxf/Zaabee.Serializers/tree/master/src/Zaabee.SystemTextJson)
+
+[Zaabee.Utf8Json](https://github.com/Mutuduxf/Zaabee.Serializers/tree/master/src/Zaabee.Utf8Json)
+
+[Zaabee.Xml](https://github.com/Mutuduxf/Zaabee.Serializers/tree/master/src/Zaabee.Xml)
+
+[Zaabee.ZeroFormatter](https://github.com/Mutuduxf/Zaabee.Serializers/tree/master/src/Zaabee.ZeroFormatter)
 
 ### Asp.net core
 
@@ -26,8 +42,7 @@ Import reference in startup.cs
 ```CSharp
 using Zaabee.RabbitMQ;
 using Zaabee.RabbitMQ.Abstractions;
-using Zaabee.RabbitMQ.ISerialize;
-using Zaabee.RabbitMQ.NewtonsoftJson;
+using Zaabee.NewtonsoftJson;
 ```
 
 Register ZabbyRabbitMqClient in ConfigureServices method
