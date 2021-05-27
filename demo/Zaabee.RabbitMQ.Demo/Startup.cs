@@ -30,7 +30,7 @@ namespace Zaabee.RabbitMQ.Demo
                     Hosts = new List<string> {"192.168.78.150"},
                     UserName = "admin",
                     Password = "123"
-                }, new NewtonsoftJson.Serializer()));
+                }, new Zaabee.NewtonsoftJson.Serializer()));
             services.AddHostedService<RabbitMqBackgroundService>();
         }
 

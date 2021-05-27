@@ -223,7 +223,7 @@ namespace Zaabee.RabbitMQ
             {
                 try
                 {
-                    var msg = _serializer.Deserialize<T>(ea.Body);
+                    var msg = _serializer.DeserializeFromBytes<T>(ea.Body.ToArray());
                     handle(msg);
                 }
                 catch (Exception ex)
@@ -245,7 +245,7 @@ namespace Zaabee.RabbitMQ
             {
                 try
                 {
-                    var msg = _serializer.Deserialize<T>(ea.Body);
+                    var msg = _serializer.DeserializeFromBytes<T>(ea.Body.ToArray());
                     resolve.Invoke()(msg);
                 }
                 catch (Exception ex)
@@ -268,7 +268,7 @@ namespace Zaabee.RabbitMQ
                 try
                 {
                     var body = ea.Body;
-                    var msg = _serializer.Deserialize<T>(body);
+                    var msg = _serializer.DeserializeFromBytes<T>(body.ToArray());
                     handle(msg);
                 }
                 finally
@@ -287,7 +287,7 @@ namespace Zaabee.RabbitMQ
                 try
                 {
                     var body = ea.Body;
-                    var msg = _serializer.Deserialize<T>(body);
+                    var msg = _serializer.DeserializeFromBytes<T>(body.ToArray());
                     resolve.Invoke()(msg);
                 }
                 finally
@@ -318,11 +318,11 @@ namespace Zaabee.RabbitMQ
                     ExMsg = inmostEx.Message,
                     ExStack = inmostEx.StackTrace,
                     ThrowTime = DateTimeOffset.Now,
-                    BodyString = _serializer.BytesToText(ea.Body)
+                    BodyString = _serializer.BytesToString(ea.Body.ToArray())
                 };
 
                 deadLetterMsgChannel.BasicPublish(dlxExchangeParam.Exchange, routingKey, properties,
-                    _serializer.Serialize(dlx));
+                    _serializer.SerializeToBytes(dlx));
             }
         }
     }

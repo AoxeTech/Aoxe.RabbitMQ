@@ -1,33 +1,33 @@
 using System;
 using Xunit;
-using Zaabee.RabbitMQ.Serializer.Abstraction;
+using Zaabee.Serializer.Abstraction;
 
 namespace Zaabee.RabbitMQ.Serializers.TestProject
 {
     public class UnitTest
     {
         [Fact]
-        public void JilTest() => SerializerTest(new Zaabee.RabbitMQ.Jil.Serializer());
+        public void JilTest() => SerializerTest(new Zaabee.Jil.Serializer());
 
         [Fact]
-        public void NewtonsoftJsonTest() => SerializerTest(new Zaabee.RabbitMQ.NewtonsoftJson.Serializer());
+        public void NewtonsoftJsonTest() => SerializerTest(new Zaabee.NewtonsoftJson.Serializer());
 
         [Fact]
-        public void SystemTextJsonTest() => SerializerTest(new Zaabee.RabbitMQ.SystemTextJson.Serializer());
+        public void SystemTextJsonTest() => SerializerTest(new Zaabee.SystemTextJson.Serializer());
 
         [Fact]
-        public void Utf8JsonTest() => SerializerTest(new Zaabee.RabbitMQ.Utf8Json.Serializer());
+        public void Utf8JsonTest() => SerializerTest(new Zaabee.Utf8Json.Serializer());
 
         [Fact]
-        public void XmlTest() => SerializerTest(new Zaabee.RabbitMQ.Xml.Serializer());
+        public void XmlTest() => SerializerTest(new Zaabee.Xml.Serializer());
 
         private static void SerializerTest(ISerializer serializer)
         {
             var testModel = GetTestModel();
-            var bytes = serializer.Serialize(testModel);
-            var text = serializer.BytesToText(bytes);
-            var result0 = serializer.Deserialize<TestModel>(bytes);
-            var result1 = serializer.FromText<TestModel>(text);
+            var bytes = serializer.SerializeToBytes(testModel);
+            var text = serializer.BytesToString(bytes);
+            var result0 = serializer.DeserializeFromBytes<TestModel>(bytes);
+            var result1 = serializer.DeserializeFromString<TestModel>(text);
 
             Assert.Equal(
                 Tuple.Create(testModel.Id, testModel.Age, testModel.CreateTime, testModel.Name, testModel.Gender),

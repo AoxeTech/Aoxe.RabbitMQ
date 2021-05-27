@@ -1,4 +1,3 @@
-using System;
 using System.Threading.Tasks;
 using RabbitMQ.Client;
 
@@ -12,9 +11,9 @@ namespace Zaabee.RabbitMQ
             PublishEvent(GetTypeName(typeof(T)), @event);
 
         public void PublishEvent<T>(string exchangeName, T @event) =>
-            PublishEvent(exchangeName, _serializer.Serialize(@event));
+            PublishEvent(exchangeName, _serializer.SerializeToBytes(@event));
 
-        public void PublishEvent(string exchangeName, ReadOnlyMemory<byte> body)
+        public void PublishEvent(string exchangeName, byte[] body)
         {
             var exchangeParam = new ExchangeParam {Exchange = exchangeName};
             using (var channel = GetPublisherChannel(exchangeParam, null))
@@ -33,7 +32,7 @@ namespace Zaabee.RabbitMQ
         public async Task PublishEventAsync<T>(string exchangeName, T @event) =>
             await Task.Run(() => { PublishEvent(exchangeName, @event); });
 
-        public async Task PublishEventAsync(string exchangeName, ReadOnlyMemory<byte> body) =>
+        public async Task PublishEventAsync(string exchangeName, byte[] body) =>
             await Task.Run(() => { PublishEvent(exchangeName, body); });
 
         #endregion
@@ -44,9 +43,9 @@ namespace Zaabee.RabbitMQ
             PublishMessage(GetTypeName(typeof(T)), message);
 
         public void PublishMessage<T>(string exchangeName, T message) =>
-            PublishMessage(exchangeName, _serializer.Serialize(message));
+            PublishMessage(exchangeName, _serializer.SerializeToBytes(message));
 
-        public void PublishMessage(string exchangeName, ReadOnlyMemory<byte> body)
+        public void PublishMessage(string exchangeName, byte[] body)
         {
             var exchangeParam = new ExchangeParam {Exchange = exchangeName, Durable = false};
             using (var channel = GetPublisherChannel(exchangeParam, null))
@@ -62,7 +61,7 @@ namespace Zaabee.RabbitMQ
         public async Task PublishMessageAsync<T>(string exchangeName, T message) =>
             await Task.Run(() => { PublishMessage(exchangeName, message); });
 
-        public async Task PublishMessageAsync(string exchangeName, ReadOnlyMemory<byte> body) =>
+        public async Task PublishMessageAsync(string exchangeName, byte[] body) =>
             await Task.Run(() => { PublishMessage(exchangeName, body); });
 
         #endregion
@@ -70,9 +69,9 @@ namespace Zaabee.RabbitMQ
         #region Command
 
         public void PublishCommand<T>(T command) =>
-            PublishCommand(GetTypeName(typeof(T)), _serializer.Serialize(command));
+            PublishCommand(GetTypeName(typeof(T)), _serializer.SerializeToBytes(command));
 
-        public void PublishCommand(string exchangeName, ReadOnlyMemory<byte> body)
+        public void PublishCommand(string exchangeName, byte[] body)
         {
             var exchangeParam = new ExchangeParam {Exchange = exchangeName};
             var queueParam = new QueueParam {Queue = exchangeName};
@@ -89,7 +88,7 @@ namespace Zaabee.RabbitMQ
         public async Task PublishCommandAsync<T>(T command) =>
             await Task.Run(() => { PublishCommand(command); });
 
-        public async Task PublishCommandAsync(string exchangeName, ReadOnlyMemory<byte> body) =>
+        public async Task PublishCommandAsync(string exchangeName, byte[] body) =>
             await Task.Run(() => { PublishCommand(exchangeName, body); });
 
         #endregion

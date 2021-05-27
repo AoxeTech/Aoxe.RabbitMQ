@@ -5,7 +5,7 @@ using System.Linq;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using Zaabee.RabbitMQ.Abstractions;
-using Zaabee.RabbitMQ.Serializer.Abstraction;
+using Zaabee.Serializer.Abstraction;
 
 namespace Zaabee.RabbitMQ
 {
@@ -107,7 +107,7 @@ namespace Zaabee.RabbitMQ
                 try
                 {
                     var body = ea.Body;
-                    var msg = _serializer.Deserialize<DeadLetterMsg>(body);
+                    var msg = _serializer.DeserializeFromBytes<DeadLetterMsg>(body.ToArray());
 
                     var republishExchangeParam =
                         new ExchangeParam {Exchange = $"republish-{deadLetterQueueName}", Durable = true};
@@ -119,10 +119,10 @@ namespace Zaabee.RabbitMQ
                         properties.Persistent = true;
                         var routingKey = republishExchangeParam.Exchange;
 
-                        var deadLetter = _serializer.FromText<T>(msg.BodyString);
+                        var deadLetter = _serializer.DeserializeFromString<T>(msg.BodyString);
 
                         republishChannel.BasicPublish(republishExchangeParam.Exchange, routingKey, properties,
-                            _serializer.Serialize(deadLetter));
+                            _serializer.SerializeToBytes(deadLetter));
                     }
 
                     channel.BasicAck(ea.DeliveryTag, false);

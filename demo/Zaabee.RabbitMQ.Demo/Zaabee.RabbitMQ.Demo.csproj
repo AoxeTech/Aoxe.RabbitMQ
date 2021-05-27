@@ -5,12 +5,12 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\src\Zaabee.RabbitMQ.NewtonsoftJson\Zaabee.RabbitMQ.NewtonsoftJson.csproj" />
-      <ProjectReference Include="..\..\src\Zaabee.RabbitMQ\Zaabee.RabbitMQ.csproj" />
+        <ProjectReference Include="..\..\src\Zaabee.RabbitMQ\Zaabee.RabbitMQ.csproj" />
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="NSwag.AspNetCore" Version="13.11.1" />
+        <PackageReference Include="NSwag.AspNetCore" Version="13.11.1" />
+        <PackageReference Include="Zaabee.NewtonsoftJson" Version="2021.2.0" />
     </ItemGroup>
 
 </Project>
