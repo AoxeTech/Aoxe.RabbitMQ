@@ -1,6 +1,6 @@
 using System;
 using Xunit;
-using Zaabee.Serializer.Abstraction;
+using Zaabee.Serializer.Abstractions;
 
 namespace Zaabee.RabbitMQ.Serializers.TestProject
 {

@@ -5,7 +5,7 @@ using System.Linq;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using Zaabee.RabbitMQ.Abstractions;
-using Zaabee.Serializer.Abstraction;
+using Zaabee.Serializer.Abstractions;
 
 namespace Zaabee.RabbitMQ
 {
