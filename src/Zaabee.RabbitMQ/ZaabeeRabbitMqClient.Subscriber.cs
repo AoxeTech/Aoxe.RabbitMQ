@@ -228,7 +228,7 @@ namespace Zaabee.RabbitMQ
                 }
                 catch (Exception ex)
                 {
-                    PublishDlx(ea, queue, ex);
+                    PublishDlx<T>(ea, queue, ex);
                 }
                 finally
                 {
@@ -250,7 +250,7 @@ namespace Zaabee.RabbitMQ
                 }
                 catch (Exception ex)
                 {
-                    PublishDlx(ea, queue, ex);
+                    PublishDlx<T>(ea, queue, ex);
                 }
                 finally
                 {
@@ -298,7 +298,7 @@ namespace Zaabee.RabbitMQ
             channel.BasicConsume(queue: queue, autoAck: false, consumer: consumer);
         }
 
-        private void PublishDlx(BasicDeliverEventArgs ea, string queue, Exception ex)
+        private void PublishDlx<T>(BasicDeliverEventArgs ea, string queue, Exception ex)
         {
             var inmostEx = ex.GetInmostException();
 
@@ -318,7 +318,7 @@ namespace Zaabee.RabbitMQ
                     ExMsg = inmostEx.Message,
                     ExStack = inmostEx.StackTrace,
                     ThrowTime = DateTimeOffset.Now,
-                    BodyString = _serializer.BytesToString(ea.Body.ToArray())
+                    BodyString = _serializer.SerializeToString(_serializer.DeserializeFromBytes<T>(ea.Body.ToArray()))
                 };
 
                 deadLetterMsgChannel.BasicPublish(dlxExchangeParam.Exchange, routingKey, properties,

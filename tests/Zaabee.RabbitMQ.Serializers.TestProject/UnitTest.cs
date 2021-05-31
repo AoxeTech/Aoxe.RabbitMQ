@@ -21,17 +21,18 @@ namespace Zaabee.RabbitMQ.Serializers.TestProject
         [Fact]
         public void XmlTest() => SerializerTest(new Zaabee.Xml.Serializer());
 
-        private static void SerializerTest(ISerializer serializer)
+        private static void SerializerTest(ITextSerializer serializer)
         {
             var testModel = GetTestModel();
             var bytes = serializer.SerializeToBytes(testModel);
-            var text = serializer.BytesToString(bytes);
+            var str = serializer.SerializeToString(testModel);
             var result0 = serializer.DeserializeFromBytes<TestModel>(bytes);
-            var result1 = serializer.DeserializeFromString<TestModel>(text);
+            var result1 = serializer.DeserializeFromString<TestModel>(str);
 
             Assert.Equal(
                 Tuple.Create(testModel.Id, testModel.Age, testModel.CreateTime, testModel.Name, testModel.Gender),
                 Tuple.Create(result0.Id, result0.Age, result0.CreateTime, result0.Name, result0.Gender));
+
             Assert.Equal(
                 Tuple.Create(testModel.Id, testModel.Age, testModel.CreateTime, testModel.Name, testModel.Gender),
                 Tuple.Create(result1.Id, result1.Age, result1.CreateTime, result1.Name, result1.Gender));
@@ -39,7 +40,7 @@ namespace Zaabee.RabbitMQ.Serializers.TestProject
 
         private static TestModel GetTestModel()
         {
-            return new TestModel
+            return new()
             {
                 Id = Guid.NewGuid(),
                 Age = new Random().Next(0, 100),

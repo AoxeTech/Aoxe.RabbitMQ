@@ -13,11 +13,11 @@ namespace Zaabee.RabbitMQ
     {
         private readonly IConnection _publishConn;
         private readonly IConnection _subscribeConn;
-        private readonly ISerializer _serializer;
+        private readonly ITextSerializer _serializer;
 
         private readonly ConcurrentDictionary<Type, string> _queueNameDic = new ();
 
-        public ZaabeeRabbitMqClient(MqConfig config, ISerializer serializer)
+        public ZaabeeRabbitMqClient(MqConfig config, ITextSerializer serializer)
         {
             if (config is null) throw new ArgumentNullException(nameof(config));
             if (serializer is null) throw new ArgumentNullException(nameof(serializer));
@@ -38,7 +38,7 @@ namespace Zaabee.RabbitMQ
             _serializer = serializer;
         }
 
-        public ZaabeeRabbitMqClient(IConnectionFactory connectionFactory, ISerializer serializer)
+        public ZaabeeRabbitMqClient(IConnectionFactory connectionFactory, ITextSerializer serializer)
         {
             if (connectionFactory is null) throw new ArgumentNullException(nameof(connectionFactory));
             _serializer = serializer ?? throw new ArgumentNullException(nameof(serializer));
@@ -48,7 +48,7 @@ namespace Zaabee.RabbitMQ
         }
 
         public ZaabeeRabbitMqClient(IConnectionFactory connectionFactory, string clientProvidedName,
-            ISerializer serializer)
+            ITextSerializer serializer)
         {
             if (connectionFactory is null) throw new ArgumentNullException(nameof(connectionFactory));
             _serializer = serializer ?? throw new ArgumentNullException(nameof(serializer));
@@ -57,7 +57,7 @@ namespace Zaabee.RabbitMQ
             _subscribeConn = connectionFactory.CreateConnection(clientProvidedName);
         }
 
-        public ZaabeeRabbitMqClient(IConnectionFactory connectionFactory, IList<string> hosts, ISerializer serializer)
+        public ZaabeeRabbitMqClient(IConnectionFactory connectionFactory, IList<string> hosts, ITextSerializer serializer)
         {
             if (connectionFactory is null) throw new ArgumentNullException(nameof(connectionFactory));
             _serializer = serializer ?? throw new ArgumentNullException(nameof(serializer));
@@ -67,7 +67,7 @@ namespace Zaabee.RabbitMQ
         }
 
         public ZaabeeRabbitMqClient(IConnectionFactory connectionFactory, IList<string> hosts,
-            string clientProvidedName, ISerializer serializer)
+            string clientProvidedName, ITextSerializer serializer)
         {
             if (connectionFactory is null) throw new ArgumentNullException(nameof(connectionFactory));
             _serializer = serializer ?? throw new ArgumentNullException(nameof(serializer));
@@ -77,7 +77,7 @@ namespace Zaabee.RabbitMQ
         }
 
         public ZaabeeRabbitMqClient(IConnectionFactory connectionFactory, IList<AmqpTcpEndpoint> endpoints,
-            ISerializer serializer)
+            ITextSerializer serializer)
         {
             if (connectionFactory is null) throw new ArgumentNullException(nameof(connectionFactory));
             _serializer = serializer ?? throw new ArgumentNullException(nameof(serializer));
@@ -87,7 +87,7 @@ namespace Zaabee.RabbitMQ
         }
 
         public ZaabeeRabbitMqClient(IConnectionFactory connectionFactory, IList<AmqpTcpEndpoint> endpoints,
-            string clientProvidedName, ISerializer serializer)
+            string clientProvidedName, ITextSerializer serializer)
         {
             if (connectionFactory is null) throw new ArgumentNullException(nameof(connectionFactory));
             _serializer = serializer ?? throw new ArgumentNullException(nameof(serializer));

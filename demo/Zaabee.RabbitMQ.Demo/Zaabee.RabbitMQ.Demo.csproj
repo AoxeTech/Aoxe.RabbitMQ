@@ -10,7 +10,7 @@
 
     <ItemGroup>
         <PackageReference Include="NSwag.AspNetCore" Version="13.11.1" />
-        <PackageReference Include="Zaabee.NewtonsoftJson" Version="2021.3.0" />
+        <PackageReference Include="Zaabee.NewtonsoftJson" Version="2021.4.0" />
     </ItemGroup>
 
 </Project>
