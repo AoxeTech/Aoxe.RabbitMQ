@@ -5,7 +5,7 @@ namespace Zaabee.RabbitMQ
 {
     public class MqConfig
     {
-        private List<string> _hosts = new List<string>();
+        private List<string> _hosts = new();
 
         public List<string> Hosts
         {
