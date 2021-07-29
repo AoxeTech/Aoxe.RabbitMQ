@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 
 namespace Zaabee.RabbitMQ.Abstractions
 {
@@ -12,7 +13,7 @@ namespace Zaabee.RabbitMQ.Abstractions
         /// <param name="handle"></param>
         /// <param name="prefetchCount"></param>
         /// <typeparam name="T"></typeparam>
-        void ReceiveEvent<T>(Action<T> handle, ushort prefetchCount = 10);
+        Task ReceiveEventAsync<T>(Action<T> handle, ushort prefetchCount = 10);
 
         /// <summary>
         /// The subscriber cluster will receive the Event by the default queue.
@@ -20,7 +21,7 @@ namespace Zaabee.RabbitMQ.Abstractions
         /// <param name="resolve"></param>
         /// <param name="prefetchCount"></param>
         /// <typeparam name="T"></typeparam>
-        void ReceiveEvent<T>(Func<Action<T>> resolve, ushort prefetchCount = 10);
+        Task ReceiveEventAsync<T>(Func<Action<T>> resolve, ushort prefetchCount = 10);
 
         /// <summary>
         /// The subscriber cluster will receive the Event by its own queue.
@@ -28,7 +29,7 @@ namespace Zaabee.RabbitMQ.Abstractions
         /// <param name="handle"></param>
         /// <param name="prefetchCount"></param>
         /// <typeparam name="T"></typeparam>
-        void SubscribeEvent<T>(Action<T> handle, ushort prefetchCount = 10);
+        Task SubscribeEventAsync<T>(Action<T> handle, ushort prefetchCount = 10);
 
         /// <summary>
         /// The subscriber cluster will receive the Event by the specified queue.
@@ -37,7 +38,7 @@ namespace Zaabee.RabbitMQ.Abstractions
         /// <param name="handle"></param>
         /// <param name="prefetchCount"></param>
         /// <typeparam name="T"></typeparam>
-        void SubscribeEvent<T>(string queue, Action<T> handle, ushort prefetchCount = 10);
+        Task SubscribeEventAsync<T>(string queue, Action<T> handle, ushort prefetchCount = 10);
 
         /// <summary>
         /// The subscriber cluster will receive the Event by the specified exchange and queue.
@@ -47,7 +48,7 @@ namespace Zaabee.RabbitMQ.Abstractions
         /// <param name="handle"></param>
         /// <param name="prefetchCount"></param>
         /// <typeparam name="T"></typeparam>
-        void SubscribeEvent<T>(string exchange, string queue, Action<T> handle, ushort prefetchCount = 10);
+        Task SubscribeEventAsync<T>(string exchange, string queue, Action<T> handle, ushort prefetchCount = 10);
 
         /// <summary>
         /// The subscriber cluster will receive the Event by its own queue.
@@ -55,7 +56,7 @@ namespace Zaabee.RabbitMQ.Abstractions
         /// <param name="resolve"></param>
         /// <param name="prefetchCount"></param>
         /// <typeparam name="T"></typeparam>
-        void SubscribeEvent<T>(Func<Action<T>> resolve, ushort prefetchCount = 10);
+        Task SubscribeEventAsync<T>(Func<Action<T>> resolve, ushort prefetchCount = 10);
 
         /// <summary>
         /// The subscriber cluster will receive the Event by the specified queue.
@@ -64,7 +65,7 @@ namespace Zaabee.RabbitMQ.Abstractions
         /// <param name="resolve"></param>
         /// <param name="prefetchCount"></param>
         /// <typeparam name="T"></typeparam>
-        void SubscribeEvent<T>(string queue, Func<Action<T>> resolve, ushort prefetchCount = 10);
+        Task SubscribeEventAsync<T>(string queue, Func<Action<T>> resolve, ushort prefetchCount = 10);
 
         /// <summary>
         /// The subscriber cluster will receive the Event by the specified exchange and queue.
@@ -74,7 +75,7 @@ namespace Zaabee.RabbitMQ.Abstractions
         /// <param name="resolve"></param>
         /// <param name="prefetchCount"></param>
         /// <typeparam name="T"></typeparam>
-        void SubscribeEvent<T>(string exchange, string queue, Func<Action<T>> resolve, ushort prefetchCount = 10);
+        Task SubscribeEventAsync<T>(string exchange, string queue, Func<Action<T>> resolve, ushort prefetchCount = 10);
 
         #endregion
 
@@ -86,7 +87,7 @@ namespace Zaabee.RabbitMQ.Abstractions
         /// <param name="handle"></param>
         /// <param name="prefetchCount"></param>
         /// <typeparam name="T"></typeparam>
-        void ReceiveMessage<T>(Action<T> handle, ushort prefetchCount = 10);
+        Task ReceiveMessageAsync<T>(Action<T> handle, ushort prefetchCount = 10);
 
         /// <summary>
         /// The subscriber cluster will receive the Message by the default queue.
@@ -94,7 +95,7 @@ namespace Zaabee.RabbitMQ.Abstractions
         /// <param name="resolve"></param>
         /// <param name="prefetchCount"></param>
         /// <typeparam name="T"></typeparam>
-        void ReceiveMessage<T>(Func<Action<T>> resolve, ushort prefetchCount = 10);
+        Task ReceiveMessageAsync<T>(Func<Action<T>> resolve, ushort prefetchCount = 10);
 
         /// <summary>
         /// The subscriber cluster will receive the Message by its own queue.
@@ -102,7 +103,7 @@ namespace Zaabee.RabbitMQ.Abstractions
         /// <param name="handle"></param>
         /// <param name="prefetchCount"></param>
         /// <typeparam name="T"></typeparam>
-        void SubscribeMessage<T>(Action<T> handle, ushort prefetchCount = 10);
+        Task SubscribeMessageAsync<T>(Action<T> handle, ushort prefetchCount = 10);
 
         /// <summary>
         /// The subscriber cluster will receive the Message by the specified queue.
@@ -111,7 +112,7 @@ namespace Zaabee.RabbitMQ.Abstractions
         /// <param name="handle"></param>
         /// <param name="prefetchCount"></param>
         /// <typeparam name="T"></typeparam>
-        void SubscribeMessage<T>(string queue, Action<T> handle, ushort prefetchCount = 10);
+        Task SubscribeMessageAsync<T>(string queue, Action<T> handle, ushort prefetchCount = 10);
 
         /// <summary>
         /// The subscriber cluster will receive the Message by the specified exchange and queue.
@@ -121,7 +122,7 @@ namespace Zaabee.RabbitMQ.Abstractions
         /// <param name="handle"></param>
         /// <param name="prefetchCount"></param>
         /// <typeparam name="T"></typeparam>
-        void SubscribeMessage<T>(string exchange, string queue, Action<T> handle, ushort prefetchCount = 10);
+        Task SubscribeMessageAsync<T>(string exchange, string queue, Action<T> handle, ushort prefetchCount = 10);
 
         /// <summary>
         /// The subscriber cluster will receive the Message by its own queue.
@@ -129,7 +130,7 @@ namespace Zaabee.RabbitMQ.Abstractions
         /// <param name="resolve"></param>
         /// <param name="prefetchCount"></param>
         /// <typeparam name="T"></typeparam>
-        void SubscribeMessage<T>(Func<Action<T>> resolve, ushort prefetchCount = 10);
+        Task SubscribeMessageAsync<T>(Func<Action<T>> resolve, ushort prefetchCount = 10);
 
         /// <summary>
         /// The subscriber cluster will receive the Message by the specified queue.
@@ -138,7 +139,7 @@ namespace Zaabee.RabbitMQ.Abstractions
         /// <param name="resolve"></param>
         /// <param name="prefetchCount"></param>
         /// <typeparam name="T"></typeparam>
-        void SubscribeMessage<T>(string queue, Func<Action<T>> resolve, ushort prefetchCount = 10);
+        Task SubscribeMessageAsync<T>(string queue, Func<Action<T>> resolve, ushort prefetchCount = 10);
 
         /// <summary>
         /// 
@@ -148,7 +149,7 @@ namespace Zaabee.RabbitMQ.Abstractions
         /// <param name="resolve"></param>
         /// <param name="prefetchCount"></param>
         /// <typeparam name="T"></typeparam>
-        void SubscribeMessage<T>(string exchange, string queue, Func<Action<T>> resolve, ushort prefetchCount = 10);
+        Task SubscribeMessageAsync<T>(string exchange, string queue, Func<Action<T>> resolve, ushort prefetchCount = 10);
 
         /// <summary>
         /// The subscriber node will receive the Message by its own queue.
@@ -156,7 +157,7 @@ namespace Zaabee.RabbitMQ.Abstractions
         /// <param name="handle"></param>
         /// <param name="prefetchCount"></param>
         /// <typeparam name="T"></typeparam>
-        void ListenMessage<T>(Action<T> handle, ushort prefetchCount = 10);
+        Task ListenMessageAsync<T>(Action<T> handle, ushort prefetchCount = 10);
 
         /// <summary>
         /// The subscriber node will receive the Message by its own queue.
@@ -164,7 +165,7 @@ namespace Zaabee.RabbitMQ.Abstractions
         /// <param name="resolve"></param>
         /// <param name="prefetchCount"></param>
         /// <typeparam name="T"></typeparam>
-        void ListenMessage<T>(Func<Action<T>> resolve, ushort prefetchCount = 10);
+        Task ListenMessageAsync<T>(Func<Action<T>> resolve, ushort prefetchCount = 10);
 
         #endregion
 
@@ -176,7 +177,7 @@ namespace Zaabee.RabbitMQ.Abstractions
         /// <param name="handle"></param>
         /// <param name="prefetchCount"></param>
         /// <typeparam name="T"></typeparam>
-        void ReceiveCommand<T>(Action<T> handle, ushort prefetchCount = 10);
+        Task ReceiveCommandAsync<T>(Action<T> handle, ushort prefetchCount = 10);
 
         /// <summary>
         /// The subscriber cluster will receive the Command by the default queue.
@@ -184,7 +185,7 @@ namespace Zaabee.RabbitMQ.Abstractions
         /// <param name="resolve"></param>
         /// <param name="prefetchCount"></param>
         /// <typeparam name="T"></typeparam>
-        void ReceiveCommand<T>(Func<Action<T>> resolve, ushort prefetchCount = 10);
+        Task ReceiveCommandAsync<T>(Func<Action<T>> resolve, ushort prefetchCount = 10);
 
         /// <summary>
         /// The subscriber cluster will receive the Command by the default queue.
@@ -193,7 +194,7 @@ namespace Zaabee.RabbitMQ.Abstractions
         /// <param name="handle"></param>
         /// <param name="prefetchCount"></param>
         /// <typeparam name="T"></typeparam>
-        void ReceiveCommand<T>(string queue, Action<T> handle, ushort prefetchCount = 10);
+        Task ReceiveCommandAsync<T>(string queue, Action<T> handle, ushort prefetchCount = 10);
 
         /// <summary>
         /// The subscriber cluster will receive the Command by the default queue.
@@ -202,10 +203,8 @@ namespace Zaabee.RabbitMQ.Abstractions
         /// <param name="resolve"></param>
         /// <param name="prefetchCount"></param>
         /// <typeparam name="T"></typeparam>
-        void ReceiveCommand<T>(string queue, Func<Action<T>> resolve, ushort prefetchCount = 10);
+        Task ReceiveCommandAsync<T>(string queue, Func<Action<T>> resolve, ushort prefetchCount = 10);
 
         #endregion
-
-        void RepublishDeadLetterEvent<T>(string deadLetterQueueName, ushort prefetchCount = 10);
     }
 }
