@@ -16,20 +16,11 @@ namespace Zaabee.RabbitMQ.Demo
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            _messageBus.ReceiveEvent<TestEvent>(new Subscriber().TestEventHandler);
-            _messageBus.SubscribeEvent<TestEvent>(new Subscriber().TestEventHandler);
-
-            _messageBus.SubscribeEvent<TestEvent>(() => new Subscriber().TestEventHandler);
-            _messageBus.SubscribeEvent<TestEvent>(() => new Subscriber().TestEventHandler, 30);
-            _messageBus.ReceiveEvent<TestEvent>(new Subscriber().TestEventExceptionHandler);
-            _messageBus.SubscribeEvent<TestEvent>(new Subscriber().TestEventExceptionHandler);
-            _messageBus.ReceiveEvent<TestEventWithVersion>(new Subscriber().TestEventWithVersionHandler);
-            _messageBus.SubscribeEvent<TestEventWithVersion>(
+            await _messageBus.SubscribeEventAsync<TestEvent>(() => new Subscriber().TestEventHandler);
+            await _messageBus.SubscribeEventAsync<TestEvent>(() => new Subscriber().TestEventHandler, 30);
+            await _messageBus.SubscribeEventAsync<TestEventWithVersion>(
                 () => new Subscriber().TestEventExceptionWithVersionHandler, 20);
-            _messageBus.ReceiveMessage<TestMessage>(new Subscriber().TestMessageHandler);
-            _messageBus.SubscribeMessage<TestMessage>(new Subscriber().TestMessageHandler);
-            _messageBus.SubscribeMessage<TestMessage>(() => new Subscriber().TestMessageHandler);
-            _messageBus.ListenMessage<TestMessage>(new Subscriber().TestMessageHandler);
+            await _messageBus.SubscribeMessageAsync<TestMessage>(() => new Subscriber().TestMessageHandler);
             _messageBus.RepublishDeadLetterEvent<TestEvent>(
                 "dead-letter-Zaabee.RabbitMQ.Demo.Subscriber.TestEventExceptionHandler[Zaabee.RabbitMQ.Demo.TestEvent]");
             _messageBus.RepublishDeadLetterEvent<TestEvent>(
