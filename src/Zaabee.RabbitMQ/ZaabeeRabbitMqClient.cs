@@ -31,6 +31,7 @@ namespace Zaabee.RabbitMQ
                 UserName = config.UserName,
                 Password = config.Password,
                 VirtualHost = string.IsNullOrWhiteSpace(config.VirtualHost) ? "/" : config.VirtualHost,
+                DispatchConsumersAsync = true
             };
 
             _publishConn = config.Hosts.Any() ? factory.CreateConnection(config.Hosts) : factory.CreateConnection();
