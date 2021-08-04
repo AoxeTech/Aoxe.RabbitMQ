@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Concurrent;
+using System.Threading.Tasks;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 
@@ -19,7 +20,19 @@ namespace Zaabee.RabbitMQ
             SubscribeEvent(eventName, eventName, resolve, prefetchCount);
         }
 
+        public void ReceiveEvent<T>(Func<Func<T, Task>> resolve, ushort prefetchCount = DefaultPrefetchCount)
+        {
+            var eventName = GetTypeName(typeof(T));
+            SubscribeEvent(eventName, eventName, resolve, prefetchCount);
+        }
+
         public void SubscribeEvent<T>(Func<Action<T>> resolve, ushort prefetchCount = DefaultPrefetchCount)
+        {
+            var methodFullName = GetQueueName(resolve);
+            SubscribeEvent(methodFullName, resolve, prefetchCount);
+        }
+
+        public void SubscribeEvent<T>(Func<Func<T, Task>> resolve, ushort prefetchCount = DefaultPrefetchCount)
         {
             var methodFullName = GetQueueName(resolve);
             SubscribeEvent(methodFullName, resolve, prefetchCount);
@@ -32,11 +45,28 @@ namespace Zaabee.RabbitMQ
             SubscribeEvent(exchange, queue, resolve, prefetchCount);
         }
 
+        public void SubscribeEvent<T>(string queue, Func<Func<T, Task>> resolve,
+            ushort prefetchCount = DefaultPrefetchCount)
+        {
+            var exchange = GetTypeName(typeof(T));
+            SubscribeEvent(exchange, queue, resolve, prefetchCount);
+        }
+
         public void SubscribeEvent<T>(string exchange, string queue, Func<Action<T>> resolve,
             ushort prefetchCount = DefaultPrefetchCount)
         {
-            var exchangeParam = new ExchangeParam {Exchange = exchange};
-            var queueParam = new QueueParam {Queue = queue};
+            var exchangeParam = new ExchangeParam { Exchange = exchange };
+            var queueParam = new QueueParam { Queue = queue };
+            var channel = GetReceiverChannel(exchangeParam, queueParam, prefetchCount);
+
+            ConsumeEvent(channel, resolve, queueParam.Queue);
+        }
+
+        public void SubscribeEvent<T>(string exchange, string queue, Func<Func<T, Task>> resolve,
+            ushort prefetchCount = DefaultPrefetchCount)
+        {
+            var exchangeParam = new ExchangeParam { Exchange = exchange };
+            var queueParam = new QueueParam { Queue = queue };
             var channel = GetReceiverChannel(exchangeParam, queueParam, prefetchCount);
 
             ConsumeEvent(channel, resolve, queueParam.Queue);
@@ -52,7 +82,19 @@ namespace Zaabee.RabbitMQ
             SubscribeMessage(messageName, messageName, resolve, prefetchCount);
         }
 
+        public void ReceiveMessage<T>(Func<Func<T, Task>> resolve, ushort prefetchCount = DefaultPrefetchCount)
+        {
+            var messageName = GetTypeName(typeof(T));
+            SubscribeMessage(messageName, messageName, resolve, prefetchCount);
+        }
+
         public void SubscribeMessage<T>(Func<Action<T>> resolve, ushort prefetchCount = DefaultPrefetchCount)
+        {
+            var methodFullName = GetQueueName(resolve);
+            SubscribeMessage(methodFullName, resolve, prefetchCount);
+        }
+
+        public void SubscribeMessage<T>(Func<Func<T, Task>> resolve, ushort prefetchCount = DefaultPrefetchCount)
         {
             var methodFullName = GetQueueName(resolve);
             SubscribeMessage(methodFullName, resolve, prefetchCount);
@@ -65,11 +107,28 @@ namespace Zaabee.RabbitMQ
             SubscribeMessage(exchange, queue, resolve, prefetchCount);
         }
 
+        public void SubscribeMessage<T>(string queue, Func<Func<T, Task>> resolve,
+            ushort prefetchCount = DefaultPrefetchCount)
+        {
+            var exchange = GetTypeName(typeof(T));
+            SubscribeMessage(exchange, queue, resolve, prefetchCount);
+        }
+
         public void SubscribeMessage<T>(string exchange, string queue, Func<Action<T>> resolve,
             ushort prefetchCount = DefaultPrefetchCount)
         {
-            var exchangeParam = new ExchangeParam {Exchange = exchange, Durable = false};
-            var queueParam = new QueueParam {Queue = queue, Durable = false};
+            var exchangeParam = new ExchangeParam { Exchange = exchange, Durable = false };
+            var queueParam = new QueueParam { Queue = queue, Durable = false };
+            var channel = GetReceiverChannel(exchangeParam, queueParam, prefetchCount);
+
+            ConsumeEvent(channel, resolve, queueParam.Queue);
+        }
+
+        public void SubscribeMessage<T>(string exchange, string queue, Func<Func<T, Task>> resolve,
+            ushort prefetchCount = DefaultPrefetchCount)
+        {
+            var exchangeParam = new ExchangeParam { Exchange = exchange, Durable = false };
+            var queueParam = new QueueParam { Queue = queue, Durable = false };
             var channel = GetReceiverChannel(exchangeParam, queueParam, prefetchCount);
 
             ConsumeEvent(channel, resolve, queueParam.Queue);
@@ -80,8 +139,20 @@ namespace Zaabee.RabbitMQ
             var exchangeName = GetTypeName(typeof(T));
             var queueName = $"{GetQueueName(resolve)}[{Guid.NewGuid()}]";
 
-            var exchangeParam = new ExchangeParam {Exchange = exchangeName, Durable = false};
-            var queueParam = new QueueParam {Queue = queueName, Durable = false, Exclusive = true, AutoDelete = true};
+            var exchangeParam = new ExchangeParam { Exchange = exchangeName, Durable = false };
+            var queueParam = new QueueParam { Queue = queueName, Durable = false, Exclusive = true, AutoDelete = true };
+            var channel = GetReceiverChannel(exchangeParam, queueParam, prefetchCount);
+
+            ConsumeMessage(channel, resolve, queueParam.Queue);
+        }
+
+        public void ListenMessage<T>(Func<Func<T, Task>> resolve, ushort prefetchCount = DefaultPrefetchCount)
+        {
+            var exchangeName = GetTypeName(typeof(T));
+            var queueName = $"{GetQueueName(resolve)}[{Guid.NewGuid()}]";
+
+            var exchangeParam = new ExchangeParam { Exchange = exchangeName, Durable = false };
+            var queueParam = new QueueParam { Queue = queueName, Durable = false, Exclusive = true, AutoDelete = true };
             var channel = GetReceiverChannel(exchangeParam, queueParam, prefetchCount);
 
             ConsumeMessage(channel, resolve, queueParam.Queue);
@@ -97,10 +168,25 @@ namespace Zaabee.RabbitMQ
             ReceiveCommand(commandName, resolve, prefetchCount);
         }
 
+        public void ReceiveCommand<T>(Func<Func<T, Task>> resolve, ushort prefetchCount = DefaultPrefetchCount)
+        {
+            var commandName = GetTypeName(typeof(T));
+            ReceiveCommand(commandName, resolve, prefetchCount);
+        }
+
         public void ReceiveCommand<T>(string queue, Func<Action<T>> resolve,
             ushort prefetchCount = DefaultPrefetchCount)
         {
-            var queueParam = new QueueParam {Queue = queue};
+            var queueParam = new QueueParam { Queue = queue };
+            var channel = GetReceiverChannel(null, queueParam, prefetchCount);
+
+            ConsumeEvent(channel, resolve, queueParam.Queue);
+        }
+
+        public void ReceiveCommand<T>(string queue, Func<Func<T, Task>> resolve,
+            ushort prefetchCount = DefaultPrefetchCount)
+        {
+            var queueParam = new QueueParam { Queue = queue };
             var channel = GetReceiverChannel(null, queueParam, prefetchCount);
 
             ConsumeEvent(channel, resolve, queueParam.Queue);
@@ -137,7 +223,8 @@ namespace Zaabee.RabbitMQ
         private void ConsumeEvent<T>(IModel channel, Func<Action<T>> resolve, string queue)
         {
             var consumer = new EventingBasicConsumer(channel);
-            consumer.Received += (model, ea) =>
+
+            void OnConsumerOnReceived(object model, BasicDeliverEventArgs ea)
             {
                 try
                 {
@@ -152,14 +239,42 @@ namespace Zaabee.RabbitMQ
                 {
                     channel.BasicAck(ea.DeliveryTag, false);
                 }
-            };
+            }
+
+            consumer.Received += OnConsumerOnReceived;
+            channel.BasicConsume(queue: queue, autoAck: false, consumer: consumer);
+        }
+
+        private void ConsumeEvent<T>(IModel channel, Func<Func<T, Task>> resolve, string queue)
+        {
+            var consumer = new EventingBasicConsumer(channel);
+
+            async void OnConsumerOnReceived(object model, BasicDeliverEventArgs ea)
+            {
+                try
+                {
+                    var msg = _serializer.DeserializeFromBytes<T>(ea.Body.ToArray());
+                    await resolve.Invoke()(msg);
+                }
+                catch (Exception ex)
+                {
+                    PublishDlx<T>(ea, queue, ex);
+                }
+                finally
+                {
+                    channel.BasicAck(ea.DeliveryTag, false);
+                }
+            }
+
+            consumer.Received += OnConsumerOnReceived;
             channel.BasicConsume(queue: queue, autoAck: false, consumer: consumer);
         }
 
         private void ConsumeMessage<T>(IModel channel, Func<Action<T>> resolve, string queue)
         {
             var consumer = new EventingBasicConsumer(channel);
-            consumer.Received += (model, ea) =>
+
+            void OnConsumerOnReceived(object model, BasicDeliverEventArgs ea)
             {
                 try
                 {
@@ -171,7 +286,31 @@ namespace Zaabee.RabbitMQ
                 {
                     channel.BasicAck(ea.DeliveryTag, false);
                 }
-            };
+            }
+
+            consumer.Received += OnConsumerOnReceived;
+            channel.BasicConsume(queue: queue, autoAck: false, consumer: consumer);
+        }
+
+        private void ConsumeMessage<T>(IModel channel, Func<Func<T, Task>> resolve, string queue)
+        {
+            var consumer = new EventingBasicConsumer(channel);
+
+            async void OnConsumerOnReceived(object model, BasicDeliverEventArgs ea)
+            {
+                try
+                {
+                    var body = ea.Body;
+                    var msg = _serializer.DeserializeFromBytes<T>(body.ToArray());
+                    await resolve.Invoke()(msg);
+                }
+                finally
+                {
+                    channel.BasicAck(ea.DeliveryTag, false);
+                }
+            }
+
+            consumer.Received += OnConsumerOnReceived;
             channel.BasicConsume(queue: queue, autoAck: false, consumer: consumer);
         }
 
@@ -180,8 +319,8 @@ namespace Zaabee.RabbitMQ
             var inmostEx = ex.GetInmostException();
 
             var dlxName = GetDeadLetterName(queue);
-            var dlxExchangeParam = new ExchangeParam {Exchange = dlxName};
-            var dlxQueueParam = new QueueParam {Queue = dlxName};
+            var dlxExchangeParam = new ExchangeParam { Exchange = dlxName };
+            var dlxQueueParam = new QueueParam { Queue = dlxName };
 
             using (var deadLetterMsgChannel = GetPublisherChannel(dlxExchangeParam, dlxQueueParam))
             {

@@ -2,6 +2,7 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using Zaabee.RabbitMQ.Abstractions;
@@ -15,7 +16,7 @@ namespace Zaabee.RabbitMQ
         private readonly IConnection _subscribeConn;
         private readonly ITextSerializer _serializer;
 
-        private readonly ConcurrentDictionary<Type, string> _queueNameDic = new ();
+        private readonly ConcurrentDictionary<Type, string> _queueNameDic = new();
 
         public ZaabeeRabbitMqClient(MqConfig config, ITextSerializer serializer)
         {
@@ -58,7 +59,8 @@ namespace Zaabee.RabbitMQ
             _subscribeConn = connectionFactory.CreateConnection(clientProvidedName);
         }
 
-        public ZaabeeRabbitMqClient(IConnectionFactory connectionFactory, IList<string> hosts, ITextSerializer serializer)
+        public ZaabeeRabbitMqClient(IConnectionFactory connectionFactory, IList<string> hosts,
+            ITextSerializer serializer)
         {
             if (connectionFactory is null) throw new ArgumentNullException(nameof(connectionFactory));
             _serializer = serializer ?? throw new ArgumentNullException(nameof(serializer));
@@ -99,7 +101,7 @@ namespace Zaabee.RabbitMQ
 
         public void RepublishDeadLetterEvent<T>(string deadLetterQueueName, ushort prefetchCount = 1)
         {
-            var queueParam = new QueueParam {Queue = deadLetterQueueName};
+            var queueParam = new QueueParam { Queue = deadLetterQueueName };
             var channel = GetReceiverChannel(null, queueParam, prefetchCount);
 
             var consumer = new EventingBasicConsumer(channel);
@@ -111,9 +113,9 @@ namespace Zaabee.RabbitMQ
                     var msg = _serializer.DeserializeFromBytes<DeadLetterMsg>(body.ToArray());
 
                     var republishExchangeParam =
-                        new ExchangeParam {Exchange = $"republish-{deadLetterQueueName}", Durable = true};
+                        new ExchangeParam { Exchange = $"republish-{deadLetterQueueName}", Durable = true };
                     var republishQueueParam =
-                        new QueueParam {Queue = FromDeadLetterName(deadLetterQueueName), Durable = true};
+                        new QueueParam { Queue = FromDeadLetterName(deadLetterQueueName), Durable = true };
                     using (var republishChannel = GetPublisherChannel(republishExchangeParam, republishQueueParam))
                     {
                         var properties = republishChannel.CreateBasicProperties();
@@ -143,16 +145,28 @@ namespace Zaabee.RabbitMQ
                     ? $"{type}[{msgVerAttr.Version}]"
                     : type.ToString());
 
+        private string GetQueueName<T>(Func<Action<T>> resolve)
+        {
+            var handle = resolve();
+            return GetQueueName(handle);
+        }
+
         private string GetQueueName<T>(Action<T> handle)
         {
             var messageName = GetTypeName(typeof(T));
             return $"{handle.Method.ReflectedType?.FullName}.{handle.Method.Name}[{messageName}]";
         }
 
-        private string GetQueueName<T>(Func<Action<T>> resolve)
+        private string GetQueueName<T>(Func<Func<T, Task>> resolve)
         {
             var handle = resolve();
             return GetQueueName(handle);
+        }
+
+        private string GetQueueName<T>(Func<T, Task> handle)
+        {
+            var messageName = GetTypeName(typeof(T));
+            return $"{handle.Method.ReflectedType?.FullName}.{handle.Method.Name}[{messageName}]";
         }
 
         private static string GetDeadLetterName(string name) =>
