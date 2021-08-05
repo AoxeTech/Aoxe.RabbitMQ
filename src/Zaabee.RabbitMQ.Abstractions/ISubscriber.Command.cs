@@ -20,23 +20,5 @@ namespace Zaabee.RabbitMQ.Abstractions
         /// <param name="prefetchCount"></param>
         /// <typeparam name="T"></typeparam>
         void ReceiveCommand<T>(Func<Func<T, Task>> resolve, ushort prefetchCount = 10);
-
-        /// <summary>
-        /// The subscriber cluster will receive the Command by the default queue.
-        /// </summary>
-        /// <param name="queue"></param>
-        /// <param name="resolve"></param>
-        /// <param name="prefetchCount"></param>
-        /// <typeparam name="T"></typeparam>
-        void ReceiveCommand<T>(string queue, Func<Action<T>> resolve, ushort prefetchCount = 10);
-
-        /// <summary>
-        /// The subscriber cluster will receive the Command by the default queue.
-        /// </summary>
-        /// <param name="queue"></param>
-        /// <param name="resolve"></param>
-        /// <param name="prefetchCount"></param>
-        /// <typeparam name="T"></typeparam>
-        void ReceiveCommand<T>(string queue, Func<Func<T, Task>> resolve, ushort prefetchCount = 10);
     }
 }
