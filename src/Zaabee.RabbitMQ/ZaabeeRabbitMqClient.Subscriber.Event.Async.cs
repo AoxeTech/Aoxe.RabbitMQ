@@ -49,7 +49,7 @@ namespace Zaabee.RabbitMQ
         {
             var exchangeParam = new ExchangeParam { Exchange = exchange };
             var queueParam = new QueueParam { Queue = queue };
-            var channel = GetReceiverChannel(exchangeParam, queueParam, prefetchCount);
+            var channel = GetReceiverAsyncChannel(exchangeParam, queueParam, prefetchCount);
 
             await ConsumeEventAsync(channel, resolve, queueParam.Queue);
         }
@@ -59,7 +59,7 @@ namespace Zaabee.RabbitMQ
         {
             var exchangeParam = new ExchangeParam { Exchange = exchange };
             var queueParam = new QueueParam { Queue = queue };
-            var channel = GetReceiverChannel(exchangeParam, queueParam, prefetchCount);
+            var channel = GetReceiverAsyncChannel(exchangeParam, queueParam, prefetchCount);
 
             await ConsumeEventAsync(channel, resolve, queueParam.Queue);
         }

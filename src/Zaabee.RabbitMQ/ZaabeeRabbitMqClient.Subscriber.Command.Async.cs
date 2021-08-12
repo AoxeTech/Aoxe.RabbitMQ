@@ -8,7 +8,7 @@ namespace Zaabee.RabbitMQ
         public async Task ReceiveCommandAsync<T>(Func<Action<T>> resolve, ushort prefetchCount = DefaultPrefetchCount)
         {
             var queueParam = new QueueParam { Queue = GetTypeName(typeof(T)) };
-            var channel = GetReceiverChannel(null, queueParam, prefetchCount);
+            var channel = GetReceiverAsyncChannel(null, queueParam, prefetchCount);
             await ConsumeEventAsync(channel, resolve, queueParam.Queue);
         }
 
@@ -16,7 +16,7 @@ namespace Zaabee.RabbitMQ
             ushort prefetchCount = DefaultPrefetchCount)
         {
             var queueParam = new QueueParam { Queue = GetTypeName(typeof(T)) };
-            var channel = GetReceiverChannel(null, queueParam, prefetchCount);
+            var channel = GetReceiverAsyncChannel(null, queueParam, prefetchCount);
             await ConsumeEventAsync(channel, resolve, queueParam.Queue);
         }
     }

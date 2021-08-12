@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Concurrent;
 using System.Threading.Tasks;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
@@ -7,6 +8,33 @@ namespace Zaabee.RabbitMQ
 {
     public partial class ZaabeeRabbitMqClient
     {
+        private readonly ConcurrentDictionary<string, IModel> _subscriberAsyncChannelDic = new();
+
+        private IModel GetReceiverAsyncChannel(ExchangeParam exchangeParam, QueueParam queueParam,
+            ushort prefetchCount)
+        {
+            return _subscriberAsyncChannelDic.GetOrAdd(queueParam.Queue, _ =>
+            {
+                var channel = _subscribeAsyncConn.CreateModel();
+
+                channel.QueueDeclare(queue: queueParam.Queue, durable: queueParam.Durable,
+                    exclusive: queueParam.Exclusive, autoDelete: queueParam.AutoDelete,
+                    arguments: queueParam.Arguments);
+
+                if (exchangeParam is not null)
+                {
+                    channel.ExchangeDeclare(exchange: exchangeParam.Exchange,
+                        type: exchangeParam.Type.ToString().ToLower(),
+                        durable: exchangeParam.Durable, autoDelete: exchangeParam.AutoDelete,
+                        arguments: exchangeParam.Arguments);
+                    channel.QueueBind(queue: queueParam.Queue, exchange: exchangeParam.Exchange,
+                        routingKey: queueParam.Queue);
+                }
+
+                channel.BasicQos(0, prefetchCount, false);
+                return channel;
+            });
+        }
         private Task ConsumeEventAsync<T>(IModel channel, Func<Action<T>> resolve, string queue)
         {
             var consumer = new AsyncEventingBasicConsumer(channel);

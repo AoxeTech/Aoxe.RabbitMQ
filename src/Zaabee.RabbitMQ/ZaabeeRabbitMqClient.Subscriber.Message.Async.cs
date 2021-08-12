@@ -50,9 +50,9 @@ namespace Zaabee.RabbitMQ
         {
             var exchangeParam = new ExchangeParam { Exchange = exchange, Durable = false };
             var queueParam = new QueueParam { Queue = queue, Durable = false };
-            var channel = GetReceiverChannel(exchangeParam, queueParam, prefetchCount);
+            var channel = GetReceiverAsyncChannel(exchangeParam, queueParam, prefetchCount);
 
-            await ConsumeEventAsync(channel, resolve, queueParam.Queue);
+            await ConsumeMessageAsync(channel, resolve, queueParam.Queue);
         }
 
         public async Task SubscribeMessageAsync<T>(string exchange, string queue, Func<Func<T, Task>> resolve,
@@ -60,9 +60,9 @@ namespace Zaabee.RabbitMQ
         {
             var exchangeParam = new ExchangeParam { Exchange = exchange, Durable = false };
             var queueParam = new QueueParam { Queue = queue, Durable = false };
-            var channel = GetReceiverChannel(exchangeParam, queueParam, prefetchCount);
+            var channel = GetReceiverAsyncChannel(exchangeParam, queueParam, prefetchCount);
 
-            await ConsumeEventAsync(channel, resolve, queueParam.Queue);
+            await ConsumeMessageAsync(channel, resolve, queueParam.Queue);
         }
 
         public async Task ListenMessageAsync<T>(Func<Action<T>> resolve, ushort prefetchCount = DefaultPrefetchCount)
