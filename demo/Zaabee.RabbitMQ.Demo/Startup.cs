@@ -21,16 +21,17 @@ namespace Zaabee.RabbitMQ.Demo
         {
             services.AddSwaggerDocument();
             services.AddControllers();
-            services.AddSingleton<IZaabeeRabbitMqClient>(p =>
-                new ZaabeeRabbitMqClient(new MqConfig
+            services.AddSingleton<IZaabeeRabbitMqClient>(_ =>
+                new ZaabeeRabbitMqClient(new ZaabeeRabbitMqOptions
                 {
                     AutomaticRecoveryEnabled = true,
                     HeartBeat = TimeSpan.FromMinutes(1),
                     NetworkRecoveryInterval = new TimeSpan(60),
-                    Hosts = new List<string> {"192.168.78.150"},
+                    Hosts = new List<string> { "192.168.78.150" },
                     UserName = "admin",
-                    Password = "123"
-                }, new Zaabee.NewtonsoftJson.Serializer()));
+                    Password = "123",
+                    Serializer = new NewtonsoftJson.Serializer()
+                }));
             services.AddHostedService<RabbitMqBackgroundService>();
         }
 

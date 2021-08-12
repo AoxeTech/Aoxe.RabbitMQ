@@ -42,16 +42,17 @@ using Zaabee.NewtonsoftJson;
 Register ZabbyRabbitMqClient in ConfigureServices method
 
 ```CSharp
-services.AddSingleton<IZaabeeRabbitMqClient>(p =>
-    new ZaabeeRabbitMqClient(new MqConfig
+services.AddSingleton<IZaabeeRabbitMqClient>(_ =>
+    new ZaabeeRabbitMqClient(new ZaabeeRabbitMqOptions
     {
         AutomaticRecoveryEnabled = true,
         HeartBeat = TimeSpan.FromMinutes(1),
         NetworkRecoveryInterval = new TimeSpan(60),
-        Hosts = new List<string> {"192.168.78.150"},
+        Hosts = new List<string> { "192.168.78.150" },
         UserName = "admin",
-        Password = "123"
-    }, new NewtonsoftJson.Serializer()));
+        Password = "123",
+        Serializer = new NewtonsoftJson.Serializer()
+    }));
 ```
 
 Create classes that implementate the IEvent or IMessage.IEvent means the message will be persisted both in exchange and queue for the RabbitMQ.When the handle throw exception it will be republished to the dead letter queue.

@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using Zaabee.Serializer.Abstractions;
 
 namespace Zaabee.RabbitMQ
 {
-    public class MqConfig
+    public class ZaabeeRabbitMqOptions
     {
         private List<string> _hosts = new();
 
@@ -27,7 +28,7 @@ namespace Zaabee.RabbitMQ
 
         public bool AutomaticRecoveryEnabled { get; set; } = true;
 
-        private TimeSpan _networkRecoveryInterval = new TimeSpan(60);
+        private TimeSpan _networkRecoveryInterval = new(60);
 
         public TimeSpan NetworkRecoveryInterval
         {
@@ -42,5 +43,7 @@ namespace Zaabee.RabbitMQ
             get => _virtualHost;
             set => _virtualHost = string.IsNullOrWhiteSpace(value) ? _virtualHost : value;
         }
+
+        public ITextSerializer Serializer { get; set; }
     }
 }

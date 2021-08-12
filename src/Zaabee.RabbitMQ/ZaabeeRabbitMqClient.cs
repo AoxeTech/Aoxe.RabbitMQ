@@ -18,26 +18,26 @@ namespace Zaabee.RabbitMQ
 
         private readonly ConcurrentDictionary<Type, string> _queueNameDic = new();
 
-        public ZaabeeRabbitMqClient(MqConfig config, ITextSerializer serializer)
+        public ZaabeeRabbitMqClient(ZaabeeRabbitMqOptions options)
         {
-            if (config is null) throw new ArgumentNullException(nameof(config));
-            if (serializer is null) throw new ArgumentNullException(nameof(serializer));
-            if (config.Hosts.Count is 0) throw new ArgumentNullException(nameof(config.Hosts));
+            if (options is null) throw new ArgumentNullException(nameof(options));
+            if (options.Serializer is null) throw new ArgumentNullException(nameof(options.Serializer));
+            if (options.Hosts.Count is 0) throw new ArgumentNullException(nameof(options.Hosts));
 
             var factory = new ConnectionFactory
             {
-                RequestedHeartbeat = config.HeartBeat,
-                AutomaticRecoveryEnabled = config.AutomaticRecoveryEnabled,
-                NetworkRecoveryInterval = config.NetworkRecoveryInterval,
-                UserName = config.UserName,
-                Password = config.Password,
-                VirtualHost = string.IsNullOrWhiteSpace(config.VirtualHost) ? "/" : config.VirtualHost,
+                RequestedHeartbeat = options.HeartBeat,
+                AutomaticRecoveryEnabled = options.AutomaticRecoveryEnabled,
+                NetworkRecoveryInterval = options.NetworkRecoveryInterval,
+                UserName = options.UserName,
+                Password = options.Password,
+                VirtualHost = string.IsNullOrWhiteSpace(options.VirtualHost) ? "/" : options.VirtualHost,
                 DispatchConsumersAsync = true
             };
 
-            _publishConn = config.Hosts.Any() ? factory.CreateConnection(config.Hosts) : factory.CreateConnection();
-            _subscribeConn = config.Hosts.Any() ? factory.CreateConnection(config.Hosts) : factory.CreateConnection();
-            _serializer = serializer;
+            _publishConn = options.Hosts.Any() ? factory.CreateConnection(options.Hosts) : factory.CreateConnection();
+            _subscribeConn = options.Hosts.Any() ? factory.CreateConnection(options.Hosts) : factory.CreateConnection();
+            _serializer = options.Serializer;
         }
 
         public ZaabeeRabbitMqClient(IConnectionFactory connectionFactory, ITextSerializer serializer)
@@ -105,7 +105,7 @@ namespace Zaabee.RabbitMQ
             var channel = GetReceiverChannel(null, queueParam, prefetchCount);
 
             var consumer = new EventingBasicConsumer(channel);
-            consumer.Received += (model, ea) =>
+            consumer.Received += (_, ea) =>
             {
                 try
                 {
