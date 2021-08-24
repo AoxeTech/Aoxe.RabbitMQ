@@ -7,7 +7,7 @@
         <Version>2021.8.0</Version>
         <Authors>Mutuduxf</Authors>
         <Company>Mutuduxf</Company>
-        <PackageTags>Zaaby Zaabee MessageQueue MQ MessageBus RabbitMQ</PackageTags>
+        <PackageTags>Zaabee;Message Queue;MQ;Message Bus;RabbitMQ;Abstractions</PackageTags>
         <Description>The Interface/BaseClass/Attribute for Zaaby.RabbitMQ</Description>
         <PackageProjectUrl>https://github.com/Mutuduxf/Zaabee.RabbitMQ</PackageProjectUrl>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
