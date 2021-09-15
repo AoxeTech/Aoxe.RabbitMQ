@@ -19,15 +19,15 @@ namespace Zaabee.RabbitMQ
 
         public async Task SubscribeEventAsync<T>(Func<Action<T>> resolve, ushort prefetchCount = DefaultPrefetchCount)
         {
-            var methodFullName = GetQueueName(resolve);
-            await SubscribeEventAsync(methodFullName, resolve, prefetchCount);
+            var eventName = GetTypeName(typeof(T));
+            await SubscribeEventAsync(eventName, resolve, prefetchCount);
         }
 
         public async Task SubscribeEventAsync<T>(Func<Func<T, Task>> resolve,
             ushort prefetchCount = DefaultPrefetchCount)
         {
-            var methodFullName = GetQueueName(resolve);
-            await SubscribeEventAsync(methodFullName, resolve, prefetchCount);
+            var eventName = GetTypeName(typeof(T));
+            await SubscribeEventAsync(eventName, resolve, prefetchCount);
         }
 
         public async Task SubscribeEventAsync<T>(string exchange, Func<Action<T>> resolve,

@@ -19,14 +19,14 @@ namespace Zaabee.RabbitMQ
 
         public void SubscribeEvent<T>(Func<Action<T>> resolve, ushort prefetchCount = DefaultPrefetchCount)
         {
-            var methodFullName = GetQueueName(resolve);
-            SubscribeEvent(methodFullName, resolve, prefetchCount);
+            var eventName = GetTypeName(typeof(T));
+            SubscribeEvent(eventName, resolve, prefetchCount);
         }
 
         public void SubscribeEvent<T>(Func<Func<T, Task>> resolve, ushort prefetchCount = DefaultPrefetchCount)
         {
-            var methodFullName = GetQueueName(resolve);
-            SubscribeEvent(methodFullName, resolve, prefetchCount);
+            var eventName = GetTypeName(typeof(T));
+            SubscribeEvent(eventName, resolve, prefetchCount);
         }
 
         public void SubscribeEvent<T>(string exchange, Func<Action<T>> resolve,

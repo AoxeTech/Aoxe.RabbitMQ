@@ -19,14 +19,14 @@ namespace Zaabee.RabbitMQ
 
         public void SubscribeMessage<T>(Func<Action<T>> resolve, ushort prefetchCount = DefaultPrefetchCount)
         {
-            var methodFullName = GetQueueName(resolve);
-            SubscribeMessage(methodFullName, resolve, prefetchCount);
+            var messageName = GetTypeName(typeof(T));
+            SubscribeMessage(messageName, resolve, prefetchCount);
         }
 
         public void SubscribeMessage<T>(Func<Func<T, Task>> resolve, ushort prefetchCount = DefaultPrefetchCount)
         {
-            var methodFullName = GetQueueName(resolve);
-            SubscribeMessage(methodFullName, resolve, prefetchCount);
+            var messageName = GetTypeName(typeof(T));
+            SubscribeMessage(messageName, resolve, prefetchCount);
         }
 
         public void SubscribeMessage<T>(string exchange, Func<Action<T>> resolve,
