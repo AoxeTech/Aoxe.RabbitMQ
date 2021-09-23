@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Zaabee.NewtonsoftJson;
 using Zaabee.RabbitMQ.Abstractions;
 
 namespace Zaabee.RabbitMQ.Demo
@@ -30,7 +31,7 @@ namespace Zaabee.RabbitMQ.Demo
                     Hosts = new List<string> { "192.168.78.150" },
                     UserName = "admin",
                     Password = "123",
-                    Serializer = new NewtonsoftJson.Serializer()
+                    Serializer = new ZaabeeSerializer()
                 }));
             services.AddHostedService<RabbitMqBackgroundService>();
         }

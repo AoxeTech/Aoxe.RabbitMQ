@@ -7,19 +7,19 @@ namespace Zaabee.RabbitMQ.Serializers.TestProject
     public class UnitTest
     {
         [Fact]
-        public void JilTest() => SerializerTest(new Zaabee.Jil.Serializer());
+        public void JilTest() => SerializerTest(new Jil.ZaabeeSerializer());
 
         [Fact]
-        public void NewtonsoftJsonTest() => SerializerTest(new Zaabee.NewtonsoftJson.Serializer());
+        public void NewtonsoftJsonTest() => SerializerTest(new NewtonsoftJson.ZaabeeSerializer());
 
         [Fact]
-        public void SystemTextJsonTest() => SerializerTest(new Zaabee.SystemTextJson.Serializer());
+        public void SystemTextJsonTest() => SerializerTest(new SystemTextJson.ZaabeeSerializer());
 
         [Fact]
-        public void Utf8JsonTest() => SerializerTest(new Zaabee.Utf8Json.Serializer());
+        public void Utf8JsonTest() => SerializerTest(new Utf8Json.ZaabeeSerializer());
 
         [Fact]
-        public void XmlTest() => SerializerTest(new Zaabee.Xml.Serializer());
+        public void XmlTest() => SerializerTest(new Xml.ZaabeeSerializer());
 
         private static void SerializerTest(ITextSerializer serializer)
         {
@@ -38,9 +38,8 @@ namespace Zaabee.RabbitMQ.Serializers.TestProject
                 Tuple.Create(result1.Id, result1.Age, result1.CreateTime, result1.Name, result1.Gender));
         }
 
-        private static TestModel GetTestModel()
-        {
-            return new()
+        private static TestModel GetTestModel() =>
+            new()
             {
                 Id = Guid.NewGuid(),
                 Age = new Random().Next(0, 100),
@@ -48,6 +47,5 @@ namespace Zaabee.RabbitMQ.Serializers.TestProject
                 Name = "apple",
                 Gender = Gender.Female
             };
-        }
     }
 }
