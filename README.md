@@ -51,7 +51,7 @@ services.AddSingleton<IZaabeeRabbitMqClient>(_ =>
         Hosts = new List<string> { "192.168.78.150" },
         UserName = "admin",
         Password = "123",
-        Serializer = new NewtonsoftJson.Serializer()
+        Serializer = new Serializer()
     }));
 ```
 
