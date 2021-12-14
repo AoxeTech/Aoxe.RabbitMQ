@@ -1,13 +1,10 @@
-﻿using System;
+﻿namespace Zaabee.RabbitMQ;
 
-namespace Zaabee.RabbitMQ
+internal class DeadLetterMsg
 {
-    internal class DeadLetterMsg
-    {
-        public string QueueName { get; set; }
-        public string ExMsg { get; set; }
-        public string ExStack { get; set; }
-        public DateTimeOffset ThrowTime { get; set; }
-        public string BodyString { get; set; }
-    }
+    public string QueueName { get; set; } = null!;
+    public string ExMsg { get; set; } = null!;
+    public string ExStack { get; set; } = null!;
+    public DateTimeOffset ThrowTime { get; set; }
+    public string BodyString { get; set; } = null!;
 }

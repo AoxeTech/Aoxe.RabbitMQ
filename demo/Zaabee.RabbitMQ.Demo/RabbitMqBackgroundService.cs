@@ -16,11 +16,11 @@ namespace Zaabee.RabbitMQ.Demo
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            await _messageBus.SubscribeEventAsync<TestEvent>(() => new Subscriber().TestEventHandler);
-            await _messageBus.SubscribeEventAsync<TestEvent>(() => new Subscriber().TestEventHandler, 30);
-            await _messageBus.SubscribeEventAsync<TestEventWithVersion>(
+            await _messageBus.SubscribeEventAsync(() => new Subscriber().TestEventHandler);
+            await _messageBus.SubscribeEventAsync(() => new Subscriber().TestEventHandler, 30);
+            await _messageBus.SubscribeEventAsync(
                 () => new Subscriber().TestEventExceptionWithVersionHandler, 20);
-            await _messageBus.SubscribeMessageAsync<TestMessage>(() => new Subscriber().TestMessageHandler);
+            await _messageBus.SubscribeMessageAsync(() => new Subscriber().TestMessageHandler);
             _messageBus.RepublishDeadLetterEvent<TestEvent>(
                 "dead-letter-Zaabee.RabbitMQ.Demo.Subscriber.TestEventExceptionHandler[Zaabee.RabbitMQ.Demo.TestEvent]");
             _messageBus.RepublishDeadLetterEvent<TestEvent>(

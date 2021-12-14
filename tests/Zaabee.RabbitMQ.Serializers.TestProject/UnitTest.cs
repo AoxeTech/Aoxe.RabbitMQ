@@ -7,27 +7,36 @@ namespace Zaabee.RabbitMQ.Serializers.TestProject
     public class UnitTest
     {
         [Fact]
-        public void JilTest() => SerializerTest(new Jil.ZaabeeSerializer());
+        public void DataContractSerializerTest() =>
+            SerializerTest(new Zaabee.DataContractSerializer.Serializer());
+        
+        [Fact]
+        public void JilTest() =>
+            SerializerTest(new Jil.Serializer());
 
         [Fact]
-        public void NewtonsoftJsonTest() => SerializerTest(new NewtonsoftJson.ZaabeeSerializer());
+        public void NewtonsoftJsonTest() =>
+            SerializerTest(new NewtonsoftJson.Serializer());
 
         [Fact]
-        public void SystemTextJsonTest() => SerializerTest(new SystemTextJson.ZaabeeSerializer());
+        public void SystemTextJsonTest() =>
+            SerializerTest(new SystemTextJson.Serializer());
 
         [Fact]
-        public void Utf8JsonTest() => SerializerTest(new Utf8Json.ZaabeeSerializer());
+        public void Utf8JsonTest() =>
+            SerializerTest(new Utf8Json.Serializer());
 
         [Fact]
-        public void XmlTest() => SerializerTest(new Xml.ZaabeeSerializer());
+        public void XmlTest() =>
+            SerializerTest(new Xml.Serializer());
 
         private static void SerializerTest(ITextSerializer serializer)
         {
             var testModel = GetTestModel();
-            var bytes = serializer.SerializeToBytes(testModel);
-            var str = serializer.SerializeToString(testModel);
-            var result0 = serializer.DeserializeFromBytes<TestModel>(bytes);
-            var result1 = serializer.DeserializeFromString<TestModel>(str);
+            var bytes = serializer.ToBytes(testModel);
+            var str = serializer.ToText(testModel);
+            var result0 = serializer.FromBytes<TestModel>(bytes);
+            var result1 = serializer.FromText<TestModel>(str);
 
             Assert.Equal(
                 Tuple.Create(testModel.Id, testModel.Age, testModel.CreateTime, testModel.Name, testModel.Gender),
