@@ -1,9 +1,8 @@
-namespace Zaabee.RabbitMQ.Abstractions
+namespace Zaabee.RabbitMQ.Abstractions;
+
+public partial interface IPublisher
 {
-    public partial interface IPublisher
-    {
-        void PublishMessage<T>(T message);
-        void PublishMessage<T>(string exchangeName, T message);
-        void PublishMessage(string exchangeName, byte[] body);
-    }
+    void PublishMessage<T>(T message);
+    void PublishMessage<T>(string exchangeName, T message);
+    void PublishMessage(string exchangeName, byte[] body);
 }

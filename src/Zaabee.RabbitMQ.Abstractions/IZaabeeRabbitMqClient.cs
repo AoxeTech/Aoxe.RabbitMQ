@@ -1,8 +1,5 @@
-using System;
+namespace Zaabee.RabbitMQ.Abstractions;
 
-namespace Zaabee.RabbitMQ.Abstractions
+public interface IZaabeeRabbitMqClient : IPublisher, ISubscriber, IDisposable
 {
-    public interface IZaabeeRabbitMqClient : IPublisher, ISubscriber, IDisposable
-    {
-    }
 }

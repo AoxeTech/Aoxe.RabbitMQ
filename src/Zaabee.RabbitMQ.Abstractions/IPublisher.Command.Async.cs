@@ -1,10 +1,7 @@
-using System.Threading.Tasks;
+namespace Zaabee.RabbitMQ.Abstractions;
 
-namespace Zaabee.RabbitMQ.Abstractions
+public partial interface IPublisher
 {
-    public partial interface IPublisher
-    {
-        Task PublishCommandAsync<T>(T command);
-        Task PublishCommandAsync(string exchangeName, byte[] body);
-    }
+    Task PublishCommandAsync<T>(T command);
+    Task PublishCommandAsync(string exchangeName, byte[] body);
 }

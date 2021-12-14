@@ -1,14 +1,11 @@
-﻿using System;
+﻿namespace Zaabee.RabbitMQ.Abstractions;
 
-namespace Zaabee.RabbitMQ.Abstractions
+public class MessageVersionAttribute : Attribute
 {
-    public class MessageVersionAttribute : Attribute
+    public MessageVersionAttribute(string version)
     {
-        public MessageVersionAttribute(string version)
-        {
-            Version = version;
-        }
-
-        public string Version { get; }
+        Version = version;
     }
+
+    public string Version { get; }
 }
