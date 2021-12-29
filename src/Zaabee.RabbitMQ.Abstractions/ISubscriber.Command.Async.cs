@@ -9,7 +9,7 @@ public partial interface ISubscriber
     /// <param name="prefetchCount"></param>
     /// <typeparam name="T"></typeparam>
     /// <returns></returns>
-    Task ReceiveCommandAsync<T>(Func<Action<T>> resolve, ushort prefetchCount = 10);
+    Task ReceiveCommandAsync<T>(Func<Action<T?>> resolve, ushort prefetchCount = 10);
 
     /// <summary>
     /// The subscriber cluster will receive the Command by the default queue.
@@ -18,5 +18,5 @@ public partial interface ISubscriber
     /// <param name="prefetchCount"></param>
     /// <typeparam name="T"></typeparam>
     /// <returns></returns>
-    Task ReceiveCommandAsync<T>(Func<Func<T, Task>> resolve, ushort prefetchCount = 10);
+    Task ReceiveCommandAsync<T>(Func<Func<T?, Task>> resolve, ushort prefetchCount = 10);
 }

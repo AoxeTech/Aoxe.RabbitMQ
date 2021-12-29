@@ -9,7 +9,7 @@ public partial interface ISubscriber
     /// <param name="prefetchCount"></param>
     /// <typeparam name="T"></typeparam>
     /// <returns></returns>
-    Task ReceiveEventAsync<T>(Func<Action<T>> resolve, ushort prefetchCount = 10);
+    Task ReceiveEventAsync<T>(Func<Action<T?>> resolve, ushort prefetchCount = 10);
 
     /// <summary>
     /// The subscriber cluster will receive the Event by the default queue.
@@ -18,7 +18,7 @@ public partial interface ISubscriber
     /// <param name="prefetchCount"></param>
     /// <typeparam name="T"></typeparam>
     /// <returns></returns>
-    Task ReceiveEventAsync<T>(Func<Func<T, Task>> resolve, ushort prefetchCount = 10);
+    Task ReceiveEventAsync<T>(Func<Func<T?, Task>> resolve, ushort prefetchCount = 10);
 
     /// <summary>
     /// The subscriber cluster will receive the Event by its own queue.
@@ -27,7 +27,7 @@ public partial interface ISubscriber
     /// <param name="prefetchCount"></param>
     /// <typeparam name="T"></typeparam>
     /// <returns></returns>
-    Task SubscribeEventAsync<T>(Func<Action<T>> resolve, ushort prefetchCount = 10);
+    Task SubscribeEventAsync<T>(Func<Action<T?>> resolve, ushort prefetchCount = 10);
 
     /// <summary>
     /// The subscriber cluster will receive the Event by its own queue.
@@ -36,7 +36,7 @@ public partial interface ISubscriber
     /// <param name="prefetchCount"></param>
     /// <typeparam name="T"></typeparam>
     /// <returns></returns>
-    Task SubscribeEventAsync<T>(Func<Func<T, Task>> resolve, ushort prefetchCount = 10);
+    Task SubscribeEventAsync<T>(Func<Func<T?, Task>> resolve, ushort prefetchCount = 10);
 
     /// <summary>
     /// The subscriber cluster will receive the Event by the specified exchange.
@@ -46,7 +46,7 @@ public partial interface ISubscriber
     /// <param name="prefetchCount"></param>
     /// <typeparam name="T"></typeparam>
     /// <returns></returns>
-    Task SubscribeEventAsync<T>(string exchange, Func<Action<T>> resolve, ushort prefetchCount = 10);
+    Task SubscribeEventAsync<T>(string exchange, Func<Action<T?>> resolve, ushort prefetchCount = 10);
 
     /// <summary>
     /// The subscriber cluster will receive the Event by the specified exchange.
@@ -56,7 +56,7 @@ public partial interface ISubscriber
     /// <param name="prefetchCount"></param>
     /// <typeparam name="T"></typeparam>
     /// <returns></returns>
-    Task SubscribeEventAsync<T>(string exchange, Func<Func<T, Task>> resolve, ushort prefetchCount = 10);
+    Task SubscribeEventAsync<T>(string exchange, Func<Func<T?, Task>> resolve, ushort prefetchCount = 10);
 
     /// <summary>
     /// The subscriber cluster will receive the Event by the specified exchange and queue.
@@ -67,7 +67,7 @@ public partial interface ISubscriber
     /// <param name="prefetchCount"></param>
     /// <typeparam name="T"></typeparam>
     /// <returns></returns>
-    Task SubscribeEventAsync<T>(string exchange, string queue, Func<Action<T>> resolve, ushort prefetchCount = 10);
+    Task SubscribeEventAsync<T>(string exchange, string queue, Func<Action<T?>> resolve, ushort prefetchCount = 10);
 
     /// <summary>
     /// The subscriber cluster will receive the Event by the specified exchange and queue.
@@ -78,6 +78,6 @@ public partial interface ISubscriber
     /// <param name="prefetchCount"></param>
     /// <typeparam name="T"></typeparam>
     /// <returns></returns>
-    Task SubscribeEventAsync<T>(string exchange, string queue, Func<Func<T, Task>> resolve,
+    Task SubscribeEventAsync<T>(string exchange, string queue, Func<Func<T?, Task>> resolve,
         ushort prefetchCount = 10);
 }
