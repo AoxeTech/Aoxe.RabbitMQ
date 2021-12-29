@@ -29,7 +29,7 @@ public partial class ZaabeeRabbitMqClient
             return channel;
         });
     }
-    private Task ConsumeEventAsync<T>(IModel channel, Func<Action<T>> resolve, string queue)
+    private Task ConsumeEventAsync<T>(IModel channel, Func<Action<T?>> resolve, string queue)
     {
         var consumer = new AsyncEventingBasicConsumer(channel);
         consumer.Received += async (model, ea) =>
@@ -53,7 +53,7 @@ public partial class ZaabeeRabbitMqClient
         return Task.CompletedTask;
     }
 
-    private Task ConsumeEventAsync<T>(IModel channel, Func<Func<T, Task>> resolve, string queue)
+    private Task ConsumeEventAsync<T>(IModel channel, Func<Func<T?, Task>> resolve, string queue)
     {
         var consumer = new AsyncEventingBasicConsumer(channel);
         consumer.Received += async (model, ea) =>
@@ -77,7 +77,7 @@ public partial class ZaabeeRabbitMqClient
         return Task.CompletedTask;
     }
 
-    private Task ConsumeMessageAsync<T>(IModel channel, Func<Action<T>> resolve, string queue)
+    private Task ConsumeMessageAsync<T>(IModel channel, Func<Action<T?>> resolve, string queue)
     {
         var consumer = new AsyncEventingBasicConsumer(channel);
         consumer.Received += async (model, ea) =>
@@ -98,7 +98,7 @@ public partial class ZaabeeRabbitMqClient
         return Task.CompletedTask;
     }
 
-    private Task ConsumeMessageAsync<T>(IModel channel, Func<Func<T, Task>> resolve, string queue)
+    private Task ConsumeMessageAsync<T>(IModel channel, Func<Func<T?, Task>> resolve, string queue)
     {
         var consumer = new AsyncEventingBasicConsumer(channel);
         consumer.Received += async (model, ea) =>

@@ -32,7 +32,7 @@ public partial class ZaabeeRabbitMqClient
         });
     }
 
-    private void ConsumeEvent<T>(IModel channel, Func<Action<T>> resolve, string queue)
+    private void ConsumeEvent<T>(IModel channel, Func<Action<T?>> resolve, string queue)
     {
         var consumer = new EventingBasicConsumer(channel);
 
@@ -57,7 +57,7 @@ public partial class ZaabeeRabbitMqClient
         channel.BasicConsume(queue: queue, autoAck: false, consumer: consumer);
     }
 
-    private void ConsumeEvent<T>(IModel channel, Func<Func<T, Task>> resolve, string queue)
+    private void ConsumeEvent<T>(IModel channel, Func<Func<T?, Task>> resolve, string queue)
     {
         var consumer = new EventingBasicConsumer(channel);
 
@@ -82,7 +82,7 @@ public partial class ZaabeeRabbitMqClient
         channel.BasicConsume(queue: queue, autoAck: false, consumer: consumer);
     }
 
-    private void ConsumeMessage<T>(IModel channel, Func<Action<T>> resolve, string queue)
+    private void ConsumeMessage<T>(IModel channel, Func<Action<T?>> resolve, string queue)
     {
         var consumer = new EventingBasicConsumer(channel);
 
@@ -104,7 +104,7 @@ public partial class ZaabeeRabbitMqClient
         channel.BasicConsume(queue: queue, autoAck: false, consumer: consumer);
     }
 
-    private void ConsumeMessage<T>(IModel channel, Func<Func<T, Task>> resolve, string queue)
+    private void ConsumeMessage<T>(IModel channel, Func<Func<T?, Task>> resolve, string queue)
     {
         var consumer = new EventingBasicConsumer(channel);
 
