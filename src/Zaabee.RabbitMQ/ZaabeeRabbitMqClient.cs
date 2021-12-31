@@ -45,7 +45,7 @@ public partial class ZaabeeRabbitMqClient : IZaabeeRabbitMqClient
         _subscribeAsyncConn = options.Hosts.Any()
             ? asyncFactory.CreateConnection(options.Hosts)
             : asyncFactory.CreateConnection();
-            
+
         _serializer = options.Serializer;
     }
 

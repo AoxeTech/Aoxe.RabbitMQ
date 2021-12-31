@@ -10,7 +10,7 @@ public partial class ZaabeeRabbitMqClient
 
     public void PublishEvent(string exchangeName, byte[] body)
     {
-        var exchangeParam = new ExchangeParam {Exchange = exchangeName};
+        var exchangeParam = new ExchangeParam { Exchange = exchangeName };
         using (var channel = GetPublisherChannel(exchangeParam, null))
         {
             var properties = channel.CreateBasicProperties();

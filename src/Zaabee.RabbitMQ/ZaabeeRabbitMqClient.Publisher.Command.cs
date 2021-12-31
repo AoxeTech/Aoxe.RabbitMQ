@@ -7,8 +7,8 @@ public partial class ZaabeeRabbitMqClient
 
     public void PublishCommand(string exchangeName, byte[] body)
     {
-        var exchangeParam = new ExchangeParam {Exchange = exchangeName};
-        var queueParam = new QueueParam {Queue = exchangeName};
+        var exchangeParam = new ExchangeParam { Exchange = exchangeName };
+        var queueParam = new QueueParam { Queue = exchangeName };
         using (var channel = GetPublisherChannel(exchangeParam, queueParam))
         {
             var properties = channel.CreateBasicProperties();

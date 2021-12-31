@@ -9,7 +9,7 @@ namespace Zaabee.RabbitMQ.Serializers.TestProject
         [Fact]
         public void DataContractSerializerTest() =>
             SerializerTest(new Zaabee.DataContractSerializer.Serializer());
-        
+
         [Fact]
         public void JilTest() =>
             SerializerTest(new Jil.Serializer());
