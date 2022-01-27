@@ -3,13 +3,13 @@
     <PropertyGroup>
         <TargetFramework>netstandard2.0</TargetFramework>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-        <PackageVersion>2022.2.0</PackageVersion>
-        <Version>2022.2.0</Version>
+        <PackageVersion>2022.4.0</PackageVersion>
+        <Version>2022.4.0</Version>
         <Authors>Mutuduxf</Authors>
         <Company>Mutuduxf</Company>
         <PackageTags>Zaabee;Message Queue;MQ;Message Bus;RabbitMQ;Abstractions</PackageTags>
         <Description>The Interface/BaseClass/Attribute for Zaaby.RabbitMQ</Description>
-        <PackageProjectUrl>https://github.com/Mutuduxf/Zaabee.RabbitMQ</PackageProjectUrl>
+        <PackageProjectUrl>https://github.com/PicoHex/Zaabee.RabbitMQ</PackageProjectUrl>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
         <LangVersion>latest</LangVersion>
         <Nullable>enable</Nullable>
