@@ -5,7 +5,7 @@ public partial class ZaabeeRabbitMqClient : IZaabeeRabbitMqClient
     private readonly IConnection _publishConn;
     private readonly IConnection _subscribeConn;
     private readonly IConnection _subscribeAsyncConn;
-    private readonly ITextSerializer _serializer;
+    private readonly IJsonSerializer _serializer;
 
     private readonly ConcurrentDictionary<Type, string> _queueNameDic = new();
 

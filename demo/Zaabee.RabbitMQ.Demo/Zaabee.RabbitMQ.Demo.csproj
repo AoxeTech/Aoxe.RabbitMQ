@@ -11,8 +11,8 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="NSwag.AspNetCore" Version="13.15.5" />
-        <PackageReference Include="Zaabee.NewtonsoftJson" Version="2022.10.0" />
+        <PackageReference Include="NSwag.AspNetCore" Version="13.15.7" />
+        <PackageReference Include="Zaabee.NewtonsoftJson" Version="2022.14.0" />
     </ItemGroup>
 
 </Project>

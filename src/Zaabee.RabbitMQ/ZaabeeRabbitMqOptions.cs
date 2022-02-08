@@ -34,5 +34,5 @@ public class ZaabeeRabbitMqOptions
         set => _virtualHost = string.IsNullOrWhiteSpace(value) ? _virtualHost : value;
     }
 
-    public ITextSerializer Serializer { get; set; } = null!;
+    public IJsonSerializer Serializer { get; set; } = null!;
 }
