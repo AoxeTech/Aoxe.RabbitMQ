@@ -8,7 +8,7 @@ public class ZaabeeRabbitMqOptions
 
     public string Password { get; set; } = null!;
 
-    private TimeSpan _heartBeat = TimeSpan.FromMinutes(1);
+    private TimeSpan _heartBeat = TimeSpan.FromMinutes(1.0);
 
     public TimeSpan HeartBeat
     {
@@ -18,12 +18,12 @@ public class ZaabeeRabbitMqOptions
 
     public bool AutomaticRecoveryEnabled { get; set; } = true;
 
-    private TimeSpan _networkRecoveryInterval = new(60);
+    private TimeSpan _networkRecoveryInterval = TimeSpan.FromSeconds(5.0);
 
     public TimeSpan NetworkRecoveryInterval
     {
         get => _networkRecoveryInterval;
-        set => _networkRecoveryInterval = value.Ticks is 0L ? _networkRecoveryInterval : value;
+        set => _networkRecoveryInterval = value == TimeSpan.Zero ? _networkRecoveryInterval : value;
     }
 
     private string _virtualHost = string.Empty;
