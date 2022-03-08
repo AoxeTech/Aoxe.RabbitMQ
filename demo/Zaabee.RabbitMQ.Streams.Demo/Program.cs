@@ -5,17 +5,15 @@ using System.Net;
 using System.Text;
 using RabbitMQ.Stream.Client;
 
-var lbAddressResolver = new AddressResolver(new IPEndPoint(IPAddress.Parse("192.168.78.130"), 5552));
 var config = new StreamSystemConfig
 {
     Endpoints = new List<EndPoint>
     {
-        lbAddressResolver.EndPoint
+        new IPEndPoint(IPAddress.Parse("192.168.78.130"), 5552)
     },
     UserName = "admin",
     Password = "123",
-    VirtualHost = "/",
-    AddressResolver = lbAddressResolver
+    VirtualHost = "/"
 };
 
 // Connect to the broker 
@@ -29,6 +27,7 @@ await streamSystem.CreateStream(new StreamSpec(stream)
 {
     MaxLengthBytes = 200000
 });
+
 var producer = await streamSystem.CreateProducer(
     new ProducerConfig
     {
