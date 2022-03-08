@@ -14,6 +14,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zaabee.RabbitMQ.Demo", "dem
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zaabee.RabbitMQ.Serializers.TestProject", "tests\Zaabee.RabbitMQ.Serializers.TestProject\Zaabee.RabbitMQ.Serializers.TestProject.csproj", "{18572AD7-1E8A-4F51-AEF4-E68DD426D161}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zaabee.RabbitMQ.Streams.Demo", "demo\Zaabee.RabbitMQ.Streams.Demo\Zaabee.RabbitMQ.Streams.Demo.csproj", "{FE725A0C-9499-44A2-8961-E8875F0ED08C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -36,11 +38,16 @@ Global
 		{18572AD7-1E8A-4F51-AEF4-E68DD426D161}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{18572AD7-1E8A-4F51-AEF4-E68DD426D161}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{18572AD7-1E8A-4F51-AEF4-E68DD426D161}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FE725A0C-9499-44A2-8961-E8875F0ED08C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FE725A0C-9499-44A2-8961-E8875F0ED08C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FE725A0C-9499-44A2-8961-E8875F0ED08C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FE725A0C-9499-44A2-8961-E8875F0ED08C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{FCD9C879-FBCC-44C2-B324-A2F9218A7DFD} = {A9E5ECCA-5ED9-4E42-A239-13FDD50BDBBE}
 		{6B557975-5394-4DA2-9254-B87817BE156D} = {A9E5ECCA-5ED9-4E42-A239-13FDD50BDBBE}
 		{CFDB36C5-A8D7-498F-8CF7-D3174A08EA94} = {AB08860D-BF14-4A60-80D6-C6D4313707AB}
 		{18572AD7-1E8A-4F51-AEF4-E68DD426D161} = {AF779304-45AF-4425-9F9A-F0648D5BDFFA}
+		{FE725A0C-9499-44A2-8961-E8875F0ED08C} = {AB08860D-BF14-4A60-80D6-C6D4313707AB}
 	EndGlobalSection
 EndGlobal
