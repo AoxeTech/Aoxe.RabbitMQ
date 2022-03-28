@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFrameworks>net48;netcoreapp3.1;net5.0;net6.0</TargetFrameworks>
+        <TargetFrameworks>net48;netcoreapp3.1;net6.0;net7.0</TargetFrameworks>
         <IsPackable>false</IsPackable>
         <LangVersion>latest</LangVersion>
 	<Nullable>enable</Nullable>
@@ -15,10 +15,10 @@
         <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.1.0" />
         <PackageReference Include="xunit" Version="2.4.1" />
         <PackageReference Include="xunit.runner.visualstudio" Version="2.4.3" />
-        <PackageReference Include="Zaabee.Jil" Version="2022.16.0" />
-        <PackageReference Include="Zaabee.NewtonsoftJson" Version="2022.16.0" />
-        <PackageReference Include="Zaabee.SystemTextJson" Version="2022.16.0" />
-        <PackageReference Include="Zaabee.Utf8Json" Version="2022.16.0" />
+        <PackageReference Include="Zaabee.Jil" Version="2022.16.2" />
+        <PackageReference Include="Zaabee.NewtonsoftJson" Version="2022.16.2" />
+        <PackageReference Include="Zaabee.SystemTextJson" Version="2022.16.2" />
+        <PackageReference Include="Zaabee.Utf8Json" Version="2022.16.2" />
     </ItemGroup>
 
 </Project>
