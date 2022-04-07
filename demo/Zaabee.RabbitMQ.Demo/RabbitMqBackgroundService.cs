@@ -17,6 +17,7 @@ namespace Zaabee.RabbitMQ.Demo
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
             await _messageBus.SubscribeEventAsync<TestEvent>(() => new Subscriber().TestEventHandler);
+            await _messageBus.SubscribeEventAsync<TestEvent>(() => new Subscriber().TestEventHandlerAsync);
             await _messageBus.SubscribeEventAsync<TestEvent>(() => new Subscriber().TestEventHandler, 30);
             await _messageBus.SubscribeEventAsync<TestEventWithVersion>(
                 () => new Subscriber().TestEventExceptionWithVersionHandler, 20);

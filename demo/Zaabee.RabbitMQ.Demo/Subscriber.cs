@@ -11,7 +11,7 @@ public class Subscriber
 
     }
 
-    public Task TestEventHandlerAsync(TestEvent testEvent)
+    public Task TestEventHandlerAsync(TestEvent? testEvent)
     {
         return Task.CompletedTask;
     }
