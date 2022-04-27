@@ -75,12 +75,14 @@ In Zaabee.RabbitMQ we distinguish the different publishing methods by message ty
 void PublishEvent<T>(T @event);
 void PublishEvent<T>(string topic, T @event);
 void PublishEvent(string topic, byte[] body);
+
 void SendEvent<T>(T @event);
 void SendEvent(string topic, byte[] body);
 
 void PublishMessage<T>(T message);
 void PublishMessage<T>(string topic, T message);
 void PublishMessage(string topic, byte[] body);
+
 void SendMessage<T>(T message);
 void SendMessage(string topic, byte[] body);
 ```
@@ -91,12 +93,14 @@ Also they have corresponding asynchronous versions:
 Task PublishEventAsync<T>(T @event);
 Task PublishEventAsync<T>(string topic, T @event);
 Task PublishEventAsync(string topic, byte[] body);
+
 Task SendEventAsync<T>(T message);
 Task SendEventAsync(string topic, byte[] body);
 
 Task PublishMessageAsync<T>(T message);
 Task PublishMessageAsync<T>(string topic, T message);
 Task PublishMessageAsync(string topic, byte[] body);
+
 Task SendMessageAsync<T>(T message);
 Task SendMessageAsync(string topic, byte[] body);
 ```
@@ -127,6 +131,7 @@ void SubscribeEvent<T>(Func<Action<T?>> resolve, ushort prefetchCount = 10);
 void SubscribeEvent<T>(Func<Func<T?, Task>> resolve, ushort prefetchCount = 10);
 void SubscribeEvent<T>(string topic, Func<Action<T?>> resolve, ushort prefetchCount = 10);
 void SubscribeEvent<T>(string topic, Func<Func<T?, Task>> resolve, ushort prefetchCount = 10);
+
 void ReceiveEvent<T>(Func<Action<T?>> resolve, ushort prefetchCount = 10);
 void ReceiveEvent<T>(Func<Func<T?, Task>> resolve, ushort prefetchCount = 10);
 
@@ -134,10 +139,14 @@ void SubscribeMessage<T>(Func<Action<T?>> resolve, ushort prefetchCount = 10);
 void SubscribeMessage<T>(Func<Func<T?, Task>> resolve, ushort prefetchCount = 10);
 void SubscribeMessage<T>(string topic, Func<Action<T?>> resolve, ushort prefetchCount = 10);
 void SubscribeMessage<T>(string topic, Func<Func<T?, Task>> resolve, ushort prefetchCount = 10);
+
 void ReceiveMessage<T>(Func<Action<T?>> resolve, ushort prefetchCount = 10);
 void ReceiveMessage<T>(Func<Func<T?, Task>> resolve, ushort prefetchCount = 10);
+
 void ListenMessage<T>(Func<Action<T?>> resolve, ushort prefetchCount = 10);
 void ListenMessage<T>(Func<Func<T?, Task>> resolve, ushort prefetchCount = 10);
+void ListenMessage<T>(string topic, Func<Action<T?>> resolve, ushort prefetchCount = 10);
+void ListenMessage<T>(string topic, Func<Func<T?, Task>> resolve, ushort prefetchCount = 10);
 ```
 
 - Subscribe: Will automatically create (if not already) a queue named by resolve to bind to the exchange and consume it.

@@ -54,4 +54,16 @@ public partial class ZaabeeRabbitMqClient
         var queue = $"{GetQueueName(resolve)}[{Guid.NewGuid()}]";
         Subscribe(topic, queue, resolve, MessageType.Message, prefetchCount);
     }
+
+    public void ListenMessage<T>(string topic, Func<Action<T?>> resolve, ushort prefetchCount = 10)
+    {
+        var queue = $"{GetQueueName(resolve)}[{Guid.NewGuid()}]";
+        Subscribe(topic, queue, resolve, MessageType.Message, prefetchCount);
+    }
+
+    public void ListenMessage<T>(string topic, Func<Func<T?, Task>> resolve, ushort prefetchCount = 10)
+    {
+        var queue = $"{GetQueueName(resolve)}[{Guid.NewGuid()}]";
+        Subscribe(topic, queue, resolve, MessageType.Message, prefetchCount);
+    }
 }
