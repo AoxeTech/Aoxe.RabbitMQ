@@ -29,6 +29,45 @@ public partial class ZaabeeRabbitMqClient
             return channel;
         });
     }
+
+    internal async Task SubscribeAsync<T>(string topic, string queue, Func<Action<T?>> resolve,
+        MessageType messageType, ushort prefetchCount = DefaultPrefetchCount)
+    {
+        var exchangeParam = new ExchangeParam { Exchange = topic };
+        var queueParam = new QueueParam { Queue = queue };
+        var channel = GetReceiverAsyncChannel(exchangeParam, queueParam, prefetchCount);
+        switch (messageType)
+        {
+            case MessageType.Message:
+                await ConsumeMessageAsync(channel, resolve, queueParam.Queue);
+                break;
+            case MessageType.Event:
+                await ConsumeEventAsync(channel, resolve, queueParam.Queue);
+                break;
+            default:
+                throw new ArgumentOutOfRangeException(nameof(messageType), messageType, null);
+        }
+    }
+
+    internal async Task SubscribeAsync<T>(string topic, string queue, Func<Func<T?, Task>> resolve,
+        MessageType messageType, ushort prefetchCount = DefaultPrefetchCount)
+    {
+        var exchangeParam = new ExchangeParam { Exchange = topic };
+        var queueParam = new QueueParam { Queue = queue };
+        var channel = GetReceiverAsyncChannel(exchangeParam, queueParam, prefetchCount);
+        switch (messageType)
+        {
+            case MessageType.Message:
+                await ConsumeMessageAsync(channel, resolve, queueParam.Queue);
+                break;
+            case MessageType.Event:
+                await ConsumeEventAsync(channel, resolve, queueParam.Queue);
+                break;
+            default:
+                throw new ArgumentOutOfRangeException(nameof(messageType), messageType, null);
+        }
+    }
+
     private Task ConsumeEventAsync<T>(IModel channel, Func<Action<T?>> resolve, string queue)
     {
         var consumer = new AsyncEventingBasicConsumer(channel);

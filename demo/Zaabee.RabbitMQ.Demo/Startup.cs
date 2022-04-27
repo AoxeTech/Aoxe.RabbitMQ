@@ -24,7 +24,7 @@ namespace Zaabee.RabbitMQ.Demo
                 new ZaabeeRabbitMqClient(new ZaabeeRabbitMqOptions
                 {
                     AutomaticRecoveryEnabled = true,
-                    Hosts = new List<string> { "192.168.78.150" },
+                    Hosts = new List<string> { "192.168.78.130" },
                     UserName = "admin",
                     Password = "123",
                     Serializer = new NewtonsoftJson.Serializer()

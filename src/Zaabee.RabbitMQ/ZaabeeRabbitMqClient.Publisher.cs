@@ -19,4 +19,23 @@ public partial class ZaabeeRabbitMqClient
 
         return channel;
     }
+
+    private void Publish(string exchangeName, string? queueName, MessageType messageType, byte[] body)
+    {
+        var exchangeParam = new ExchangeParam { Exchange = exchangeName };
+        var queueParam = string.IsNullOrWhiteSpace(queueName) ? null : new QueueParam { Queue = queueName! };
+        using (var channel = GetPublisherChannel(exchangeParam, queueParam))
+        {
+            IBasicProperties? properties = null;
+            if (messageType is MessageType.Event)
+            {
+                properties = channel.CreateBasicProperties();
+                if (properties is not null)
+                    properties.Persistent = true;
+            }
+
+            var routingKey = exchangeParam.Exchange;
+            channel.BasicPublish(exchangeParam.Exchange, routingKey, properties, body);
+        }
+    }
 }

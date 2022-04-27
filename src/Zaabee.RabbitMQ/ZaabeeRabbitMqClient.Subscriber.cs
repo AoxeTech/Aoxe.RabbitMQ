@@ -32,6 +32,46 @@ public partial class ZaabeeRabbitMqClient
         });
     }
 
+    internal void Subscribe<T>(string topic, string queue, Func<Action<T?>> resolve, MessageType messageType,
+        ushort prefetchCount = DefaultPrefetchCount)
+    {
+        var exchangeParam = new ExchangeParam { Exchange = topic };
+        var queueParam = new QueueParam { Queue = queue };
+        var channel = GetReceiverChannel(exchangeParam, queueParam, prefetchCount);
+
+        switch (messageType)
+        {
+            case MessageType.Message:
+                ConsumeMessage(channel, resolve, queueParam.Queue);
+                break;
+            case MessageType.Event:
+                ConsumeEvent(channel, resolve, queueParam.Queue);
+                break;
+            default:
+                throw new ArgumentOutOfRangeException(nameof(messageType), messageType, null);
+        }
+    }
+
+    internal void Subscribe<T>(string topic, string queue, Func<Func<T?, Task>> resolve, MessageType messageType,
+        ushort prefetchCount = DefaultPrefetchCount)
+    {
+        var exchangeParam = new ExchangeParam { Exchange = topic };
+        var queueParam = new QueueParam { Queue = queue };
+        var channel = GetReceiverChannel(exchangeParam, queueParam, prefetchCount);
+
+        switch (messageType)
+        {
+            case MessageType.Message:
+                ConsumeMessage(channel, resolve, queueParam.Queue);
+                break;
+            case MessageType.Event:
+                ConsumeEvent(channel, resolve, queueParam.Queue);
+                break;
+            default:
+                throw new ArgumentOutOfRangeException(nameof(messageType), messageType, null);
+        }
+    }
+
     private void ConsumeEvent<T>(IModel channel, Func<Action<T?>> resolve, string queue)
     {
         var consumer = new EventingBasicConsumer(channel);

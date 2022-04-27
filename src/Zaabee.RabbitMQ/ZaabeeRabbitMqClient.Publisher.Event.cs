@@ -2,22 +2,21 @@ namespace Zaabee.RabbitMQ;
 
 public partial class ZaabeeRabbitMqClient
 {
-    public void PublishEvent<T>(T @event) =>
-        PublishEvent(GetTypeName(typeof(T)), @event);
-
-    public void PublishEvent<T>(string exchangeName, T @event) =>
-        PublishEvent(exchangeName, _serializer.ToBytes(@event));
-
-    public void PublishEvent(string exchangeName, byte[] body)
+    public void SendEvent<T>(T @event)
     {
-        var exchangeParam = new ExchangeParam { Exchange = exchangeName };
-        using (var channel = GetPublisherChannel(exchangeParam, null))
-        {
-            var properties = channel.CreateBasicProperties();
-            properties.Persistent = true;
-            var routingKey = exchangeParam.Exchange;
-
-            channel.BasicPublish(exchangeParam.Exchange, routingKey, properties, body);
-        }
+        var topic = GetTypeName(typeof(T));
+        Publish(topic, topic, MessageType.Event, _serializer.ToBytes(@event));
     }
+
+    public void SendEvent(string topic, byte[] body) =>
+        Publish(topic, topic, MessageType.Event, body);
+
+    public void PublishEvent<T>(T @event) =>
+        Publish(GetTypeName(typeof(T)), null, MessageType.Event, _serializer.ToBytes(@event));
+
+    public void PublishEvent<T>(string topic, T @event) =>
+        Publish(topic, null, MessageType.Event, _serializer.ToBytes(@event));
+
+    public void PublishEvent(string topic, byte[] body) =>
+        Publish(topic, null, MessageType.Event, body);
 }
