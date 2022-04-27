@@ -113,7 +113,7 @@ There are two concepts here, message type and message sending type：
 If the name of the topic is not specified, it will be automatically named by the type of the message, with the following logic:
 
 ```csharp
-type.GetCustomAttributes(typeof(MessageVersionAttribute), false).FirstOrDefault() is MessageVersionAttribute msgVerAttr
+messageType.GetCustomAttributes(typeof(MessageVersionAttribute), false).FirstOrDefault() is MessageVersionAttribute msgVerAttr
     ? $"{type}[{msgVerAttr.Version}]"
     : type.ToString());
 ```
@@ -141,7 +141,7 @@ void ListenMessage<T>(Func<Func<T?, Task>> resolve, ushort prefetchCount = 10);
 ```
 
 - Subscribe: Will automatically create (if not already) a queue named by resolve to bind to the exchange and consume it.
-- Receive: As opposed to "Send", will automatically consume messages from the queue created by send.
-- Listen: We know that multiple nodes subscribe to the same queue, the messages in this queue will be pushed to these nodes to achieve a balanced load, that is, a single message will only be consumed by a single node in the cluster; while "Listen" allows a single node to have an independent exclusive queue, and automatically delete this queue when the connection is disconnected, usually used in scenarios where all nodes need to be notified.
+- Receive: As opposed to "Send", will consume messages from the queue created by send.
+- Listen: We know that multiple nodes subscribe/receive to the same queue, the messages in this queue will be pushed to these nodes to achieve a balanced load, that is, a single message will only be consumed by a single node in the cluster; while "Listen" allows a single node to have an independent exclusive queue, and automatically delete this queue when the connection is disconnected, usually used in scenarios where all nodes need to be notified.
 
 Also these methods corresponding asynchronous versions too.
