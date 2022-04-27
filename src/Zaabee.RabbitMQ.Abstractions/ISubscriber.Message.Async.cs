@@ -75,4 +75,24 @@ public partial interface ISubscriber
     /// <typeparam name="T"></typeparam>
     /// <returns></returns>
     Task ListenMessageAsync<T>(Func<Func<T?, Task>> resolve, ushort prefetchCount = 10);
+
+    /// <summary>
+    /// The subscriber node will receive the Message by the specified topic.
+    /// </summary>
+    /// <param name="topic"></param>
+    /// <param name="resolve"></param>
+    /// <param name="prefetchCount"></param>
+    /// <typeparam name="T"></typeparam>
+    /// <returns></returns>
+    Task ListenMessageAsync<T>(string topic, Func<Action<T?>> resolve, ushort prefetchCount = 10);
+
+    /// <summary>
+    /// The subscriber node will receive the Message by the specified topic.
+    /// </summary>
+    /// <param name="topic"></param>
+    /// <param name="resolve"></param>
+    /// <param name="prefetchCount"></param>
+    /// <typeparam name="T"></typeparam>
+    /// <returns></returns>
+    Task ListenMessageAsync<T>(string topic, Func<Func<T?, Task>> resolve, ushort prefetchCount = 10);
 }
