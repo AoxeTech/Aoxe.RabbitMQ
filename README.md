@@ -15,21 +15,15 @@ Install-Package Zaabee.RabbitMQ
 Install-Package Zaabee.NewtonsoftJson
 ```
 
-Otherwise we have these serializers:
+In addition we have the following json serializers:
 
 [Zaabee.Jil](https://github.com/PicoHex/Zaabee.Serializers/tree/master/src/Zaabee.MsgPack)
-
-[Zaabee.NewtonsoftJson](https://github.com/PicoHex/Zaabee.Serializers/tree/master/src/Zaabee.NewtonsoftJson)
 
 [Zaabee.SystemTextJson](https://github.com/PicoHex/Zaabee.Serializers/tree/master/src/Zaabee.SystemTextJson)
 
 [Zaabee.Utf8Json](https://github.com/PicoHex/Zaabee.Serializers/tree/master/src/Zaabee.Utf8Json)
 
-[Zaabee.Xml](https://github.com/PicoHex/Zaabee.Serializers/tree/master/src/Zaabee.Xml)
-
 ### Asp.net core
-
-#### Build Project
 
 Import reference in startup.cs
 
@@ -46,182 +40,108 @@ services.AddSingleton<IZaabeeRabbitMqClient>(_ =>
     new ZaabeeRabbitMqClient(new ZaabeeRabbitMqOptions
     {
         AutomaticRecoveryEnabled = true,
-        HeartBeat = TimeSpan.FromMinutes(1),
-        NetworkRecoveryInterval = new TimeSpan(60),
-        Hosts = new List<string> { "192.168.78.150" },
+        Hosts = new List<string> { "192.168.78.130" },
         UserName = "admin",
         Password = "123",
-        Serializer = new ZaabeeSerializer()
+        Serializer = new NewtonsoftJson.Serializer()
     }));
 ```
 
-Create classes that implementate the IEvent or IMessage.IEvent means the message will be persisted both in exchange and queue for the RabbitMQ.When the handle throw exception it will be republished to the dead letter queue.
-
-IMessage is implemented for performance,it will not persist the exchange and queue.
+Create a message class named "TestEvent" and version control it with the "MessageVersion" attribute.
 
 ```CSharp
 public class TestEvent
 {
     public Guid Id { get; set; }
-    public DateTimeOffset Timestamp { get; set; }
+    public DateTime CreateTime { get; set; }
 }
+```
+
+```csharp
 
 [MessageVersion("3.14")]
 public class TestEventWithVersion
 {
     public Guid Id { get; set; }
-    public DateTimeOffset Timestamp { get; set; }
-}
-
-public class TestMessage
-{
-    public Guid Id { get; set; }
-    public DateTimeOffset Timestamp { get; set; }
+    public DateTime CreateTime { get; set; }
 }
 ```
 
-#### Publish
+### Publish
 
-Now add a controller in the webapi project like this
+In Zaabee.RabbitMQ we distinguish the different publishing methods by message type and message sending type as follows:
 
-```CSharp
-[Route("api/[controller]/[action]")]
-public class RabbitMqDemoController : Controller
-{
-    private readonly IZaabeeRabbitMqClient _messageBus;
+```csharp
+void PublishEvent<T>(T @event);
+void PublishEvent<T>(string topic, T @event);
+void PublishEvent(string topic, byte[] body);
+void SendEvent<T>(T @event);
+void SendEvent(string topic, byte[] body);
 
-    public RabbitMqDemoController(IZaabeeRabbitMqClient messageBus)
-    {
-        _messageBus = messageBus;
-    }
-
-    [HttpGet]
-    [HttpPost]
-    public long PublishEvent(int quantity)
-    {
-        var sw = Stopwatch.StartNew();
-        for (var i = 0; i < quantity; i++)
-        {
-            _messageBus.PublishEvent(new TestEvent
-            {
-                Id = Guid.NewGuid(),
-                Timestamp = DateTimeOffset.Now
-            });
-        }
-
-        return sw.ElapsedMilliseconds;
-    }
-
-    [HttpGet]
-    [HttpPost]
-    public long PublishEventWithVersion(int quantity)
-    {
-        var sw = Stopwatch.StartNew();
-        for (var i = 0; i < quantity; i++)
-        {
-            _messageBus.PublishEvent(new TestEventWithVersion
-            {
-                Id = Guid.NewGuid(),
-                Timestamp = DateTimeOffset.Now
-            });
-        }
-
-        return sw.ElapsedMilliseconds;
-    }
-
-    [HttpGet]
-    [HttpPost]
-    public long PublishMessage(int quantity)
-    {
-        var sw = Stopwatch.StartNew();
-        for (var i = 0; i < quantity; i++)
-        {
-            _messageBus.PublishMessage(new TestMessage
-            {
-                Id = Guid.NewGuid(),
-                Timestamp = DateTimeOffset.Now
-            });
-        }
-
-        return sw.ElapsedMilliseconds;
-    }
-}
+void PublishMessage<T>(T message);
+void PublishMessage<T>(string topic, T message);
+void PublishMessage(string topic, byte[] body);
+void SendMessage<T>(T message);
+void SendMessage(string topic, byte[] body);
 ```
 
-You can send request to these actions and the queues will show in the Rabbitmq Management
+Also they have corresponding asynchronous versions:
 
-#### Subscribe
+```csharp
+Task PublishEventAsync<T>(T @event);
+Task PublishEventAsync<T>(string topic, T @event);
+Task PublishEventAsync(string topic, byte[] body);
+Task SendEventAsync<T>(T message);
+Task SendEventAsync(string topic, byte[] body);
 
-Create a class named ServiceRunner.cs
-
-```CSharp
-using System.Threading;
-using System.Threading.Tasks;
-using Microsoft.Extensions.Hosting;
-using Zaabee.RabbitMQ.Abstractions;
-
-namespace Zaabee.RabbitMQ.Demo
-{
-    public class RabbitMqBackgroundService : BackgroundService
-    {
-        private readonly IZaabeeRabbitMqClient _messageBus;
-
-        public RabbitMqBackgroundService(IZaabeeRabbitMqClient messageBus)
-        {
-            _messageBus = messageBus;
-        }
-
-        protected override async Task ExecuteAsync(CancellationToken stoppingToken)
-        {
-            _messageBus.ReceiveEvent<TestEvent>(TestEventHandler);
-            _messageBus.SubscribeEvent<TestEvent>(new Subscriber().TestEventHandler);
-
-            _messageBus.SubscribeEvent<TestEvent>(new Subscriber().TestEventHandler);
-            _messageBus.SubscribeEvent<TestEvent>(() => new Subscriber().TestEventHandler, 30);
-            _messageBus.ReceiveEvent<TestEvent>(TestEventExceptionHandler);
-            _messageBus.SubscribeEvent<TestEvent>(TestEventExceptionHandler);
-            _messageBus.ReceiveEvent<TestEventWithVersion>(TestEventWithVersionHandler);
-            _messageBus.ReceiveEvent<TestEventWithVersion>(TestEventExceptionWithVersionHandler, 20);
-            _messageBus.ReceiveMessage<TestMessage>(TestMessageHandler);
-            _messageBus.SubscribeMessage<TestMessage>(new Subscriber().TestMessageHandler);
-            _messageBus.SubscribeMessage<TestMessage>(() => new Subscriber().TestMessageHandler);
-            _messageBus.ListenMessage<TestMessage>(TestMessageHandler);
-            _messageBus.RepublishDeadLetterEvent<TestEvent>(
-                "dead-letter-EmailApplication.EmailEventHandler.Handle[EmailContract.EmailCommand]");
-            _messageBus.RepublishDeadLetterEvent<TestEvent>(
-                "dead-letter-Demo.TestEvent");
-        }
-
-        public override async Task StopAsync(CancellationToken cancellationToken)
-        {
-            await base.StopAsync(cancellationToken);
-            _messageBus.Dispose();
-        }
-    }
-}
+Task PublishMessageAsync<T>(T message);
+Task PublishMessageAsync<T>(string topic, T message);
+Task PublishMessageAsync(string topic, byte[] body);
+Task SendMessageAsync<T>(T message);
+Task SendMessageAsync(string topic, byte[] body);
 ```
 
-Add the host service in the ConfigureServices method(Start.cs)
+There are two concepts here, message type and message sending type：
 
-```CSharp
-services.AddHostedService<RabbitMqBackgroundService>();
+- Message type
+  - Message: The "Message" type will not be persisted for throughput and performance purposes, and messages will not be transferred to the dead message queue in the event of a consumption exception.
+  - Event: Messages of event type will be persisted and will be transferred to the corresponding dead message queue in case of consumption exceptions.
+- Message sending type
+  - Publish: The message will be posted to the corresponding Topic (which is actually the wrapper for the exchange in Rabbitmq), and if there is no queue binding to the exchange, the message will be discarded.
+  - Send: When messages are sent to RabbitMQ, a default queue is created in addition to the corresponding exchange (if there is none), and the exchange and queue will be named after the topic.
+
+If the name of the topic is not specified, it will be automatically named by the type of the message, with the following logic:
+
+```csharp
+type.GetCustomAttributes(typeof(MessageVersionAttribute), false).FirstOrDefault() is MessageVersionAttribute msgVerAttr
+    ? $"{type}[{msgVerAttr.Version}]"
+    : type.ToString());
 ```
 
-Debug the webapi project you can see the message in the queues will be subscribed.And some of them will be republished to the dead letter queues.
+### Subscribe
 
-### Notion
+As with publish, there are several different methods of subscribing:
 
-The IEvent has two subscribe types and IMessage has three
+```csharp
+void SubscribeEvent<T>(Func<Action<T?>> resolve, ushort prefetchCount = 10);
+void SubscribeEvent<T>(Func<Func<T?, Task>> resolve, ushort prefetchCount = 10);
+void SubscribeEvent<T>(string topic, Func<Action<T?>> resolve, ushort prefetchCount = 10);
+void SubscribeEvent<T>(string topic, Func<Func<T?, Task>> resolve, ushort prefetchCount = 10);
+void ReceiveEvent<T>(Func<Action<T?>> resolve, ushort prefetchCount = 10);
+void ReceiveEvent<T>(Func<Func<T?, Task>> resolve, ushort prefetchCount = 10);
 
-* ReceiveEvent
-* SubscribeEvent
+void SubscribeMessage<T>(Func<Action<T?>> resolve, ushort prefetchCount = 10);
+void SubscribeMessage<T>(Func<Func<T?, Task>> resolve, ushort prefetchCount = 10);
+void SubscribeMessage<T>(string topic, Func<Action<T?>> resolve, ushort prefetchCount = 10);
+void SubscribeMessage<T>(string topic, Func<Func<T?, Task>> resolve, ushort prefetchCount = 10);
+void ReceiveMessage<T>(Func<Action<T?>> resolve, ushort prefetchCount = 10);
+void ReceiveMessage<T>(Func<Func<T?, Task>> resolve, ushort prefetchCount = 10);
+void ListenMessage<T>(Func<Action<T?>> resolve, ushort prefetchCount = 10);
+void ListenMessage<T>(Func<Func<T?, Task>> resolve, ushort prefetchCount = 10);
+```
 
-* ReceiveMessage
-* SubscribeMessage
-* ListenMessage
+- Subscribe: Will automatically create (if not already) a queue named by resolve to bind to the exchange and consume it.
+- Receive: As opposed to "Send", will automatically consume messages from the queue created by send.
+- Listen: We know that multiple nodes subscribe to the same queue, the messages in this queue will be pushed to these nodes to achieve a balanced load, that is, a single message will only be consumed by a single node in the cluster; while "Listen" allows a single node to have an independent exclusive queue, and automatically delete this queue when the connection is disconnected, usually used in scenarios where all nodes need to be notified.
 
-The differences between IEvent and IMessage is that IEvent will persist messages but IMessage will not.IMessage is designed for performance,thus it will not persist messages in the exchange and queue.
-
-When you send a message at first time it will create default exchange named by the message full class name.The RECEIVE method will get the message from the queue whitch with the same name as exchange.The SUBSCRIBE method will create a new queue named by the handle and binding it to the message default exchange.So when you want to extend your service logic you just need to subscribe it and the previous services didn't need to recode or release.
-
-The LISTEN method based by the exclusive queue.It is for each node but not the cluster.When you need to refresh the local cache or the config you can use it.When the connection close,the LISTEN queue will be deleted.
+Also these methods corresponding asynchronous versions too.
