@@ -35,8 +35,8 @@ public partial class ZaabeeRabbitMqClient
     internal void Subscribe<T>(string topic, string queue, Func<Action<T?>> resolve, MessageType messageType,
         ushort prefetchCount = DefaultPrefetchCount)
     {
-        var exchangeParam = new ExchangeParam { Exchange = topic };
-        var queueParam = new QueueParam { Queue = queue };
+        var exchangeParam = new ExchangeParam { Exchange = topic, Durable = messageType is MessageType.Event };
+        var queueParam = new QueueParam { Queue = queue, Durable = messageType is MessageType.Event };
         var channel = GetReceiverChannel(exchangeParam, queueParam, prefetchCount);
 
         switch (messageType)
@@ -55,8 +55,8 @@ public partial class ZaabeeRabbitMqClient
     internal void Subscribe<T>(string topic, string queue, Func<Func<T?, Task>> resolve, MessageType messageType,
         ushort prefetchCount = DefaultPrefetchCount)
     {
-        var exchangeParam = new ExchangeParam { Exchange = topic };
-        var queueParam = new QueueParam { Queue = queue };
+        var exchangeParam = new ExchangeParam { Exchange = topic, Durable = messageType is MessageType.Event };
+        var queueParam = new QueueParam { Queue = queue, Durable = messageType is MessageType.Event };
         var channel = GetReceiverChannel(exchangeParam, queueParam, prefetchCount);
 
         switch (messageType)
