@@ -108,10 +108,10 @@ Task SendMessageAsync(string topic, byte[] body);
 There are two concepts here, message type and message sending type：
 
 - Message type
-  - Message: The "Message" type will not be persisted for throughput and performance purposes, and messages will not be transferred to the dead message queue in the event of a consumption exception.
-  - Event: Messages of event type will be persisted and will be transferred to the corresponding dead message queue in case of consumption exceptions.
+  - Message: The "Message" type will not be persisted for throughput and performance purposes, and messages will not be transferred to the dead message queue in the event of a consumption exception. The message's exchange is also Durable to false, so the exchange will be lost after the broker restarts.
+  - Event: Messages of event type will be persisted and will be transferred to the corresponding dead message queue in case of consumption exceptions. The Durable of event's exchange is true, so that it is not lost when the broker restarts.
 - Message sending type
-  - Publish: The message will be posted to the corresponding Topic (which is actually the wrapper for the exchange in Rabbitmq), and if there is no queue binding to the exchange, the message will be discarded.
+  - Publish: The message will be posted to the corresponding Topic (which is actually the wrapper for the exchange in RabbitMQ), and if there is no queue binding to the exchange, the message will be discarded.
   - Send: When messages are sent to RabbitMQ, a default queue is created in addition to the corresponding exchange (if there is none), and the exchange and queue will be named after the topic.
 
 If the name of the topic is not specified, it will be automatically named by the type of the message, with the following logic:
