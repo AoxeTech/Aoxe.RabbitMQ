@@ -6,39 +6,13 @@ public partial class ZaabeeRabbitMqClient
 
     private readonly ConcurrentDictionary<string, IModel> _subscriberChannelDic = new();
 
-    private IModel GetReceiverChannel(ExchangeParam? exchangeParam, QueueParam queueParam,
-        ushort prefetchCount)
-    {
-        return _subscriberChannelDic.GetOrAdd(queueParam.Queue, _ =>
-        {
-            var channel = _subscribeConn.CreateModel();
-
-            channel.QueueDeclare(queue: queueParam.Queue, durable: queueParam.Durable,
-                exclusive: queueParam.Exclusive, autoDelete: queueParam.AutoDelete,
-                arguments: queueParam.Arguments);
-
-            if (exchangeParam is not null)
-            {
-                channel.ExchangeDeclare(exchange: exchangeParam.Exchange,
-                    type: exchangeParam.Type.ToString().ToLower(),
-                    durable: exchangeParam.Durable, autoDelete: exchangeParam.AutoDelete,
-                    arguments: exchangeParam.Arguments);
-                channel.QueueBind(queue: queueParam.Queue, exchange: exchangeParam.Exchange,
-                    routingKey: queueParam.Queue);
-            }
-
-            channel.BasicQos(0, prefetchCount, false);
-            return channel;
-        });
-    }
-
-    internal void Subscribe<T>(string topic, string queue, Func<Action<T?>> resolve, MessageType messageType,
+    private void Subscribe<T>(ExchangeParam exchangeParam,
+        QueueParam queueParam,
+        Func<Action<T?>> resolve,
+        MessageType messageType,
         ushort prefetchCount = DefaultPrefetchCount)
     {
-        var exchangeParam = new ExchangeParam { Exchange = topic, Durable = messageType is MessageType.Event };
-        var queueParam = new QueueParam { Queue = queue, Durable = messageType is MessageType.Event };
         var channel = GetReceiverChannel(exchangeParam, queueParam, prefetchCount);
-
         switch (messageType)
         {
             case MessageType.Message:
@@ -52,13 +26,13 @@ public partial class ZaabeeRabbitMqClient
         }
     }
 
-    internal void Subscribe<T>(string topic, string queue, Func<Func<T?, Task>> resolve, MessageType messageType,
+    private void Subscribe<T>(ExchangeParam exchangeParam,
+        QueueParam queueParam,
+        Func<Func<T?, Task>> resolve,
+        MessageType messageType,
         ushort prefetchCount = DefaultPrefetchCount)
     {
-        var exchangeParam = new ExchangeParam { Exchange = topic, Durable = messageType is MessageType.Event };
-        var queueParam = new QueueParam { Queue = queue, Durable = messageType is MessageType.Event };
         var channel = GetReceiverChannel(exchangeParam, queueParam, prefetchCount);
-
         switch (messageType)
         {
             case MessageType.Message:
@@ -80,7 +54,7 @@ public partial class ZaabeeRabbitMqClient
         {
             try
             {
-                var msg = _serializer.FromBytes<T>(ea.Body.ToArray())!;
+                var msg = _serializer.FromBytes<T>(ea.Body.ToArray());
                 resolve.Invoke()(msg);
             }
             catch (Exception ex)
@@ -105,7 +79,7 @@ public partial class ZaabeeRabbitMqClient
         {
             try
             {
-                var msg = _serializer.FromBytes<T>(ea.Body.ToArray())!;
+                var msg = _serializer.FromBytes<T>(ea.Body.ToArray());
                 await resolve.Invoke()(msg);
             }
             catch (Exception ex)
@@ -131,7 +105,7 @@ public partial class ZaabeeRabbitMqClient
             try
             {
                 var body = ea.Body;
-                var msg = _serializer.FromBytes<T>(body.ToArray())!;
+                var msg = _serializer.FromBytes<T>(body.ToArray());
                 resolve.Invoke()(msg);
             }
             finally
@@ -153,7 +127,7 @@ public partial class ZaabeeRabbitMqClient
             try
             {
                 var body = ea.Body;
-                var msg = _serializer.FromBytes<T>(body.ToArray())!;
+                var msg = _serializer.FromBytes<T>(body.ToArray());
                 await resolve.Invoke()(msg);
             }
             finally
@@ -164,6 +138,31 @@ public partial class ZaabeeRabbitMqClient
 
         consumer.Received += OnConsumerOnReceived;
         channel.BasicConsume(queue: queue, autoAck: false, consumer: consumer);
+    }
+
+    private IModel GetReceiverChannel(ExchangeParam? exchangeParam, QueueParam queueParam, ushort prefetchCount)
+    {
+        return _subscriberChannelDic.GetOrAdd(queueParam.Queue, _ =>
+        {
+            var channel = _subscribeConn.CreateModel();
+
+            channel.QueueDeclare(queue: queueParam.Queue, durable: queueParam.Durable,
+                exclusive: queueParam.Exclusive, autoDelete: queueParam.AutoDelete,
+                arguments: queueParam.Arguments);
+
+            if (exchangeParam is not null)
+            {
+                channel.ExchangeDeclare(exchange: exchangeParam.Exchange,
+                    type: exchangeParam.Type.ToString().ToLower(),
+                    durable: exchangeParam.Durable, autoDelete: exchangeParam.AutoDelete,
+                    arguments: exchangeParam.Arguments);
+                channel.QueueBind(queue: queueParam.Queue, exchange: exchangeParam.Exchange,
+                    routingKey: queueParam.Queue);
+            }
+
+            channel.BasicQos(0, prefetchCount, false);
+            return channel;
+        });
     }
 
     private void PublishDlx<T>(BasicDeliverEventArgs ea, string queue, Exception ex)

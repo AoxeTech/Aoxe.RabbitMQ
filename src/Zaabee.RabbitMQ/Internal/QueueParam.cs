@@ -1,4 +1,4 @@
-﻿namespace Zaabee.RabbitMQ;
+﻿namespace Zaabee.RabbitMQ.Internal;
 
 /// <summary>
 /// 队列参数

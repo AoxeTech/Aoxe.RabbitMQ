@@ -5,18 +5,34 @@ public partial class ZaabeeRabbitMqClient
     public void SendMessage<T>(T message)
     {
         var topic = GetTypeName(typeof(T));
-        Publish(topic, topic, MessageType.Message, _serializer.ToBytes(message));
+        var exchangeParam = GetExchangeParam(topic, MessageType.Message);
+        var queueParam = GetQueueParam(topic, MessageType.Message);
+        Publish(exchangeParam, queueParam, MessageType.Message, message);
     }
 
-    public void SendMessage(string topic, byte[] body) =>
-        Publish(topic, topic, MessageType.Message, body);
+    public void SendMessage(string topic, byte[] body)
+    {
+        var exchangeParam = GetExchangeParam(topic, MessageType.Message);
+        var queueParam = GetQueueParam(topic, MessageType.Message);
+        Publish(exchangeParam, queueParam, MessageType.Message, body);
+    }
 
-    public void PublishMessage<T>(T message) =>
-        Publish(GetTypeName(typeof(T)), null, MessageType.Message, _serializer.ToBytes(message));
+    public void PublishMessage<T>(T message)
+    {
+        var topic = GetTypeName(typeof(T));
+        var exchangeParam = GetExchangeParam(topic, MessageType.Message);
+        Publish(exchangeParam, null, MessageType.Message, message);
+    }
 
-    public void PublishMessage<T>(string topic, T message) =>
-        Publish(topic, null, MessageType.Message, _serializer.ToBytes(message));
+    public void PublishMessage<T>(string topic, T message)
+    {
+        var exchangeParam = GetExchangeParam(topic, MessageType.Message);
+        Publish(exchangeParam, null, MessageType.Message, message);
+    }
 
-    public void PublishMessage(string topic, byte[] body) =>
-        Publish(topic, null, MessageType.Message, body);
+    public void PublishMessage(string topic, byte[] body)
+    {
+        var exchangeParam = GetExchangeParam(topic, MessageType.Message);
+        Publish(exchangeParam, null, MessageType.Message, body);
+    }
 }

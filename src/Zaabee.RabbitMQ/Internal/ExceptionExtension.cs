@@ -1,6 +1,6 @@
-﻿namespace Zaabee.RabbitMQ;
+﻿namespace Zaabee.RabbitMQ.Internal;
 
-public static class ExceptionExtension
+internal static class ExceptionExtension
 {
     public static Exception GetInmostException(this Exception ex)
     {

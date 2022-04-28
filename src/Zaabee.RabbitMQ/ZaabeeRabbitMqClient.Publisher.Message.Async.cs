@@ -2,18 +2,18 @@ namespace Zaabee.RabbitMQ;
 
 public partial class ZaabeeRabbitMqClient
 {
-    public async Task SendMessageAsync<T>(T message) =>
-        await Task.Run(() => { SendMessage(message); });
+    public Task SendMessageAsync<T>(T message) =>
+        Task.Run(() => { SendMessage(message); });
 
-    public async Task SendMessageAsync(string topic, byte[] body) =>
-        await Task.Run(() => { SendMessage(topic, body); });
+    public Task SendMessageAsync(string topic, byte[] body) =>
+        Task.Run(() => { SendMessage(topic, body); });
 
-    public async Task PublishMessageAsync<T>(T message) =>
-        await Task.Run(() => { PublishMessage(message); });
+    public Task PublishMessageAsync<T>(T message) =>
+        Task.Run(() => { PublishMessage(message); });
 
-    public async Task PublishMessageAsync<T>(string topic, T message) =>
-        await Task.Run(() => { PublishMessage(topic, message); });
+    public Task PublishMessageAsync<T>(string topic, T message) =>
+        Task.Run(() => { PublishMessage(topic, message); });
 
-    public async Task PublishMessageAsync(string topic, byte[] body) =>
-        await Task.Run(() => { PublishMessage(topic, body); });
+    public Task PublishMessageAsync(string topic, byte[] body) =>
+        Task.Run(() => { PublishMessage(topic, body); });
 }

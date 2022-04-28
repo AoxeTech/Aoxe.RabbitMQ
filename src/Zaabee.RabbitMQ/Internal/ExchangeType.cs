@@ -1,4 +1,4 @@
-﻿namespace Zaabee.RabbitMQ;
+﻿namespace Zaabee.RabbitMQ.Internal;
 
 internal enum ExchangeType
 {

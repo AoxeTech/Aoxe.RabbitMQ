@@ -94,6 +94,18 @@ public partial class ZaabeeRabbitMqClient : IZaabeeRabbitMqClient
         channel.BasicConsume(queue: deadLetterQueueName, autoAck: false, consumer: consumer);
     }
 
+    private static ExchangeParam GetExchangeParam(string topic, MessageType messageType) =>
+        new() { Exchange = topic, Durable = messageType is MessageType.Event };
+
+    private static QueueParam GetQueueParam(string queue, MessageType messageType, SubscribeType? subscribeType = null)
+    {
+        var queueParam = new QueueParam { Queue = queue, Durable = messageType is MessageType.Event };
+        if (subscribeType is null or not SubscribeType.Listen) return queueParam;
+        queueParam.Exclusive = true;
+        queueParam.AutoDelete = true;
+        return queueParam;
+    }
+
     private string GetTypeName(Type type) =>
         _queueNameDic.GetOrAdd(type,
             _ => type.GetCustomAttributes(typeof(MessageVersionAttribute), false).FirstOrDefault()
@@ -104,11 +116,6 @@ public partial class ZaabeeRabbitMqClient : IZaabeeRabbitMqClient
     private string GetQueueName<T>(Func<Action<T>> resolve)
     {
         var handle = resolve();
-        return GetQueueName(handle);
-    }
-
-    private string GetQueueName<T>(Action<T> handle)
-    {
         var messageName = GetTypeName(typeof(T));
         return $"{handle.Method.ReflectedType?.FullName}.{handle.Method.Name}[{messageName}]";
     }
@@ -116,11 +123,6 @@ public partial class ZaabeeRabbitMqClient : IZaabeeRabbitMqClient
     private string GetQueueName<T>(Func<Func<T, Task>> resolve)
     {
         var handle = resolve();
-        return GetQueueName(handle);
-    }
-
-    private string GetQueueName<T>(Func<T, Task> handle)
-    {
         var messageName = GetTypeName(typeof(T));
         return $"{handle.Method.ReflectedType?.FullName}.{handle.Method.Name}[{messageName}]";
     }

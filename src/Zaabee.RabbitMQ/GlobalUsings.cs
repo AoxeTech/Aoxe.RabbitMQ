@@ -7,3 +7,4 @@ global using RabbitMQ.Client;
 global using RabbitMQ.Client.Events;
 global using Zaabee.RabbitMQ.Abstractions;
 global using Zaabee.Serializer.Abstractions;
+global using Zaabee.RabbitMQ.Internal;
