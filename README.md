@@ -58,7 +58,6 @@ public class TestEvent
 ```
 
 ```csharp
-
 [MessageVersion("3.14")]
 public class TestEventWithVersion
 {
