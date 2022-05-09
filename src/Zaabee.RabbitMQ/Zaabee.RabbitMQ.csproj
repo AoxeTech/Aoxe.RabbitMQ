@@ -1,24 +1,21 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
-    
-    <PropertyGroup>
-        <TargetFramework>netstandard2.0</TargetFramework>
-        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-        <PackageVersion>2022.13.6</PackageVersion>
-        <Version>2022.13.6</Version>
-        <Authors>Mutuduxf</Authors>
-        <Company>Mutuduxf</Company>
-        <PackageTags>Zaabee;Message Queue;MQ;Message Bus;RabbitMQ</PackageTags>
-        <PackageProjectUrl>https://github.com/PicoHex/Zaabee.RabbitMQ</PackageProjectUrl>
-        <Description>Rabbit client wrapper for asp.net core or Zaaby</Description>
-        <PackageLicenseExpression>MIT</PackageLicenseExpression>
-        <LangVersion>Latest</LangVersion>
-        <Nullable>enable</Nullable>
-    </PropertyGroup>
-    
-    <ItemGroup>
-        <PackageReference Include="RabbitMQ.Client" Version="6.2.4" />
-        <PackageReference Include="Zaabee.RabbitMQ.Abstractions" Version="2022.13.0" />
-        <PackageReference Include="Zaabee.Serializer.Abstractions" Version="2022.14.0" />
-    </ItemGroup>
-    
+<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<TargetFramework>netstandard2.0</TargetFramework>
+		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+		<PackageVersion>2022.13.8</PackageVersion>
+		<Version>2022.13.8</Version>
+		<Authors>Mutuduxf</Authors>
+		<Company>Mutuduxf</Company>
+		<PackageTags>Zaabee;Message Queue;MQ;Message Bus;RabbitMQ</PackageTags>
+		<PackageProjectUrl>https://github.com/PicoHex/Zaabee.RabbitMQ</PackageProjectUrl>
+		<Description>Rabbit client wrapper for asp.net core or Zaaby</Description>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+		<LangVersion>Latest</LangVersion>
+		<Nullable>enable</Nullable>
+	</PropertyGroup>
+	<ItemGroup>
+		<PackageReference Include="RabbitMQ.Client" Version="6.3.0"/>
+		<PackageReference Include="Zaabee.RabbitMQ.Abstractions" Version="2022.13.0"/>
+		<PackageReference Include="Zaabee.Serializer.Abstractions" Version="2022.14.0"/>
+	</ItemGroup>
 </Project>
