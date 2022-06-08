@@ -8,7 +8,7 @@
 		<ProjectReference Include="..\..\src\Zaabee.RabbitMQ\Zaabee.RabbitMQ.csproj"/>
 	</ItemGroup>
 	<ItemGroup>
-		<PackageReference Include="NSwag.AspNetCore" Version="13.16.0"/>
+		<PackageReference Include="NSwag.AspNetCore" Version="13.16.1"/>
 		<PackageReference Include="Zaabee.NewtonsoftJson" Version="2022.16.2"/>
 	</ItemGroup>
 </Project>
