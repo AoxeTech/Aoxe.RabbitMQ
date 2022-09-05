@@ -9,7 +9,7 @@ public partial interface ISubscriber
     /// <param name="prefetchCount"></param>
     /// <typeparam name="T"></typeparam>
     /// <returns></returns>
-    Task ReceiveEventAsync<T>(Func<Action<T?>> resolve, ushort prefetchCount = 10);
+    Task ReceiveCommandAsync<T>(Func<Action<T?>> resolve, ushort prefetchCount = 10);
 
     /// <summary>
     /// The subscriber cluster will get the command from the queue which bind the default topic.
@@ -18,7 +18,7 @@ public partial interface ISubscriber
     /// <param name="prefetchCount"></param>
     /// <typeparam name="T"></typeparam>
     /// <returns></returns>
-    Task ReceiveEventAsync<T>(Func<Func<T?, Task>> resolve, ushort prefetchCount = 10);
+    Task ReceiveCommandAsync<T>(Func<Func<T?, Task>> resolve, ushort prefetchCount = 10);
 
     /// <summary>
     /// The subscriber cluster will get the command from the queue which bind the specified topic.
@@ -28,7 +28,7 @@ public partial interface ISubscriber
     /// <param name="prefetchCount"></param>
     /// <typeparam name="T"></typeparam>
     /// <returns></returns>
-    Task ReceiveEventAsync<T>(string topic, Func<Action<T?>> resolve, ushort prefetchCount = 10);
+    Task ReceiveCommandAsync<T>(string topic, Func<Action<T?>> resolve, ushort prefetchCount = 10);
 
     /// <summary>
     /// The subscriber cluster will get the command from the queue which bind the specified topic.
@@ -38,7 +38,7 @@ public partial interface ISubscriber
     /// <param name="prefetchCount"></param>
     /// <typeparam name="T"></typeparam>
     /// <returns></returns>
-    Task ReceiveEventAsync<T>(string topic, Func<Func<T?, Task>> resolve, ushort prefetchCount = 10);
+    Task ReceiveCommandAsync<T>(string topic, Func<Func<T?, Task>> resolve, ushort prefetchCount = 10);
 
     /// <summary>
     /// The subscriber cluster will get the command from the queue which bind the specified topic.
@@ -48,7 +48,7 @@ public partial interface ISubscriber
     /// <param name="prefetchCount"></param>
     /// <typeparam name="T"></typeparam>
     /// <returns></returns>
-    Task ReceiveEventAsync<T>(string topic, Func<Action<byte[]>> resolve, ushort prefetchCount = 10);
+    Task ReceiveCommandAsync<T>(string topic, Func<Action<byte[]>> resolve, ushort prefetchCount = 10);
 
     /// <summary>
     /// The subscriber cluster will get the command from the queue which bind the specified topic.
@@ -58,5 +58,5 @@ public partial interface ISubscriber
     /// <param name="prefetchCount"></param>
     /// <typeparam name="T"></typeparam>
     /// <returns></returns>
-    Task ReceiveEventAsync<T>(string topic, Func<Func<byte[], Task>> resolve, ushort prefetchCount = 10);
+    Task ReceiveCommandAsync<T>(string topic, Func<Func<byte[], Task>> resolve, ushort prefetchCount = 10);
 }
