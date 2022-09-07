@@ -11,7 +11,11 @@ public partial interface IPublisher
     /// <param name="dlx"></param>
     /// <typeparam name="T"></typeparam>
     /// <returns></returns>
-    Task SendMessageAsync<T>(T message, bool persistence = false, int retry = 0, bool dlx = false);
+    Task SendMessageAsync<T>(
+        T message,
+        bool persistence = false,
+        int retry = 3,
+        bool dlx = true);
 
     /// <summary>
     /// Send the message to the specified topic.
@@ -23,7 +27,12 @@ public partial interface IPublisher
     /// <param name="dlx"></param>
     /// <typeparam name="T"></typeparam>
     /// <returns></returns>
-    Task SendMessageAsync<T>(string topic, T message, bool persistence = false, int retry = 0, bool dlx = false);
+    Task SendMessageAsync<T>(
+        string topic,
+        T message,
+        bool persistence = false,
+        int retry = 3,
+        bool dlx = true);
 
     /// <summary>
     /// Send the message to the specified topic.
@@ -34,5 +43,10 @@ public partial interface IPublisher
     /// <param name="retry"></param>
     /// <param name="dlx"></param>
     /// <returns></returns>
-    Task SendMessageAsync(string topic, byte[] body, bool persistence = false, int retry = 0, bool dlx = false);
+    Task SendMessageAsync(
+        string topic,
+        byte[] body,
+        bool persistence = false,
+        int retry = 3,
+        bool dlx = true);
 }

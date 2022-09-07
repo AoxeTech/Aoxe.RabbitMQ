@@ -9,7 +9,10 @@ public partial interface IPublisher
     /// <param name="retry"></param>
     /// <param name="dlx"></param>
     /// <typeparam name="T"></typeparam>
-    void SendCommand<T>(T command, int retry = 3, bool dlx = true);
+    void SendCommand<T>(
+        T command,
+        int retry = 3,
+        bool dlx = true);
 
     /// <summary>
     /// Send the command to the specified topic.
@@ -19,7 +22,11 @@ public partial interface IPublisher
     /// <param name="retry"></param>
     /// <param name="dlx"></param>
     /// <typeparam name="T"></typeparam>
-    void SendCommand<T>(string topic, T command, int retry = 3, bool dlx = true);
+    void SendCommand<T>(
+        string topic,
+        T command,
+        int retry = 3,
+        bool dlx = true);
 
     /// <summary>
     /// Send the command to the specified topic.
@@ -28,5 +35,9 @@ public partial interface IPublisher
     /// <param name="body"></param>
     /// <param name="retry"></param>
     /// <param name="dlx"></param>
-    void SendCommand(string topic, byte[] body, int retry = 3, bool dlx = true);
+    void SendCommand(
+        string topic,
+        byte[] body,
+        int retry = 3,
+        bool dlx = true);
 }
