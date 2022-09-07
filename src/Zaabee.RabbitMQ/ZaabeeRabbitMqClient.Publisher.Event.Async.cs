@@ -2,12 +2,6 @@ namespace Zaabee.RabbitMQ;
 
 public partial class ZaabeeRabbitMqClient
 {
-    public Task SendEventAsync<T>(T @event) =>
-        Task.Run(() => { SendEvent(@event); });
-
-    public Task SendEventAsync(string topic, byte[] body) =>
-        Task.Run(() => { SendEvent(topic, body); });
-
     public Task PublishEventAsync<T>(T @event) =>
         Task.Run(() => { PublishEvent(@event); });
 

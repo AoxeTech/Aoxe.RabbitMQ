@@ -1,6 +1,6 @@
-namespace Zaabee.RabbitMQ.Abstractions;
+namespace Zaabee.RabbitMQ;
 
-public partial interface ISubscriber
+public partial class ZaabeeRabbitMqClient
 {
     /// <summary>
     /// The subscriber cluster will get the command from the queue which bind the default topic.
@@ -11,11 +11,17 @@ public partial interface ISubscriber
     /// <param name="dlx"></param>
     /// <typeparam name="T"></typeparam>
     /// <returns></returns>
-    Task ReceiveCommandAsync<T>(
+    public async Task ReceiveCommandAsync<T>(
         Func<Action<T?>> resolve,
-        ushort prefetchCount = 10,
+        ushort prefetchCount = DefaultPrefetchCount,
         int retry = 3,
-        bool dlx = true);
+        bool dlx = true)
+    {
+        var topic = GetTypeName(typeof(T));
+        var exchangeParam = GetExchangeParam(topic, MessageType.Event);
+        var queueParam = GetQueueParam(topic, MessageType.Event, SubscribeType.Receive);
+        await SubscribeAsync(exchangeParam, queueParam, resolve, MessageType.Event, prefetchCount);
+    }
 
     /// <summary>
     /// The subscriber cluster will get the command from the queue which bind the default topic.
@@ -26,11 +32,17 @@ public partial interface ISubscriber
     /// <param name="dlx"></param>
     /// <typeparam name="T"></typeparam>
     /// <returns></returns>
-    Task ReceiveCommandAsync<T>(
+    public async Task ReceiveCommandAsync<T>(
         Func<Func<T?, Task>> resolve,
-        ushort prefetchCount = 10,
+        ushort prefetchCount = DefaultPrefetchCount,
         int retry = 3,
-        bool dlx = true);
+        bool dlx = true)
+    {
+        var topic = GetTypeName(typeof(T));
+        var exchangeParam = GetExchangeParam(topic, MessageType.Event);
+        var queueParam = GetQueueParam(topic, MessageType.Event, SubscribeType.Receive);
+        await SubscribeAsync(exchangeParam, queueParam, resolve, MessageType.Event, prefetchCount);
+    }
 
     /// <summary>
     /// The subscriber cluster will get the command from the queue which bind the specified topic.
@@ -42,11 +54,16 @@ public partial interface ISubscriber
     /// <param name="dlx"></param>
     /// <typeparam name="T"></typeparam>
     /// <returns></returns>
-    Task ReceiveCommandAsync<T>(
+    public async Task ReceiveCommandAsync<T>(
         string topic, Func<Action<T?>> resolve,
-        ushort prefetchCount = 10,
+        ushort prefetchCount = DefaultPrefetchCount,
         int retry = 3,
-        bool dlx = true);
+        bool dlx = true)
+    {
+        var exchangeParam = GetExchangeParam(topic, MessageType.Event);
+        var queueParam = GetQueueParam(topic, MessageType.Event, SubscribeType.Receive);
+        await SubscribeAsync(exchangeParam, queueParam, resolve, MessageType.Event, prefetchCount);
+    }
 
     /// <summary>
     /// The subscriber cluster will get the command from the queue which bind the specified topic.
@@ -58,12 +75,17 @@ public partial interface ISubscriber
     /// <param name="dlx"></param>
     /// <typeparam name="T"></typeparam>
     /// <returns></returns>
-    Task ReceiveCommandAsync<T>(
+    public async Task ReceiveCommandAsync<T>(
         string topic,
         Func<Func<T?, Task>> resolve,
-        ushort prefetchCount = 10,
+        ushort prefetchCount = DefaultPrefetchCount,
         int retry = 3,
-        bool dlx = true);
+        bool dlx = true)
+    {
+        var exchangeParam = GetExchangeParam(topic, MessageType.Event);
+        var queueParam = GetQueueParam(topic, MessageType.Event, SubscribeType.Receive);
+        await SubscribeAsync(exchangeParam, queueParam, resolve, MessageType.Event, prefetchCount);
+    }
 
     /// <summary>
     /// The subscriber cluster will get the command from the queue which bind the specified topic.
@@ -75,12 +97,17 @@ public partial interface ISubscriber
     /// <param name="dlx"></param>
     /// <typeparam name="T"></typeparam>
     /// <returns></returns>
-    Task ReceiveCommandAsync<T>(
+    public async Task ReceiveCommandAsync<T>(
         string topic,
         Func<Action<byte[]>> resolve,
-        ushort prefetchCount = 10,
+        ushort prefetchCount = DefaultPrefetchCount,
         int retry = 3,
-        bool dlx = true);
+        bool dlx = true)
+    {
+        var exchangeParam = GetExchangeParam(topic, MessageType.Event);
+        var queueParam = GetQueueParam(topic, MessageType.Event, SubscribeType.Receive);
+        await SubscribeAsync(exchangeParam, queueParam, resolve, MessageType.Event, prefetchCount);
+    }
 
     /// <summary>
     /// The subscriber cluster will get the command from the queue which bind the specified topic.
@@ -92,10 +119,15 @@ public partial interface ISubscriber
     /// <param name="dlx"></param>
     /// <typeparam name="T"></typeparam>
     /// <returns></returns>
-    Task ReceiveCommandAsync<T>(
+    public async Task ReceiveCommandAsync<T>(
         string topic,
         Func<Func<byte[], Task>> resolve,
-        ushort prefetchCount = 10,
+        ushort prefetchCount = DefaultPrefetchCount,
         int retry = 3,
-        bool dlx = true);
+        bool dlx = true)
+    {
+        var exchangeParam = GetExchangeParam(topic, MessageType.Event);
+        var queueParam = GetQueueParam(topic, MessageType.Event, SubscribeType.Receive);
+        await SubscribeAsync(exchangeParam, queueParam, resolve, MessageType.Event, prefetchCount);
+    }
 }
