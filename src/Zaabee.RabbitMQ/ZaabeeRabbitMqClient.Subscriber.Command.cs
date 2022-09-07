@@ -6,71 +6,45 @@ public partial class ZaabeeRabbitMqClient
         Func<Action<T?>> resolve,
         ushort prefetchCount = DefaultPrefetchCount,
         int retry = 3,
-        bool dlx = true)
-    {
-        var topic = GetTypeName(typeof(T));
-        var exchangeParam = GetExchangeParam(topic, MessageType.Event);
-        var queueParam = GetQueueParam(topic, MessageType.Event, SubscribeType.Receive);
-        Subscribe(exchangeParam, queueParam, resolve, MessageType.Event, prefetchCount);
-    }
+        bool dlx = true) =>
+        ReceiveMessage(resolve, true, prefetchCount, retry, dlx);
 
     public void ReceiveCommand<T>(
         Func<Func<T?, Task>> resolve,
         ushort prefetchCount = DefaultPrefetchCount,
         int retry = 3,
-        bool dlx = true)
-    {
-        var topic = GetTypeName(typeof(T));
-        var exchangeParam = GetExchangeParam(topic, MessageType.Event);
-        var queueParam = GetQueueParam(topic, MessageType.Event, SubscribeType.Receive);
-        Subscribe(exchangeParam, queueParam, resolve, MessageType.Event, prefetchCount);
-    }
+        bool dlx = true) =>
+        ReceiveMessage(resolve, true, prefetchCount, retry, dlx);
 
     public void ReceiveCommand<T>(
         string topic,
         Func<Action<T?>> resolve,
         ushort prefetchCount = DefaultPrefetchCount,
         int retry = 3,
-        bool dlx = true)
-    {
-        var exchangeParam = GetExchangeParam(topic, MessageType.Event);
-        var queueParam = GetQueueParam(topic, MessageType.Event, SubscribeType.Receive);
-        Subscribe(exchangeParam, queueParam, resolve, MessageType.Event, prefetchCount);
-    }
+        bool dlx = true) =>
+        ReceiveMessage(topic, resolve, true, prefetchCount, retry, dlx);
 
     public void ReceiveCommand<T>(
         string topic,
         Func<Func<T?, Task>> resolve,
         ushort prefetchCount = DefaultPrefetchCount,
         int retry = 3,
-        bool dlx = true)
-    {
-        var exchangeParam = GetExchangeParam(topic, MessageType.Event);
-        var queueParam = GetQueueParam(topic, MessageType.Event, SubscribeType.Receive);
-        Subscribe(exchangeParam, queueParam, resolve, MessageType.Event, prefetchCount);
-    }
+        bool dlx = true) =>
+        ReceiveMessage(topic, resolve, true, prefetchCount, retry, dlx);
 
     public void ReceiveCommand<T>(
         string topic,
         Func<Action<byte[]>> resolve,
         ushort prefetchCount = DefaultPrefetchCount,
         int retry = 3,
-        bool dlx = true)
-    {
-        var exchangeParam = GetExchangeParam(topic, MessageType.Event);
-        var queueParam = GetQueueParam(topic, MessageType.Event, SubscribeType.Receive);
-        Subscribe(exchangeParam, queueParam, resolve, MessageType.Event, prefetchCount);
-    }
+        bool dlx = true) =>
+        ReceiveMessage(topic, resolve, true, prefetchCount, retry, dlx);
 
     public void ReceiveCommand<T>(
         string topic,
         Func<Func<byte[], Task>> resolve,
         ushort prefetchCount = DefaultPrefetchCount,
         int retry = 3,
-        bool dlx = true)
-    {
-        var exchangeParam = GetExchangeParam(topic, MessageType.Event);
-        var queueParam = GetQueueParam(topic, MessageType.Event, SubscribeType.Receive);
-        Subscribe(exchangeParam, queueParam, resolve, MessageType.Event, prefetchCount);
-    }
+        bool dlx = true) =>
+        ReceiveMessage(topic, resolve, true, prefetchCount, retry, dlx);
 }

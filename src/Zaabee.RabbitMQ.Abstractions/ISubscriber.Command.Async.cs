@@ -43,7 +43,8 @@ public partial interface ISubscriber
     /// <typeparam name="T"></typeparam>
     /// <returns></returns>
     Task ReceiveCommandAsync<T>(
-        string topic, Func<Action<T?>> resolve,
+        string topic,
+        Func<Action<T?>> resolve,
         ushort prefetchCount = 10,
         int retry = 3,
         bool dlx = true);

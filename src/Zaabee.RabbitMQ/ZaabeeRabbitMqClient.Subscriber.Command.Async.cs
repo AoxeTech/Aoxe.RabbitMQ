@@ -15,13 +15,8 @@ public partial class ZaabeeRabbitMqClient
         Func<Action<T?>> resolve,
         ushort prefetchCount = DefaultPrefetchCount,
         int retry = 3,
-        bool dlx = true)
-    {
-        var topic = GetTypeName(typeof(T));
-        var exchangeParam = GetExchangeParam(topic, MessageType.Event);
-        var queueParam = GetQueueParam(topic, MessageType.Event, SubscribeType.Receive);
-        await SubscribeAsync(exchangeParam, queueParam, resolve, MessageType.Event, prefetchCount);
-    }
+        bool dlx = true) =>
+        await ReceiveMessageAsync(resolve, true, prefetchCount, retry, dlx);
 
     /// <summary>
     /// The subscriber cluster will get the command from the queue which bind the default topic.
@@ -36,13 +31,8 @@ public partial class ZaabeeRabbitMqClient
         Func<Func<T?, Task>> resolve,
         ushort prefetchCount = DefaultPrefetchCount,
         int retry = 3,
-        bool dlx = true)
-    {
-        var topic = GetTypeName(typeof(T));
-        var exchangeParam = GetExchangeParam(topic, MessageType.Event);
-        var queueParam = GetQueueParam(topic, MessageType.Event, SubscribeType.Receive);
-        await SubscribeAsync(exchangeParam, queueParam, resolve, MessageType.Event, prefetchCount);
-    }
+        bool dlx = true) =>
+        await ReceiveMessageAsync(resolve, true, prefetchCount, retry, dlx);
 
     /// <summary>
     /// The subscriber cluster will get the command from the queue which bind the specified topic.
@@ -55,15 +45,12 @@ public partial class ZaabeeRabbitMqClient
     /// <typeparam name="T"></typeparam>
     /// <returns></returns>
     public async Task ReceiveCommandAsync<T>(
-        string topic, Func<Action<T?>> resolve,
+        string topic,
+        Func<Action<T?>> resolve,
         ushort prefetchCount = DefaultPrefetchCount,
         int retry = 3,
-        bool dlx = true)
-    {
-        var exchangeParam = GetExchangeParam(topic, MessageType.Event);
-        var queueParam = GetQueueParam(topic, MessageType.Event, SubscribeType.Receive);
-        await SubscribeAsync(exchangeParam, queueParam, resolve, MessageType.Event, prefetchCount);
-    }
+        bool dlx = true) =>
+        await ReceiveMessageAsync(topic, resolve, true, prefetchCount, retry, dlx);
 
     /// <summary>
     /// The subscriber cluster will get the command from the queue which bind the specified topic.
@@ -80,12 +67,8 @@ public partial class ZaabeeRabbitMqClient
         Func<Func<T?, Task>> resolve,
         ushort prefetchCount = DefaultPrefetchCount,
         int retry = 3,
-        bool dlx = true)
-    {
-        var exchangeParam = GetExchangeParam(topic, MessageType.Event);
-        var queueParam = GetQueueParam(topic, MessageType.Event, SubscribeType.Receive);
-        await SubscribeAsync(exchangeParam, queueParam, resolve, MessageType.Event, prefetchCount);
-    }
+        bool dlx = true) =>
+        await ReceiveMessageAsync(topic, resolve, true, prefetchCount, retry, dlx);
 
     /// <summary>
     /// The subscriber cluster will get the command from the queue which bind the specified topic.
@@ -102,12 +85,8 @@ public partial class ZaabeeRabbitMqClient
         Func<Action<byte[]>> resolve,
         ushort prefetchCount = DefaultPrefetchCount,
         int retry = 3,
-        bool dlx = true)
-    {
-        var exchangeParam = GetExchangeParam(topic, MessageType.Event);
-        var queueParam = GetQueueParam(topic, MessageType.Event, SubscribeType.Receive);
-        await SubscribeAsync(exchangeParam, queueParam, resolve, MessageType.Event, prefetchCount);
-    }
+        bool dlx = true) =>
+        await ReceiveMessageAsync(topic, resolve, true, prefetchCount, retry, dlx);
 
     /// <summary>
     /// The subscriber cluster will get the command from the queue which bind the specified topic.
@@ -124,10 +103,6 @@ public partial class ZaabeeRabbitMqClient
         Func<Func<byte[], Task>> resolve,
         ushort prefetchCount = DefaultPrefetchCount,
         int retry = 3,
-        bool dlx = true)
-    {
-        var exchangeParam = GetExchangeParam(topic, MessageType.Event);
-        var queueParam = GetQueueParam(topic, MessageType.Event, SubscribeType.Receive);
-        await SubscribeAsync(exchangeParam, queueParam, resolve, MessageType.Event, prefetchCount);
-    }
+        bool dlx = true) =>
+        await ReceiveMessageAsync(topic, resolve, true, prefetchCount, retry, dlx);
 }
