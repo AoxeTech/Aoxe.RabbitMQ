@@ -6,6 +6,6 @@
 		<Nullable>enable</Nullable>
 	</PropertyGroup>
 	<ItemGroup>
-		<PackageReference Include="RabbitMQ.Stream.Client" Version="1.0.0-rc.4"/>
+		<PackageReference Include="RabbitMQ.Stream.Client" Version="1.0.0-rc.5" />
 	</ItemGroup>
 </Project>
