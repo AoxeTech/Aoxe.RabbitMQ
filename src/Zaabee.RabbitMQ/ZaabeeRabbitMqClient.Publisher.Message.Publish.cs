@@ -7,8 +7,8 @@ public partial class ZaabeeRabbitMqClient
         bool persistence = false)
     {
         var topic = GetTypeName(typeof(T));
-        var exchangeParam = GetExchangeParam(topic, MessageType.Message);
-        Publish(exchangeParam, null, MessageType.Message, message);
+        var exchangeParam = GetExchangeParam(topic, persistence);
+        Publish(exchangeParam, null, persistence, message);
     }
 
     public void PublishMessage<T>(
@@ -16,8 +16,8 @@ public partial class ZaabeeRabbitMqClient
         T message,
         bool persistence = false)
     {
-        var exchangeParam = GetExchangeParam(topic, MessageType.Message);
-        Publish(exchangeParam, null, MessageType.Message, message);
+        var exchangeParam = GetExchangeParam(topic, persistence);
+        Publish(exchangeParam, null, persistence, message);
     }
 
     public void PublishMessage(
@@ -25,7 +25,7 @@ public partial class ZaabeeRabbitMqClient
         byte[] body,
         bool persistence = false)
     {
-        var exchangeParam = GetExchangeParam(topic, MessageType.Message);
-        Publish(exchangeParam, null, MessageType.Message, body);
+        var exchangeParam = GetExchangeParam(topic, persistence);
+        Publish(exchangeParam, null, persistence, body);
     }
 }

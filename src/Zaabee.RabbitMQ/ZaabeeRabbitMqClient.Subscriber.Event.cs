@@ -38,7 +38,7 @@ public partial class ZaabeeRabbitMqClient
         ushort prefetchCount = DefaultPrefetchCount,
         int retry = 3,
         bool dlx = true) =>
-        SubscribeMessage(topic, resolve, true, prefetchCount, retry, dlx);
+        SubscribeMessage<T>(topic, resolve, true, prefetchCount, retry, dlx);
 
     public void SubscribeEvent<T>(
         string topic,
@@ -46,5 +46,5 @@ public partial class ZaabeeRabbitMqClient
         ushort prefetchCount = DefaultPrefetchCount,
         int retry = 3,
         bool dlx = true) =>
-        SubscribeMessage(topic, resolve, true, prefetchCount, retry, dlx);
+        SubscribeMessage<T>(topic, resolve, true, prefetchCount, retry, dlx);
 }

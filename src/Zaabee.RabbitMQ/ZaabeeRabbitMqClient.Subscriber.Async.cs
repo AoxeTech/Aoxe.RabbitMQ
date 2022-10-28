@@ -4,7 +4,8 @@ public partial class ZaabeeRabbitMqClient
 {
     private readonly ConcurrentDictionary<string, IModel> _subscriberAsyncChannelDic = new();
 
-    private async Task SubscribeAsync<T>(ExchangeParam exchangeParam,
+    private async Task SubscribeAsync<T>(
+        ExchangeParam exchangeParam,
         QueueParam queueParam,
         Func<Action<T?>> resolve,
         MessageType messageType,
@@ -24,7 +25,8 @@ public partial class ZaabeeRabbitMqClient
         }
     }
 
-    private async Task SubscribeAsync<T>(ExchangeParam exchangeParam,
+    private async Task SubscribeAsync<T>(
+        ExchangeParam exchangeParam,
         QueueParam queueParam,
         Func<Func<T?, Task>> resolve,
         MessageType messageType,
@@ -44,7 +46,10 @@ public partial class ZaabeeRabbitMqClient
         }
     }
 
-    private Task ConsumeEventAsync<T>(IModel channel, Func<Action<T?>> resolve, string queue)
+    private Task ConsumeEventAsync<T>(
+        IModel channel,
+        Func<Action<T?>> resolve,
+        string queue)
     {
         var consumer = new AsyncEventingBasicConsumer(channel);
         consumer.Received += async (model, ea) =>
@@ -68,7 +73,10 @@ public partial class ZaabeeRabbitMqClient
         return Task.CompletedTask;
     }
 
-    private Task ConsumeEventAsync<T>(IModel channel, Func<Func<T?, Task>> resolve, string queue)
+    private Task ConsumeEventAsync<T>(
+        IModel channel,
+        Func<Func<T?, Task>> resolve,
+        string queue)
     {
         var consumer = new AsyncEventingBasicConsumer(channel);
         consumer.Received += async (model, ea) =>
@@ -92,7 +100,10 @@ public partial class ZaabeeRabbitMqClient
         return Task.CompletedTask;
     }
 
-    private Task ConsumeMessageAsync<T>(IModel channel, Func<Action<T?>> resolve, string queue)
+    private Task ConsumeMessageAsync<T>(
+        IModel channel,
+        Func<Action<T?>> resolve,
+        string queue)
     {
         var consumer = new AsyncEventingBasicConsumer(channel);
         consumer.Received += async (model, ea) =>
@@ -113,7 +124,10 @@ public partial class ZaabeeRabbitMqClient
         return Task.CompletedTask;
     }
 
-    private Task ConsumeMessageAsync<T>(IModel channel, Func<Func<T?, Task>> resolve, string queue)
+    private Task ConsumeMessageAsync<T>(
+        IModel channel,
+        Func<Func<T?, Task>> resolve,
+        string queue)
     {
         var consumer = new AsyncEventingBasicConsumer(channel);
         consumer.Received += async (model, ea) =>
@@ -134,7 +148,9 @@ public partial class ZaabeeRabbitMqClient
         return Task.CompletedTask;
     }
 
-    private IModel GetReceiverAsyncChannel(ExchangeParam? exchangeParam, QueueParam queueParam,
+    private IModel GetReceiverAsyncChannel(
+        ExchangeParam? exchangeParam,
+        QueueParam queueParam,
         ushort prefetchCount)
     {
         return _subscriberAsyncChannelDic.GetOrAdd(queueParam.Queue, _ =>

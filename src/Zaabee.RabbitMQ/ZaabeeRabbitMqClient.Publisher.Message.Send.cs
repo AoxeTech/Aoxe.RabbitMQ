@@ -9,9 +9,9 @@ public partial class ZaabeeRabbitMqClient
         bool dlx = true)
     {
         var topic = GetTypeName(typeof(T));
-        var exchangeParam = GetExchangeParam(topic, MessageType.Message);
-        var queueParam = GetQueueParam(topic, MessageType.Message);
-        Publish(exchangeParam, queueParam, MessageType.Message, message);
+        var exchangeParam = GetExchangeParam(topic, persistence);
+        var queueParam = GetQueueParam(topic, persistence, SubscribeType.Receive);
+        Publish(exchangeParam, queueParam, persistence, message);
     }
 
     public void SendMessage<T>(
@@ -21,9 +21,9 @@ public partial class ZaabeeRabbitMqClient
         int retry = 3,
         bool dlx = true)
     {
-        var exchangeParam = GetExchangeParam(topic, MessageType.Message);
-        var queueParam = GetQueueParam(topic, MessageType.Message);
-        Publish(exchangeParam, queueParam, MessageType.Message, message);
+        var exchangeParam = GetExchangeParam(topic, persistence);
+        var queueParam = GetQueueParam(topic, persistence, SubscribeType.Receive);
+        Publish(exchangeParam, queueParam, persistence, message);
     }
 
     public void SendMessage(
@@ -33,8 +33,8 @@ public partial class ZaabeeRabbitMqClient
         int retry = 3,
         bool dlx = true)
     {
-        var exchangeParam = GetExchangeParam(topic, MessageType.Message);
-        var queueParam = GetQueueParam(topic, MessageType.Message);
-        Publish(exchangeParam, queueParam, MessageType.Message, body);
+        var exchangeParam = GetExchangeParam(topic, persistence);
+        var queueParam = GetQueueParam(topic, persistence, SubscribeType.Receive);
+        Publish(exchangeParam, queueParam, persistence, body);
     }
 }

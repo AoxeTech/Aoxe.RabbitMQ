@@ -6,13 +6,17 @@ public partial class ZaabeeRabbitMqClient
 
     private readonly ConcurrentDictionary<string, IModel> _subscriberChannelDic = new();
 
-    private void Subscribe<T>(ExchangeParam exchangeParam,
+    private void Subscribe<T>(
+        ExchangeParam exchangeParam,
         QueueParam queueParam,
         Func<Action<T?>> resolve,
-        MessageType messageType,
-        ushort prefetchCount = DefaultPrefetchCount)
+        bool persistence,
+        ushort prefetchCount = DefaultPrefetchCount,
+        int retry = 0,
+        bool dlx = false)
     {
         var channel = GetReceiverChannel(exchangeParam, queueParam, prefetchCount);
+        
         switch (messageType)
         {
             case MessageType.Message:
@@ -26,11 +30,14 @@ public partial class ZaabeeRabbitMqClient
         }
     }
 
-    private void Subscribe<T>(ExchangeParam exchangeParam,
+    private void Subscribe<T>(
+        ExchangeParam exchangeParam,
         QueueParam queueParam,
         Func<Func<T?, Task>> resolve,
-        MessageType messageType,
-        ushort prefetchCount = DefaultPrefetchCount)
+        bool persistence,
+        ushort prefetchCount = DefaultPrefetchCount,
+        int retry = 0,
+        bool dlx = false)
     {
         var channel = GetReceiverChannel(exchangeParam, queueParam, prefetchCount);
         switch (messageType)
@@ -46,7 +53,10 @@ public partial class ZaabeeRabbitMqClient
         }
     }
 
-    private void ConsumeEvent<T>(IModel channel, Func<Action<T?>> resolve, string queue)
+    private void ConsumeEvent<T>(
+        IModel channel,
+        Func<Action<T?>> resolve,
+        string queue)
     {
         var consumer = new EventingBasicConsumer(channel);
 
@@ -71,7 +81,10 @@ public partial class ZaabeeRabbitMqClient
         channel.BasicConsume(queue: queue, autoAck: false, consumer: consumer);
     }
 
-    private void ConsumeEvent<T>(IModel channel, Func<Func<T?, Task>> resolve, string queue)
+    private void ConsumeEvent<T>(
+        IModel channel,
+        Func<Func<T?, Task>> resolve,
+        string queue)
     {
         var consumer = new EventingBasicConsumer(channel);
 
@@ -95,8 +108,11 @@ public partial class ZaabeeRabbitMqClient
         consumer.Received += OnConsumerOnReceived;
         channel.BasicConsume(queue: queue, autoAck: false, consumer: consumer);
     }
-
-    private void ConsumeMessage<T>(IModel channel, Func<Action<T?>> resolve, string queue)
+    
+    private void ConsumeMessage<T>(
+        IModel channel,
+        Func<Action<T?>> resolve,
+        string queue)
     {
         var consumer = new EventingBasicConsumer(channel);
 
@@ -118,7 +134,10 @@ public partial class ZaabeeRabbitMqClient
         channel.BasicConsume(queue: queue, autoAck: false, consumer: consumer);
     }
 
-    private void ConsumeMessage<T>(IModel channel, Func<Func<T?, Task>> resolve, string queue)
+    private void ConsumeMessage<T>(
+        IModel channel,
+        Func<Func<T?, Task>> resolve,
+        string queue)
     {
         var consumer = new EventingBasicConsumer(channel);
 
@@ -140,7 +159,10 @@ public partial class ZaabeeRabbitMqClient
         channel.BasicConsume(queue: queue, autoAck: false, consumer: consumer);
     }
 
-    private IModel GetReceiverChannel(ExchangeParam? exchangeParam, QueueParam queueParam, ushort prefetchCount)
+    private IModel GetReceiverChannel(
+        ExchangeParam? exchangeParam,
+        QueueParam queueParam,
+        ushort prefetchCount)
     {
         return _subscriberChannelDic.GetOrAdd(queueParam.Queue, _ =>
         {
@@ -165,7 +187,10 @@ public partial class ZaabeeRabbitMqClient
         });
     }
 
-    private void PublishDlx<T>(BasicDeliverEventArgs ea, string queue, Exception ex)
+    private void PublishDlx<T>(
+        BasicDeliverEventArgs ea,
+        string queue,
+        Exception ex)
     {
         var inmostEx = ex.GetInmostException();
 

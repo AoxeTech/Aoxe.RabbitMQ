@@ -2,12 +2,21 @@ namespace Zaabee.RabbitMQ;
 
 public partial class ZaabeeRabbitMqClient
 {
-    public Task PublishEventAsync<T>(T @event) =>
-        Task.Run(() => { PublishEvent(@event); });
+    public Task PublishEventAsync<T>(T @event)
+    {
+        PublishEvent(@event);
+        return Task.CompletedTask;
+    }
 
-    public Task PublishEventAsync<T>(string topic, T @event) =>
-        Task.Run(() => { PublishEvent(topic, @event); });
+    public Task PublishEventAsync<T>(string topic, T @event)
+    {
+        PublishEvent(topic, @event);
+        return Task.CompletedTask;
+    }
 
-    public Task PublishEventAsync(string topic, byte[] body) =>
-        Task.Run(() => { PublishEvent(topic, body); });
+    public Task PublishEventAsync(string topic, byte[] body)
+    {
+        PublishEvent(topic, body);
+        return Task.CompletedTask;
+    }
 }

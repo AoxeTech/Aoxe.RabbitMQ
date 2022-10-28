@@ -38,7 +38,7 @@ public partial class ZaabeeRabbitMqClient
         ushort prefetchCount = DefaultPrefetchCount,
         int retry = 3,
         bool dlx = true) =>
-        await SubscribeMessageAsync(topic, resolve, true, prefetchCount, retry, dlx);
+        await SubscribeMessageAsync<T>(topic, resolve, true, prefetchCount, retry, dlx);
 
     public async Task SubscribeEventAsync<T>(
         string topic,
@@ -46,5 +46,5 @@ public partial class ZaabeeRabbitMqClient
         ushort prefetchCount = DefaultPrefetchCount,
         int retry = 3,
         bool dlx = true) =>
-        await SubscribeMessageAsync(topic, resolve, true, prefetchCount, retry, dlx);
+        await SubscribeMessageAsync<T>(topic, resolve, true, prefetchCount, retry, dlx);
 }

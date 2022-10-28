@@ -86,7 +86,7 @@ public partial class ZaabeeRabbitMqClient
         ushort prefetchCount = DefaultPrefetchCount,
         int retry = 3,
         bool dlx = true) =>
-        await ReceiveMessageAsync(topic, resolve, true, prefetchCount, retry, dlx);
+        await ReceiveMessageAsync<T>(topic, resolve, true, prefetchCount, retry, dlx);
 
     /// <summary>
     /// The subscriber cluster will get the command from the queue which bind the specified topic.
@@ -104,5 +104,5 @@ public partial class ZaabeeRabbitMqClient
         ushort prefetchCount = DefaultPrefetchCount,
         int retry = 3,
         bool dlx = true) =>
-        await ReceiveMessageAsync(topic, resolve, true, prefetchCount, retry, dlx);
+        await ReceiveMessageAsync<T>(topic, resolve, true, prefetchCount, retry, dlx);
 }

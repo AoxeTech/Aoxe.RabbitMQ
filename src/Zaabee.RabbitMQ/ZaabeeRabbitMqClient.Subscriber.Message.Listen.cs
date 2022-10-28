@@ -8,9 +8,9 @@ public partial class ZaabeeRabbitMqClient
     {
         var topic = GetTypeName(typeof(T));
         var queue = $"{GetQueueName(resolve)}[{Guid.NewGuid()}]";
-        var exchangeParam = GetExchangeParam(topic, MessageType.Message);
-        var queueParam = GetQueueParam(queue, MessageType.Message, SubscribeType.Listen);
-        Subscribe(exchangeParam, queueParam, resolve, MessageType.Message, prefetchCount);
+        var exchangeParam = GetExchangeParam(topic, false);
+        var queueParam = GetQueueParam(queue, false, SubscribeType.Listen);
+        Subscribe(exchangeParam, queueParam, resolve, false, prefetchCount);
     }
 
     public void ListenMessage<T>(
@@ -19,9 +19,9 @@ public partial class ZaabeeRabbitMqClient
     {
         var topic = GetTypeName(typeof(T));
         var queue = $"{GetQueueName(resolve)}[{Guid.NewGuid()}]";
-        var exchangeParam = GetExchangeParam(topic, MessageType.Message);
-        var queueParam = GetQueueParam(queue, MessageType.Message, SubscribeType.Listen);
-        Subscribe(exchangeParam, queueParam, resolve, MessageType.Message, prefetchCount);
+        var exchangeParam = GetExchangeParam(topic, false);
+        var queueParam = GetQueueParam(queue, false, SubscribeType.Listen);
+        Subscribe(exchangeParam, queueParam, resolve, false, prefetchCount);
     }
 
     public void ListenMessage<T>(
@@ -30,9 +30,9 @@ public partial class ZaabeeRabbitMqClient
         ushort prefetchCount = DefaultPrefetchCount)
     {
         var queue = $"{GetQueueName(resolve)}[{Guid.NewGuid()}]";
-        var exchangeParam = GetExchangeParam(topic, MessageType.Message);
-        var queueParam = GetQueueParam(queue, MessageType.Message, SubscribeType.Listen);
-        Subscribe(exchangeParam, queueParam, resolve, MessageType.Message, prefetchCount);
+        var exchangeParam = GetExchangeParam(topic, false);
+        var queueParam = GetQueueParam(queue, false, SubscribeType.Listen);
+        Subscribe(exchangeParam, queueParam, resolve, false, prefetchCount);
     }
 
     public void ListenMessage<T>(
@@ -41,9 +41,9 @@ public partial class ZaabeeRabbitMqClient
         ushort prefetchCount = DefaultPrefetchCount)
     {
         var queue = $"{GetQueueName(resolve)}[{Guid.NewGuid()}]";
-        var exchangeParam = GetExchangeParam(topic, MessageType.Message);
-        var queueParam = GetQueueParam(queue, MessageType.Message, SubscribeType.Listen);
-        Subscribe(exchangeParam, queueParam, resolve, MessageType.Message, prefetchCount);
+        var exchangeParam = GetExchangeParam(topic, false);
+        var queueParam = GetQueueParam(queue, false, SubscribeType.Listen);
+        Subscribe(exchangeParam, queueParam, resolve, false, prefetchCount);
     }
 
     public void ListenMessage<T>(
@@ -52,9 +52,9 @@ public partial class ZaabeeRabbitMqClient
         ushort prefetchCount = DefaultPrefetchCount)
     {
         var queue = $"{GetQueueName(resolve)}[{Guid.NewGuid()}]";
-        var exchangeParam = GetExchangeParam(topic, MessageType.Message);
-        var queueParam = GetQueueParam(queue, MessageType.Message, SubscribeType.Listen);
-        Subscribe(exchangeParam, queueParam, resolve, MessageType.Message, prefetchCount);
+        var exchangeParam = GetExchangeParam(topic, false);
+        var queueParam = GetQueueParam(queue, false, SubscribeType.Listen);
+        Subscribe<T>(exchangeParam, queueParam, resolve, false, prefetchCount);
     }
 
     public void ListenMessage<T>(
@@ -63,8 +63,8 @@ public partial class ZaabeeRabbitMqClient
         ushort prefetchCount = DefaultPrefetchCount)
     {
         var queue = $"{GetQueueName(resolve)}[{Guid.NewGuid()}]";
-        var exchangeParam = GetExchangeParam(topic, MessageType.Message);
-        var queueParam = GetQueueParam(queue, MessageType.Message, SubscribeType.Listen);
-        Subscribe(exchangeParam, queueParam, resolve, MessageType.Message, prefetchCount);
+        var exchangeParam = GetExchangeParam(topic, false);
+        var queueParam = GetQueueParam(queue, false, SubscribeType.Listen);
+        Subscribe<T>(exchangeParam, queueParam, resolve, false, prefetchCount);
     }
 }

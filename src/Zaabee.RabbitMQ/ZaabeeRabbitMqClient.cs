@@ -2,6 +2,8 @@
 
 public partial class ZaabeeRabbitMqClient : IZaabeeRabbitMqClient
 {
+    private readonly ushort _publishRetryCount;
+    private readonly ushort _handleRetryCount;
     private readonly IConnection _publishConn;
     private readonly IConnection _subscribeConn;
     private readonly IConnection _subscribeAsyncConn;
@@ -11,6 +13,8 @@ public partial class ZaabeeRabbitMqClient : IZaabeeRabbitMqClient
 
     public ZaabeeRabbitMqClient(ZaabeeRabbitMqOptions options)
     {
+        _publishRetryCount = options.PublishRetryCount;
+        _handleRetryCount = options.HandleRetryCount;
         if (options is null) throw new ArgumentNullException(nameof(options));
         if (options.Serializer is null) throw new ArgumentNullException(nameof(options.Serializer));
         if (options.Hosts.Count is 0) throw new ArgumentNullException(nameof(options.Hosts));
@@ -42,15 +46,14 @@ public partial class ZaabeeRabbitMqClient : IZaabeeRabbitMqClient
             DispatchConsumersAsync = true
         };
 
-        _publishConn = options.Hosts.Any()
-            ? factory.CreateConnection(options.Hosts)
-            : factory.CreateConnection();
-        _subscribeConn = options.Hosts.Any()
-            ? factory.CreateConnection(options.Hosts)
-            : factory.CreateConnection();
-        _subscribeAsyncConn = options.Hosts.Any()
-            ? asyncFactory.CreateConnection(options.Hosts)
-            : asyncFactory.CreateConnection();
+        (_publishConn, _subscribeConn, _subscribeAsyncConn) =
+            options.Hosts.Any()
+                ? (factory.CreateConnection(options.Hosts),
+                    factory.CreateConnection(options.Hosts),
+                    asyncFactory.CreateConnection(options.Hosts))
+                : (factory.CreateConnection(),
+                    factory.CreateConnection(),
+                    asyncFactory.CreateConnection());
 
         _serializer = options.Serializer;
     }
@@ -59,7 +62,7 @@ public partial class ZaabeeRabbitMqClient : IZaabeeRabbitMqClient
     {
         var queueParam = new QueueParam { Queue = deadLetterQueueName };
         var channel = GetReceiverChannel(null, queueParam, prefetchCount);
-
+    
         var consumer = new EventingBasicConsumer(channel);
         consumer.Received += (_, ea) =>
         {
@@ -67,7 +70,7 @@ public partial class ZaabeeRabbitMqClient : IZaabeeRabbitMqClient
             {
                 var body = ea.Body;
                 var msg = _serializer.FromBytes<DeadLetterMsg>(body.ToArray())!;
-
+    
                 var republishExchangeParam =
                     new ExchangeParam { Exchange = $"republish-{deadLetterQueueName}", Durable = true };
                 var republishQueueParam =
@@ -77,13 +80,13 @@ public partial class ZaabeeRabbitMqClient : IZaabeeRabbitMqClient
                     var properties = republishChannel.CreateBasicProperties();
                     properties.Persistent = true;
                     var routingKey = republishExchangeParam.Exchange;
-
+    
                     var deadLetter = _serializer.FromText<T>(msg.BodyString);
-
+    
                     republishChannel.BasicPublish(republishExchangeParam.Exchange, routingKey, properties,
                         _serializer.ToBytes(deadLetter));
                 }
-
+    
                 channel.BasicAck(ea.DeliveryTag, false);
             }
             catch
@@ -94,24 +97,22 @@ public partial class ZaabeeRabbitMqClient : IZaabeeRabbitMqClient
         channel.BasicConsume(queue: deadLetterQueueName, autoAck: false, consumer: consumer);
     }
 
-    private static ExchangeParam GetExchangeParam(string topic, MessageType messageType) =>
-        new() { Exchange = topic, Durable = messageType is MessageType.Event };
+    private static ExchangeParam GetExchangeParam(
+        string topic,
+        bool persistence) =>
+        new() { Exchange = topic, Durable = persistence };
 
-    private static QueueParam GetQueueParam(string queue, MessageType messageType, SubscribeType? subscribeType = null)
+    private static QueueParam GetQueueParam(
+        string queue,
+        bool persistence,
+        SubscribeType subscribeType)
     {
-        var queueParam = new QueueParam { Queue = queue, Durable = messageType is MessageType.Event };
-        if (subscribeType is null or not SubscribeType.Listen) return queueParam;
+        var queueParam = new QueueParam { Queue = queue, Durable = persistence };
+        if (subscribeType is not SubscribeType.Listen) return queueParam;
         queueParam.Exclusive = true;
         queueParam.AutoDelete = true;
         return queueParam;
     }
-
-    private string GetTypeName(Type type) =>
-        _queueNameDic.GetOrAdd(type,
-            _ => type.GetCustomAttributes(typeof(MessageVersionAttribute), false).FirstOrDefault()
-                is MessageVersionAttribute msgVerAttr
-                ? $"{type}[{msgVerAttr.Version}]"
-                : type.ToString());
 
     private string GetQueueName<T>(Func<Action<T>> resolve)
     {
@@ -127,11 +128,18 @@ public partial class ZaabeeRabbitMqClient : IZaabeeRabbitMqClient
         return $"{handle.Method.ReflectedType?.FullName}.{handle.Method.Name}[{messageName}]";
     }
 
-    private static string GetDeadLetterName(string name) =>
-        $"dead-letter-{name}";
+    private string GetTypeName(Type type) =>
+        _queueNameDic.GetOrAdd(type,
+            _ => type.GetCustomAttributes(typeof(MessageVersionAttribute), false).FirstOrDefault()
+                is MessageVersionAttribute msgVerAttr
+                ? $"{type}[{msgVerAttr.Version}]"
+                : type.ToString());
 
-    private static string FromDeadLetterName(string deadLetterName) =>
-        deadLetterName.Replace("dead-letter-", "");
+    // private static string GetDeadLetterName(string name) =>
+    //     $"dead-letter-{name}";
+    //
+    // private static string FromDeadLetterName(string deadLetterName) =>
+    //     deadLetterName.Replace("dead-letter-", "");
 
     public void Dispose()
     {

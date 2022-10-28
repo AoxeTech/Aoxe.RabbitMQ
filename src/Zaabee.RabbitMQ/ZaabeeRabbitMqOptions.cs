@@ -12,6 +12,10 @@ public class ZaabeeRabbitMqOptions
     public TimeSpan SocketReadTimeout { get; set; } = TimeSpan.FromSeconds(30);
     public TimeSpan SocketWriteTimeout { get; set; } = TimeSpan.FromSeconds(30);
 
+    public ushort PublishRetryCount { get; set; } = 3;
+
+    public ushort HandleRetryCount { get; set; } = 3;
+
     private string _virtualHost = string.Empty;
 
     public string VirtualHost
