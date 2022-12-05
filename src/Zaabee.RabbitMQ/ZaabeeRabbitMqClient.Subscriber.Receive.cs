@@ -4,7 +4,7 @@ public partial class ZaabeeRabbitMqClient
 {
     public void ReceiveMessage<T>(
         Func<Action<T?>> resolve,
-        bool persistence = false,
+        bool persistence,
         ushort prefetchCount = DefaultPrefetchCount,
         int retry = 0,
         bool dlx = false)
@@ -17,7 +17,7 @@ public partial class ZaabeeRabbitMqClient
 
     public void ReceiveMessage<T>(
         Func<Func<T?, Task>> resolve,
-        bool persistence = false,
+        bool persistence,
         ushort prefetchCount = DefaultPrefetchCount,
         int retry = 0,
         bool dlx = false)
@@ -31,7 +31,7 @@ public partial class ZaabeeRabbitMqClient
     public void ReceiveMessage<T>(
         string topic,
         Func<Action<T?>> resolve,
-        bool persistence = false,
+        bool persistence,
         ushort prefetchCount = DefaultPrefetchCount,
         int retry = 0,
         bool dlx = false)
@@ -44,7 +44,7 @@ public partial class ZaabeeRabbitMqClient
     public void ReceiveMessage<T>(
         string topic,
         Func<Func<T?, Task>> resolve,
-        bool persistence = false,
+        bool persistence,
         ushort prefetchCount = DefaultPrefetchCount,
         int retry = 0,
         bool dlx = false)
@@ -54,10 +54,10 @@ public partial class ZaabeeRabbitMqClient
         Subscribe(exchangeParam, queueParam, resolve, MessageType.Message, prefetchCount);
     }
 
-    public void ReceiveMessage<T>(
+    public void ReceiveMessage(
         string topic,
         Func<Action<byte[]>> resolve,
-        bool persistence = false,
+        bool persistence,
         ushort prefetchCount = DefaultPrefetchCount,
         int retry = 0,
         bool dlx = false)
@@ -67,10 +67,10 @@ public partial class ZaabeeRabbitMqClient
         Subscribe(exchangeParam, queueParam, resolve, MessageType.Message, prefetchCount);
     }
 
-    public void ReceiveMessage<T>(
+    public void ReceiveMessage(
         string topic,
         Func<Func<byte[], Task>> resolve,
-        bool persistence = false,
+        bool persistence,
         ushort prefetchCount = DefaultPrefetchCount,
         int retry = 0,
         bool dlx = false)

@@ -46,7 +46,7 @@ public partial class ZaabeeRabbitMqClient
         Subscribe(exchangeParam, queueParam, resolve, false, prefetchCount);
     }
 
-    public void ListenMessage<T>(
+    public void ListenMessage(
         string topic,
         Func<Action<byte[]>> resolve,
         ushort prefetchCount = DefaultPrefetchCount)
@@ -54,10 +54,10 @@ public partial class ZaabeeRabbitMqClient
         var queue = $"{GetQueueName(resolve)}[{Guid.NewGuid()}]";
         var exchangeParam = GetExchangeParam(topic, false);
         var queueParam = GetQueueParam(queue, false, SubscribeType.Listen);
-        Subscribe<T>(exchangeParam, queueParam, resolve, false, prefetchCount);
+        Subscribe(exchangeParam, queueParam, resolve, false, prefetchCount);
     }
 
-    public void ListenMessage<T>(
+    public void ListenMessage(
         string topic,
         Func<Func<byte[], Task>> resolve,
         ushort prefetchCount = DefaultPrefetchCount)
@@ -65,6 +65,6 @@ public partial class ZaabeeRabbitMqClient
         var queue = $"{GetQueueName(resolve)}[{Guid.NewGuid()}]";
         var exchangeParam = GetExchangeParam(topic, false);
         var queueParam = GetQueueParam(queue, false, SubscribeType.Listen);
-        Subscribe<T>(exchangeParam, queueParam, resolve, false, prefetchCount);
+        Subscribe(exchangeParam, queueParam, resolve, false, prefetchCount);
     }
 }

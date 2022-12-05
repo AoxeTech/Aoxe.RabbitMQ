@@ -2,7 +2,7 @@ namespace Zaabee.RabbitMQ;
 
 public partial class ZaabeeRabbitMqClient
 {
-    public void SubscribeMessage<T>(
+    public async Task SubscribeMessageAsync<T>(
         Func<Action<T?>> resolve,
         bool persistence = false,
         ushort prefetchCount = DefaultPrefetchCount,
@@ -13,10 +13,10 @@ public partial class ZaabeeRabbitMqClient
         var queue = GetQueueName(resolve);
         var exchangeParam = GetExchangeParam(topic, MessageType.Message);
         var queueParam = GetQueueParam(queue, MessageType.Message, SubscribeType.Subscribe);
-        Subscribe(exchangeParam, queueParam, resolve, MessageType.Message, prefetchCount);
+        await SubscribeAsync(exchangeParam, queueParam, resolve, MessageType.Message, prefetchCount);
     }
 
-    public void SubscribeMessage<T>(
+    public async Task SubscribeMessageAsync<T>(
         Func<Func<T?, Task>> resolve,
         bool persistence = false,
         ushort prefetchCount = DefaultPrefetchCount,
@@ -27,10 +27,10 @@ public partial class ZaabeeRabbitMqClient
         var queue = GetQueueName(resolve);
         var exchangeParam = GetExchangeParam(topic, MessageType.Message);
         var queueParam = GetQueueParam(queue, MessageType.Message, SubscribeType.Subscribe);
-        Subscribe(exchangeParam, queueParam, resolve, MessageType.Message, prefetchCount);
+        await SubscribeAsync(exchangeParam, queueParam, resolve, MessageType.Message, prefetchCount);
     }
 
-    public void SubscribeMessage<T>(
+    public async Task SubscribeMessageAsync<T>(
         string topic,
         Func<Action<T?>> resolve,
         bool persistence = false,
@@ -41,10 +41,10 @@ public partial class ZaabeeRabbitMqClient
         var queue = GetQueueName(resolve);
         var exchangeParam = GetExchangeParam(topic, MessageType.Message);
         var queueParam = GetQueueParam(queue, MessageType.Message, SubscribeType.Subscribe);
-        Subscribe(exchangeParam, queueParam, resolve, MessageType.Message, prefetchCount);
+        await SubscribeAsync(exchangeParam, queueParam, resolve, MessageType.Message, prefetchCount);
     }
 
-    public void SubscribeMessage<T>(
+    public async Task SubscribeMessageAsync<T>(
         string topic,
         Func<Func<T?, Task>> resolve,
         bool persistence = false,
@@ -55,10 +55,10 @@ public partial class ZaabeeRabbitMqClient
         var queue = GetQueueName(resolve);
         var exchangeParam = GetExchangeParam(topic, MessageType.Message);
         var queueParam = GetQueueParam(queue, MessageType.Message, SubscribeType.Subscribe);
-        Subscribe(exchangeParam, queueParam, resolve, MessageType.Message, prefetchCount);
+        await SubscribeAsync(exchangeParam, queueParam, resolve, MessageType.Message, prefetchCount);
     }
 
-    public void SubscribeMessage<T>(
+    public async Task SubscribeMessageAsync(
         string topic,
         Func<Action<byte[]>> resolve,
         bool persistence = false,
@@ -69,10 +69,10 @@ public partial class ZaabeeRabbitMqClient
         var queue = GetQueueName(resolve);
         var exchangeParam = GetExchangeParam(topic, MessageType.Message);
         var queueParam = GetQueueParam(queue, MessageType.Message, SubscribeType.Subscribe);
-        Subscribe(exchangeParam, queueParam, resolve, MessageType.Message, prefetchCount);
+        await SubscribeAsync(exchangeParam, queueParam, resolve, MessageType.Message, prefetchCount);
     }
 
-    public void SubscribeMessage<T>(
+    public async Task SubscribeMessageAsync(
         string topic,
         Func<Func<byte[], Task>> resolve,
         bool persistence = false,
@@ -83,6 +83,6 @@ public partial class ZaabeeRabbitMqClient
         var queue = GetQueueName(resolve);
         var exchangeParam = GetExchangeParam(topic, MessageType.Message);
         var queueParam = GetQueueParam(queue, MessageType.Message, SubscribeType.Subscribe);
-        Subscribe(exchangeParam, queueParam, resolve, MessageType.Message, prefetchCount);
+        await SubscribeAsync(exchangeParam, queueParam, resolve, MessageType.Message, prefetchCount);
     }
 }

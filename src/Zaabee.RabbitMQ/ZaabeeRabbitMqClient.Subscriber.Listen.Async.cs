@@ -46,7 +46,7 @@ public partial class ZaabeeRabbitMqClient
         await SubscribeAsync(exchangeParam, queueParam, resolve, MessageType.Message, prefetchCount);
     }
 
-    public async Task ListenMessageAsync<T>(
+    public async Task ListenMessageAsync(
         string topic,
         Func<Action<byte[]>> resolve,
         ushort prefetchCount = DefaultPrefetchCount)
@@ -57,7 +57,7 @@ public partial class ZaabeeRabbitMqClient
         await SubscribeAsync(exchangeParam, queueParam, resolve, MessageType.Message, prefetchCount);
     }
 
-    public async Task ListenMessageAsync<T>(
+    public async Task ListenMessageAsync(
         string topic,
         Func<Func<byte[], Task>> resolve,
         ushort prefetchCount = DefaultPrefetchCount)
