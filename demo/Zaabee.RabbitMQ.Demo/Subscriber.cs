@@ -1,11 +1,7 @@
-﻿using System;
-using System.Threading.Tasks;
-
-namespace Zaabee.RabbitMQ.Demo;
+﻿namespace Zaabee.RabbitMQ.Demo;
 
 public class Subscriber
 {
-
     public void TestEventHandler(TestEvent? testEvent)
     {
 

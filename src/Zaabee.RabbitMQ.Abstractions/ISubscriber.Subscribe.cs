@@ -11,9 +11,9 @@ public partial interface ISubscriber
     /// <param name="retry"></param>
     /// <param name="dlx"></param>
     /// <typeparam name="T"></typeparam>
-    void SubscribeMessage<T>(
+    void Subscribe<T>(
         Func<Action<T?>> resolve,
-        bool persistence = false,
+        bool persistence,
         ushort prefetchCount = 10,
         int retry = 0,
         bool dlx = false);
@@ -27,9 +27,9 @@ public partial interface ISubscriber
     /// <param name="retry"></param>
     /// <param name="dlx"></param>
     /// <typeparam name="T"></typeparam>
-    void SubscribeMessage<T>(
+    void Subscribe<T>(
         Func<Func<T?, Task>> resolve,
-        bool persistence = false,
+        bool persistence,
         ushort prefetchCount = 10,
         int retry = 0,
         bool dlx = false);
@@ -44,10 +44,10 @@ public partial interface ISubscriber
     /// <param name="retry"></param>
     /// <param name="dlx"></param>
     /// <typeparam name="T"></typeparam>
-    void SubscribeMessage<T>(
+    void Subscribe<T>(
         string topic,
         Func<Action<T?>> resolve,
-        bool persistence = false,
+        bool persistence,
         ushort prefetchCount = 10,
         int retry = 0,
         bool dlx = false);
@@ -62,10 +62,10 @@ public partial interface ISubscriber
     /// <param name="retry"></param>
     /// <param name="dlx"></param>
     /// <typeparam name="T"></typeparam>
-    void SubscribeMessage<T>(
+    void Subscribe<T>(
         string topic,
         Func<Func<T?, Task>> resolve,
-        bool persistence = false,
+        bool persistence,
         ushort prefetchCount = 10,
         int retry = 0,
         bool dlx = false);
@@ -79,11 +79,10 @@ public partial interface ISubscriber
     /// <param name="prefetchCount"></param>
     /// <param name="retry"></param>
     /// <param name="dlx"></param>
-    /// <typeparam name="T"></typeparam>
-    void SubscribeMessage<T>(
+    void Subscribe(
         string topic,
         Func<Action<byte[]>> resolve,
-        bool persistence = false,
+        bool persistence,
         ushort prefetchCount = 10,
         int retry = 0,
         bool dlx = false);
@@ -97,11 +96,10 @@ public partial interface ISubscriber
     /// <param name="prefetchCount"></param>
     /// <param name="retry"></param>
     /// <param name="dlx"></param>
-    /// <typeparam name="T"></typeparam>
-    void SubscribeMessage<T>(
+    void Subscribe(
         string topic,
         Func<Func<byte[], Task>> resolve,
-        bool persistence = false,
+        bool persistence,
         ushort prefetchCount = 10,
         int retry = 0,
         bool dlx = false);

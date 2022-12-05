@@ -2,7 +2,7 @@ namespace Zaabee.RabbitMQ;
 
 public partial class ZaabeeRabbitMqClient
 {
-    public async Task ReceiveMessageAsync<T>(
+    public async Task ReceiveAsync<T>(
         Func<Action<T?>> resolve,
         bool persistence = false,
         ushort prefetchCount = DefaultPrefetchCount,
@@ -15,7 +15,7 @@ public partial class ZaabeeRabbitMqClient
         await SubscribeAsync(exchangeParam, queueParam, resolve, MessageType.Message, prefetchCount);
     }
 
-    public async Task ReceiveMessageAsync<T>(
+    public async Task ReceiveAsync<T>(
         Func<Func<T?, Task>> resolve,
         bool persistence = false,
         ushort prefetchCount = DefaultPrefetchCount,
@@ -28,7 +28,7 @@ public partial class ZaabeeRabbitMqClient
         await SubscribeAsync(exchangeParam, queueParam, resolve, MessageType.Message, prefetchCount);
     }
 
-    public async Task ReceiveMessageAsync<T>(
+    public async Task ReceiveAsync<T>(
         string topic,
         Func<Action<T?>> resolve,
         bool persistence = false,
@@ -41,7 +41,7 @@ public partial class ZaabeeRabbitMqClient
         await SubscribeAsync(exchangeParam, queueParam, resolve, MessageType.Message, prefetchCount);
     }
 
-    public async Task ReceiveMessageAsync<T>(
+    public async Task ReceiveAsync<T>(
         string topic,
         Func<Func<T?, Task>> resolve,
         bool persistence = false,
@@ -54,7 +54,7 @@ public partial class ZaabeeRabbitMqClient
         await SubscribeAsync(exchangeParam, queueParam, resolve, MessageType.Message, prefetchCount);
     }
 
-    public async Task ReceiveMessageAsync(
+    public async Task ReceiveAsync(
         string topic,
         Func<Action<byte[]>> resolve,
         bool persistence = false,
@@ -67,7 +67,7 @@ public partial class ZaabeeRabbitMqClient
         await SubscribeAsync(exchangeParam, queueParam, resolve, MessageType.Message, prefetchCount);
     }
 
-    public async Task ReceiveMessageAsync(
+    public async Task ReceiveAsync(
         string topic,
         Func<Func<byte[], Task>> resolve,
         bool persistence = false,

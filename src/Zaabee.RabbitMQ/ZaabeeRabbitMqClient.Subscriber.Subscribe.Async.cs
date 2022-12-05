@@ -2,7 +2,7 @@ namespace Zaabee.RabbitMQ;
 
 public partial class ZaabeeRabbitMqClient
 {
-    public async Task SubscribeMessageAsync<T>(
+    public async Task SubscribeAsync<T>(
         Func<Action<T?>> resolve,
         bool persistence = false,
         ushort prefetchCount = DefaultPrefetchCount,
@@ -16,7 +16,7 @@ public partial class ZaabeeRabbitMqClient
         await SubscribeAsync(exchangeParam, queueParam, resolve, MessageType.Message, prefetchCount);
     }
 
-    public async Task SubscribeMessageAsync<T>(
+    public async Task SubscribeAsync<T>(
         Func<Func<T?, Task>> resolve,
         bool persistence = false,
         ushort prefetchCount = DefaultPrefetchCount,
@@ -30,7 +30,7 @@ public partial class ZaabeeRabbitMqClient
         await SubscribeAsync(exchangeParam, queueParam, resolve, MessageType.Message, prefetchCount);
     }
 
-    public async Task SubscribeMessageAsync<T>(
+    public async Task SubscribeAsync<T>(
         string topic,
         Func<Action<T?>> resolve,
         bool persistence = false,
@@ -44,7 +44,7 @@ public partial class ZaabeeRabbitMqClient
         await SubscribeAsync(exchangeParam, queueParam, resolve, MessageType.Message, prefetchCount);
     }
 
-    public async Task SubscribeMessageAsync<T>(
+    public async Task SubscribeAsync<T>(
         string topic,
         Func<Func<T?, Task>> resolve,
         bool persistence = false,
@@ -58,7 +58,7 @@ public partial class ZaabeeRabbitMqClient
         await SubscribeAsync(exchangeParam, queueParam, resolve, MessageType.Message, prefetchCount);
     }
 
-    public async Task SubscribeMessageAsync(
+    public async Task SubscribeAsync(
         string topic,
         Func<Action<byte[]>> resolve,
         bool persistence = false,
@@ -72,7 +72,7 @@ public partial class ZaabeeRabbitMqClient
         await SubscribeAsync(exchangeParam, queueParam, resolve, MessageType.Message, prefetchCount);
     }
 
-    public async Task SubscribeMessageAsync(
+    public async Task SubscribeAsync(
         string topic,
         Func<Func<byte[], Task>> resolve,
         bool persistence = false,

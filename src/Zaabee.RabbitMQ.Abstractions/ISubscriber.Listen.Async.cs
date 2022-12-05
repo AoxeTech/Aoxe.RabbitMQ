@@ -9,7 +9,7 @@ public partial interface ISubscriber
     /// <param name="prefetchCount"></param>
     /// <typeparam name="T"></typeparam>
     /// <returns></returns>
-    Task ListenMessageAsync<T>(
+    Task ListenAsync<T>(
         Func<Action<T?>> resolve,
         ushort prefetchCount = 10);
 
@@ -20,7 +20,7 @@ public partial interface ISubscriber
     /// <param name="prefetchCount"></param>
     /// <typeparam name="T"></typeparam>
     /// <returns></returns>
-    Task ListenMessageAsync<T>(
+    Task ListenAsync<T>(
         Func<Func<T?, Task>> resolve,
         ushort prefetchCount = 10);
 
@@ -32,7 +32,7 @@ public partial interface ISubscriber
     /// <param name="prefetchCount"></param>
     /// <typeparam name="T"></typeparam>
     /// <returns></returns>
-    Task ListenMessageAsync<T>(
+    Task ListenAsync<T>(
         string topic,
         Func<Action<T?>> resolve,
         ushort prefetchCount = 10);
@@ -45,7 +45,7 @@ public partial interface ISubscriber
     /// <param name="prefetchCount"></param>
     /// <typeparam name="T"></typeparam>
     /// <returns></returns>
-    Task ListenMessageAsync<T>(
+    Task ListenAsync<T>(
         string topic,
         Func<Func<T?, Task>> resolve,
         ushort prefetchCount = 10);
@@ -56,9 +56,8 @@ public partial interface ISubscriber
     /// <param name="topic"></param>
     /// <param name="resolve"></param>
     /// <param name="prefetchCount"></param>
-    /// <typeparam name="T"></typeparam>
     /// <returns></returns>
-    Task ListenMessageAsync<T>(
+    Task ListenAsync(
         string topic,
         Func<Action<byte[]>> resolve,
         ushort prefetchCount = 10);
@@ -69,9 +68,8 @@ public partial interface ISubscriber
     /// <param name="topic"></param>
     /// <param name="resolve"></param>
     /// <param name="prefetchCount"></param>
-    /// <typeparam name="T"></typeparam>
     /// <returns></returns>
-    Task ListenMessageAsync<T>(
+    Task ListenAsync(
         string topic,
         Func<Func<byte[], Task>> resolve,
         ushort prefetchCount = 10);

@@ -2,7 +2,7 @@ namespace Zaabee.RabbitMQ;
 
 public partial class ZaabeeRabbitMqClient
 {
-    public void SubscribeMessage<T>(
+    public void Subscribe<T>(
         Func<Action<T?>> resolve,
         bool persistence = false,
         ushort prefetchCount = DefaultPrefetchCount,
@@ -16,7 +16,7 @@ public partial class ZaabeeRabbitMqClient
         Subscribe(exchangeParam, queueParam, resolve, MessageType.Message, prefetchCount);
     }
 
-    public void SubscribeMessage<T>(
+    public void Subscribe<T>(
         Func<Func<T?, Task>> resolve,
         bool persistence = false,
         ushort prefetchCount = DefaultPrefetchCount,
@@ -30,7 +30,7 @@ public partial class ZaabeeRabbitMqClient
         Subscribe(exchangeParam, queueParam, resolve, MessageType.Message, prefetchCount);
     }
 
-    public void SubscribeMessage<T>(
+    public void Subscribe<T>(
         string topic,
         Func<Action<T?>> resolve,
         bool persistence = false,
@@ -44,7 +44,7 @@ public partial class ZaabeeRabbitMqClient
         Subscribe(exchangeParam, queueParam, resolve, MessageType.Message, prefetchCount);
     }
 
-    public void SubscribeMessage<T>(
+    public void Subscribe<T>(
         string topic,
         Func<Func<T?, Task>> resolve,
         bool persistence = false,
@@ -58,7 +58,7 @@ public partial class ZaabeeRabbitMqClient
         Subscribe(exchangeParam, queueParam, resolve, MessageType.Message, prefetchCount);
     }
 
-    public void SubscribeMessage(
+    public void Subscribe(
         string topic,
         Func<Action<byte[]>> resolve,
         bool persistence = false,
@@ -72,7 +72,7 @@ public partial class ZaabeeRabbitMqClient
         Subscribe(exchangeParam, queueParam, resolve, MessageType.Message, prefetchCount);
     }
 
-    public void SubscribeMessage(
+    public void Subscribe(
         string topic,
         Func<Func<byte[], Task>> resolve,
         bool persistence = false,

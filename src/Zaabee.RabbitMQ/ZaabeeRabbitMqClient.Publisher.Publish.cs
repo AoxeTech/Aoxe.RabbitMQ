@@ -2,7 +2,7 @@ namespace Zaabee.RabbitMQ;
 
 public partial class ZaabeeRabbitMqClient
 {
-    public void PublishMessage<T>(
+    public void Publish<T>(
         T message,
         bool persistence = false)
     {
@@ -11,7 +11,7 @@ public partial class ZaabeeRabbitMqClient
         Publish(exchangeParam, null, persistence, message);
     }
 
-    public void PublishMessage<T>(
+    public void Publish<T>(
         string topic,
         T message,
         bool persistence = false)
@@ -20,7 +20,7 @@ public partial class ZaabeeRabbitMqClient
         Publish(exchangeParam, null, persistence, message);
     }
 
-    public void PublishMessage(
+    public void Publish(
         string topic,
         byte[] body,
         bool persistence = false)

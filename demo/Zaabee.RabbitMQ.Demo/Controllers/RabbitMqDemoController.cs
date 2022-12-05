@@ -1,104 +1,182 @@
-﻿using System;
-using System.Diagnostics;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Zaabee.RabbitMQ.Abstractions;
+﻿namespace Zaabee.RabbitMQ.Demo.Controllers;
 
-namespace Zaabee.RabbitMQ.Demo.Controllers
+[Route("api/[controller]/[action]")]
+public class RabbitMqDemoController : Controller
 {
-    [Route("api/[controller]/[action]")]
-    public class RabbitMqDemoController : Controller
+    private readonly IZaabeeRabbitMqClient _messageBus;
+
+    public RabbitMqDemoController(IZaabeeRabbitMqClient messageBus)
     {
-        private readonly IZaabeeRabbitMqClient _messageBus;
+        _messageBus = messageBus;
+    }
 
-        public RabbitMqDemoController(IZaabeeRabbitMqClient messageBus)
+    [HttpGet]
+    [HttpPost]
+    public long PublishEventSync(int quantity)
+    {
+        var sw = Stopwatch.StartNew();
+        for (var i = 0; i < quantity; i++)
         {
-            _messageBus = messageBus;
-        }
-
-        [HttpGet]
-        [HttpPost]
-        public long PublishEventSync(int quantity)
-        {
-            var sw = Stopwatch.StartNew();
-            for (var i = 0; i < quantity; i++)
+            _messageBus.PublishEvent(new TestEvent
             {
-                _messageBus.PublishEvent(new TestEvent
-                {
-                    Id = Guid.NewGuid(),
-                    Timestamp = DateTimeOffset.Now
-                });
-            }
-
-            return sw.ElapsedMilliseconds;
+                Id = Guid.NewGuid(),
+                Timestamp = DateTimeOffset.Now
+            });
         }
 
-        [HttpGet]
-        [HttpPost]
-        public async Task<long> PublishEventAsync(int quantity)
+        return sw.ElapsedMilliseconds;
+    }
+
+    [HttpGet]
+    [HttpPost]
+    public async Task<long> PublishEventAsync(int quantity)
+    {
+        var sw = Stopwatch.StartNew();
+        for (var i = 0; i < quantity; i++)
         {
-            var sw = Stopwatch.StartNew();
-            for (var i = 0; i < quantity; i++)
+            await _messageBus.PublishEventAsync(new TestEvent
             {
-                await _messageBus.PublishEventAsync(new TestEvent
-                {
-                    Id = Guid.NewGuid(),
-                    Timestamp = DateTimeOffset.Now
-                });
-            }
-
-            return sw.ElapsedMilliseconds;
+                Id = Guid.NewGuid(),
+                Timestamp = DateTimeOffset.Now
+            });
         }
 
-        [HttpGet]
-        [HttpPost]
-        public long PublishEventWithVersion(int quantity)
+        return sw.ElapsedMilliseconds;
+    }
+
+    [HttpGet]
+    [HttpPost]
+    public long PublishEventWithVersion(int quantity)
+    {
+        var sw = Stopwatch.StartNew();
+        for (var i = 0; i < quantity; i++)
         {
-            var sw = Stopwatch.StartNew();
-            for (var i = 0; i < quantity; i++)
+            _messageBus.PublishEvent(new TestEventWithVersion
             {
-                _messageBus.PublishEvent(new TestEventWithVersion
-                {
-                    Id = Guid.NewGuid(),
-                    Timestamp = DateTimeOffset.Now
-                });
-            }
-
-            return sw.ElapsedMilliseconds;
+                Id = Guid.NewGuid(),
+                Timestamp = DateTimeOffset.Now
+            });
         }
 
-        [HttpGet]
-        [HttpPost]
-        public long PublishMessageSync(int quantity)
+        return sw.ElapsedMilliseconds;
+    }
+
+    [HttpGet]
+    [HttpPost]
+    public long SendCommandSync(int quantity)
+    {
+        var sw = Stopwatch.StartNew();
+        for (var i = 0; i < quantity; i++)
         {
-            var sw = Stopwatch.StartNew();
-            for (var i = 0; i < quantity; i++)
+            _messageBus.SendCommand(new TestEvent
             {
-                _messageBus.PublishMessage(new TestMessage
-                {
-                    Id = Guid.NewGuid(),
-                    Timestamp = DateTimeOffset.Now
-                });
-            }
-
-            return sw.ElapsedMilliseconds;
+                Id = Guid.NewGuid(),
+                Timestamp = DateTimeOffset.Now
+            });
         }
 
-        [HttpGet]
-        [HttpPost]
-        public async Task<long> PublishMessageAsync(int quantity)
+        return sw.ElapsedMilliseconds;
+    }
+
+    [HttpGet]
+    [HttpPost]
+    public async Task<long> SendCommandAsync(int quantity)
+    {
+        var sw = Stopwatch.StartNew();
+        for (var i = 0; i < quantity; i++)
         {
-            var sw = Stopwatch.StartNew();
-            for (var i = 0; i < quantity; i++)
+            await _messageBus.SendCommandAsync(new TestEvent
             {
-                await _messageBus.PublishMessageAsync(new TestMessage
-                {
-                    Id = Guid.NewGuid(),
-                    Timestamp = DateTimeOffset.Now
-                });
-            }
-
-            return sw.ElapsedMilliseconds;
+                Id = Guid.NewGuid(),
+                Timestamp = DateTimeOffset.Now
+            });
         }
+
+        return sw.ElapsedMilliseconds;
+    }
+
+    [HttpGet]
+    [HttpPost]
+    public long SendCommandWithVersion(int quantity)
+    {
+        var sw = Stopwatch.StartNew();
+        for (var i = 0; i < quantity; i++)
+        {
+            _messageBus.SendCommand(new TestEventWithVersion
+            {
+                Id = Guid.NewGuid(),
+                Timestamp = DateTimeOffset.Now
+            });
+        }
+
+        return sw.ElapsedMilliseconds;
+    }
+
+    [HttpGet]
+    [HttpPost]
+    public long PublishMessageSync(int quantity)
+    {
+        var sw = Stopwatch.StartNew();
+        for (var i = 0; i < quantity; i++)
+        {
+            _messageBus.Publish(new TestMessage
+            {
+                Id = Guid.NewGuid(),
+                Timestamp = DateTimeOffset.Now
+            }, false);
+        }
+
+        return sw.ElapsedMilliseconds;
+    }
+
+    [HttpGet]
+    [HttpPost]
+    public async Task<long> PublishMessageAsync(int quantity)
+    {
+        var sw = Stopwatch.StartNew();
+        for (var i = 0; i < quantity; i++)
+        {
+            await _messageBus.PublishMessageAsync(new TestMessage
+            {
+                Id = Guid.NewGuid(),
+                Timestamp = DateTimeOffset.Now
+            }, false);
+        }
+
+        return sw.ElapsedMilliseconds;
+    }
+
+    [HttpGet]
+    [HttpPost]
+    public long SendMessageSync(int quantity)
+    {
+        var sw = Stopwatch.StartNew();
+        for (var i = 0; i < quantity; i++)
+        {
+            _messageBus.Send(new TestMessage
+            {
+                Id = Guid.NewGuid(),
+                Timestamp = DateTimeOffset.Now
+            }, false);
+        }
+
+        return sw.ElapsedMilliseconds;
+    }
+
+    [HttpGet]
+    [HttpPost]
+    public async Task<long> SendMessageAsync(int quantity)
+    {
+        var sw = Stopwatch.StartNew();
+        for (var i = 0; i < quantity; i++)
+        {
+            await _messageBus.SendAsync(new TestMessage
+            {
+                Id = Guid.NewGuid(),
+                Timestamp = DateTimeOffset.Now
+            }, false);
+        }
+
+        return sw.ElapsedMilliseconds;
     }
 }

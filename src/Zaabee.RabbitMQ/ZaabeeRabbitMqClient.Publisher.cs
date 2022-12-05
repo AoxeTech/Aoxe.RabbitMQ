@@ -1,8 +1,3 @@
-using System.Net.Sockets;
-using Polly;
-using Polly.Retry;
-using RabbitMQ.Client.Exceptions;
-
 namespace Zaabee.RabbitMQ;
 
 public partial class ZaabeeRabbitMqClient
@@ -20,15 +15,11 @@ public partial class ZaabeeRabbitMqClient
         bool persistence,
         byte[] body)
     {
-        var policy = RetryPolicy.Handle<BrokerUnreachableException>()
+        var policy = Policy.Handle<BrokerUnreachableException>()
             .Or<SocketException>()
             .WaitAndRetry(_publishRetryCount, retryAttempt =>
                     TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)),
-                (ex, time) =>
-                {
-                    _logger.LogWarning(ex, "Could not publish event: {EventId} after {Timeout}s ({ExceptionMessage})",
-                        @event.Id, $"{time.TotalSeconds:n1}", ex.Message);
-                });
+                (ex, _) => throw ex);
 
         policy.Execute(() =>
         {
@@ -70,6 +61,7 @@ public partial class ZaabeeRabbitMqClient
             exclusive: queueParam.Exclusive,
             autoDelete: queueParam.AutoDelete,
             arguments: queueParam.Arguments);
+        
         channel.QueueBind(
             queue: queueParam.Queue,
             exchange: exchangeParam.Exchange,

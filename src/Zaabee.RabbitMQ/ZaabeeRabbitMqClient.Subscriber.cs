@@ -10,47 +10,64 @@ public partial class ZaabeeRabbitMqClient
         ExchangeParam exchangeParam,
         QueueParam queueParam,
         Func<Action<T?>> resolve,
-        bool persistence,
         ushort prefetchCount = DefaultPrefetchCount,
         int retry = 0,
         bool dlx = false)
     {
         var channel = GetReceiverChannel(exchangeParam, queueParam, prefetchCount);
         
-        switch (messageType)
-        {
-            case MessageType.Message:
-                ConsumeMessage(channel, resolve, queueParam.Queue);
-                break;
-            case MessageType.Event:
-                ConsumeEvent(channel, resolve, queueParam.Queue);
-                break;
-            default:
-                throw new ArgumentOutOfRangeException(nameof(messageType), messageType, null);
-        }
+        if (dlx)
+            ConsumeEvent(channel, resolve, queueParam.Queue);
+        else
+            ConsumeMessage(channel, resolve, queueParam.Queue);
+    }
+
+    private void Subscribe(
+        ExchangeParam exchangeParam,
+        QueueParam queueParam,
+        Func<Action<byte[]>> resolve,
+        ushort prefetchCount = DefaultPrefetchCount,
+        int retry = 0,
+        bool dlx = false)
+    {
+        var channel = GetReceiverChannel(exchangeParam, queueParam, prefetchCount);
+        
+        if (dlx)
+            ConsumeEvent(channel, resolve, queueParam.Queue);
+        else
+            ConsumeMessage(channel, resolve, queueParam.Queue);
     }
 
     private void Subscribe<T>(
         ExchangeParam exchangeParam,
         QueueParam queueParam,
         Func<Func<T?, Task>> resolve,
-        bool persistence,
         ushort prefetchCount = DefaultPrefetchCount,
         int retry = 0,
         bool dlx = false)
     {
         var channel = GetReceiverChannel(exchangeParam, queueParam, prefetchCount);
-        switch (messageType)
-        {
-            case MessageType.Message:
-                ConsumeMessage(channel, resolve, queueParam.Queue);
-                break;
-            case MessageType.Event:
-                ConsumeEvent(channel, resolve, queueParam.Queue);
-                break;
-            default:
-                throw new ArgumentOutOfRangeException(nameof(messageType), messageType, null);
-        }
+        
+        if (dlx)
+            ConsumeEvent(channel, resolve, queueParam.Queue);
+        else
+            ConsumeMessage(channel, resolve, queueParam.Queue);
+    }
+
+    private void Subscribe(
+        ExchangeParam exchangeParam,
+        QueueParam queueParam,
+        Func<Func<byte[], Task>> resolve,
+        ushort prefetchCount = DefaultPrefetchCount,
+        int retry = 0,
+        bool dlx = false)
+    {
+        var channel = GetReceiverChannel(exchangeParam, queueParam, prefetchCount);
+        
+        if (dlx)
+            ConsumeEvent(channel, resolve, queueParam.Queue);
+        else
+            ConsumeMessage(channel, resolve, queueParam.Queue);
     }
 
     private void ConsumeEvent<T>(
@@ -185,36 +202,5 @@ public partial class ZaabeeRabbitMqClient
             channel.BasicQos(0, prefetchCount, false);
             return channel;
         });
-    }
-
-    private void PublishDlx<T>(
-        BasicDeliverEventArgs ea,
-        string queue,
-        Exception ex)
-    {
-        var inmostEx = ex.GetInmostException();
-
-        var dlxName = GetDeadLetterName(queue);
-        var dlxExchangeParam = new ExchangeParam { Exchange = dlxName };
-        var dlxQueueParam = new QueueParam { Queue = dlxName };
-
-        using (var deadLetterMsgChannel = GetPublisherChannel(dlxExchangeParam, dlxQueueParam))
-        {
-            var properties = deadLetterMsgChannel.CreateBasicProperties();
-            properties.Persistent = true;
-            var routingKey = dlxExchangeParam.Exchange;
-
-            var dlx = new DeadLetterMsg
-            {
-                QueueName = queue,
-                ExMsg = inmostEx.Message,
-                ExStack = inmostEx.StackTrace,
-                ThrowTime = DateTimeOffset.Now,
-                BodyString = _serializer.ToText(_serializer.FromBytes<T>(ea.Body.ToArray()))
-            };
-
-            deadLetterMsgChannel.BasicPublish(dlxExchangeParam.Exchange, routingKey, properties,
-                _serializer.ToBytes(dlx));
-        }
     }
 }

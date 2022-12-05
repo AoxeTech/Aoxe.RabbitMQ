@@ -10,9 +10,9 @@ public partial interface IPublisher
     /// <param name="retry"></param>
     /// <param name="dlx"></param>
     /// <typeparam name="T"></typeparam>
-    void SendMessage<T>(
+    void Send<T>(
         T message,
-        bool persistence = false,
+        bool persistence,
         int retry = 3,
         bool dlx = true);
 
@@ -25,10 +25,10 @@ public partial interface IPublisher
     /// <param name="retry"></param>
     /// <param name="dlx"></param>
     /// <typeparam name="T"></typeparam>
-    void SendMessage<T>(
+    void Send<T>(
         string topic,
         T message,
-        bool persistence = false,
+        bool persistence,
         int retry = 3,
         bool dlx = true);
 
@@ -40,10 +40,10 @@ public partial interface IPublisher
     /// <param name="persistence"></param>
     /// <param name="retry"></param>
     /// <param name="dlx"></param>
-    void SendMessage(
+    void Send(
         string topic,
         byte[] body,
-        bool persistence = false,
+        bool persistence,
         int retry = 3,
         bool dlx = true);
 }

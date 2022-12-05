@@ -58,44 +58,44 @@ public partial class ZaabeeRabbitMqClient : IZaabeeRabbitMqClient
         _serializer = options.Serializer;
     }
 
-    public void RepublishDeadLetterEvent<T>(string deadLetterQueueName, ushort prefetchCount = 1)
-    {
-        var queueParam = new QueueParam { Queue = deadLetterQueueName };
-        var channel = GetReceiverChannel(null, queueParam, prefetchCount);
-    
-        var consumer = new EventingBasicConsumer(channel);
-        consumer.Received += (_, ea) =>
-        {
-            try
-            {
-                var body = ea.Body;
-                var msg = _serializer.FromBytes<DeadLetterMsg>(body.ToArray())!;
-    
-                var republishExchangeParam =
-                    new ExchangeParam { Exchange = $"republish-{deadLetterQueueName}", Durable = true };
-                var republishQueueParam =
-                    new QueueParam { Queue = FromDeadLetterName(deadLetterQueueName), Durable = true };
-                using (var republishChannel = GetPublisherChannel(republishExchangeParam, republishQueueParam))
-                {
-                    var properties = republishChannel.CreateBasicProperties();
-                    properties.Persistent = true;
-                    var routingKey = republishExchangeParam.Exchange;
-    
-                    var deadLetter = _serializer.FromText<T>(msg.BodyString);
-    
-                    republishChannel.BasicPublish(republishExchangeParam.Exchange, routingKey, properties,
-                        _serializer.ToBytes(deadLetter));
-                }
-    
-                channel.BasicAck(ea.DeliveryTag, false);
-            }
-            catch
-            {
-                channel.BasicNack(ea.DeliveryTag, false, true);
-            }
-        };
-        channel.BasicConsume(queue: deadLetterQueueName, autoAck: false, consumer: consumer);
-    }
+    // public void RepublishDeadLetterEvent<T>(string deadLetterQueueName, ushort prefetchCount = 1)
+    // {
+    //     var queueParam = new QueueParam { Queue = deadLetterQueueName };
+    //     var channel = GetReceiverChannel(null, queueParam, prefetchCount);
+    //
+    //     var consumer = new EventingBasicConsumer(channel);
+    //     consumer.Received += (_, ea) =>
+    //     {
+    //         try
+    //         {
+    //             var body = ea.Body;
+    //             var msg = _serializer.FromBytes<DeadLetterMsg>(body.ToArray())!;
+    //
+    //             var republishExchangeParam =
+    //                 new ExchangeParam { Exchange = $"republish-{deadLetterQueueName}", Durable = true };
+    //             var republishQueueParam =
+    //                 new QueueParam { Queue = FromDeadLetterName(deadLetterQueueName), Durable = true };
+    //             using (var republishChannel = GetPublisherChannel(republishExchangeParam, republishQueueParam))
+    //             {
+    //                 var properties = republishChannel.CreateBasicProperties();
+    //                 properties.Persistent = true;
+    //                 var routingKey = republishExchangeParam.Exchange;
+    //
+    //                 var deadLetter = _serializer.FromText<T>(msg.BodyString);
+    //
+    //                 republishChannel.BasicPublish(republishExchangeParam.Exchange, routingKey, properties,
+    //                     _serializer.ToBytes(deadLetter));
+    //             }
+    //
+    //             channel.BasicAck(ea.DeliveryTag, false);
+    //         }
+    //         catch
+    //         {
+    //             channel.BasicNack(ea.DeliveryTag, false, true);
+    //         }
+    //     };
+    //     channel.BasicConsume(queue: deadLetterQueueName, autoAck: false, consumer: consumer);
+    // }
 
     private static ExchangeParam GetExchangeParam(
         string topic,

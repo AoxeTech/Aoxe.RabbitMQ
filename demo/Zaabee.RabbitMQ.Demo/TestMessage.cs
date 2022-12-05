@@ -1,10 +1,7 @@
-﻿using System;
+﻿namespace Zaabee.RabbitMQ.Demo;
 
-namespace Zaabee.RabbitMQ.Demo
+public class TestMessage
 {
-    public class TestMessage
-    {
-        public Guid Id { get; set; }
-        public DateTimeOffset Timestamp { get; set; }
-    }
+    public Guid Id { get; set; }
+    public DateTimeOffset Timestamp { get; set; }
 }

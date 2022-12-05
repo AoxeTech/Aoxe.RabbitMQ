@@ -8,9 +8,9 @@ public partial interface IPublisher
     /// <param name="message"></param>
     /// <param name="persistence"></param>
     /// <typeparam name="T"></typeparam>
-    void PublishMessage<T>(
+    void Publish<T>(
         T message,
-        bool persistence = false);
+        bool persistence);
 
     /// <summary>
     /// Publish the message to the specified topic.
@@ -19,10 +19,10 @@ public partial interface IPublisher
     /// <param name="message"></param>
     /// <param name="persistence"></param>
     /// <typeparam name="T"></typeparam>
-    void PublishMessage<T>(
+    void Publish<T>(
         string topic,
         T message,
-        bool persistence = false);
+        bool persistence);
 
     /// <summary>
     /// Publish the message to the specified topic.
@@ -30,8 +30,8 @@ public partial interface IPublisher
     /// <param name="topic"></param>
     /// <param name="body"></param>
     /// <param name="persistence"></param>
-    void PublishMessage(
+    void Publish(
         string topic,
         byte[] body,
-        bool persistence = false);
+        bool persistence);
 }

@@ -2,35 +2,35 @@ namespace Zaabee.RabbitMQ;
 
 public partial class ZaabeeRabbitMqClient
 {
-    public Task SendMessageAsync<T>(
+    public Task SendAsync<T>(
         T message,
         bool persistence = false,
         int retry = 3,
         bool dlx = true)
     {
-        SendMessage(message, persistence, retry, dlx);
+        Send(message, persistence, retry, dlx);
         return Task.CompletedTask;
     }
 
-    public Task SendMessageAsync<T>(
+    public Task SendAsync<T>(
         string topic,
         T message,
         bool persistence = false,
         int retry = 3,
         bool dlx = true)
     {
-        SendMessage(topic, message, persistence, retry, dlx);
+        Send(topic, message, persistence, retry, dlx);
         return Task.CompletedTask;
     }
 
-    public Task SendMessageAsync(
+    public Task SendAsync(
         string topic,
         byte[] body,
         bool persistence = false,
         int retry = 3,
         bool dlx = true)
     {
-        SendMessage(topic, body, persistence, retry, dlx);
+        Send(topic, body, persistence, retry, dlx);
         return Task.CompletedTask;
     }
 }

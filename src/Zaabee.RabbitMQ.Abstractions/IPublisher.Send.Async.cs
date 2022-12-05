@@ -11,9 +11,9 @@ public partial interface IPublisher
     /// <param name="dlx"></param>
     /// <typeparam name="T"></typeparam>
     /// <returns></returns>
-    Task SendMessageAsync<T>(
+    Task SendAsync<T>(
         T message,
-        bool persistence = false,
+        bool persistence,
         int retry = 3,
         bool dlx = true);
 
@@ -27,10 +27,10 @@ public partial interface IPublisher
     /// <param name="dlx"></param>
     /// <typeparam name="T"></typeparam>
     /// <returns></returns>
-    Task SendMessageAsync<T>(
+    Task SendAsync<T>(
         string topic,
         T message,
-        bool persistence = false,
+        bool persistence,
         int retry = 3,
         bool dlx = true);
 
@@ -43,10 +43,10 @@ public partial interface IPublisher
     /// <param name="retry"></param>
     /// <param name="dlx"></param>
     /// <returns></returns>
-    Task SendMessageAsync(
+    Task SendAsync(
         string topic,
         byte[] body,
-        bool persistence = false,
+        bool persistence,
         int retry = 3,
         bool dlx = true);
 }
