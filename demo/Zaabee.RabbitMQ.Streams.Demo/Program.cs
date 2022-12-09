@@ -1,9 +1,9 @@
 ﻿// See https://aka.ms/new-console-template for more information
 
-using System.Buffers;
 using System.Net;
 using System.Text;
 using RabbitMQ.Stream.Client;
+using RabbitMQ.Stream.Client.Reliable;
 
 var config = new StreamSystemConfig
 {

@@ -1,7 +1,3 @@
-using System;
-using Xunit;
-using Zaabee.Serializer.Abstractions;
-
 namespace Zaabee.RabbitMQ.Serializers.TestProject;
 
 public class UnitTest
