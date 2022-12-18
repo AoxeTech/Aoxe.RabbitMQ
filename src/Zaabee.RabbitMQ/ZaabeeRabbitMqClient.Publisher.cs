@@ -23,19 +23,16 @@ public partial class ZaabeeRabbitMqClient
 
         policy.Execute(() =>
         {
-            using (var channel = GetPublisherChannel(exchangeParam, queueParam))
+            IBasicProperties? properties = null;
+            using var channel = GetPublisherChannel(exchangeParam, queueParam);
+            if (persistence)
             {
-                IBasicProperties? properties = null;
-                if (persistence)
-                {
-                    properties = channel.CreateBasicProperties();
-                    if (properties is not null)
-                        properties.Persistent = persistence;
-                }
-
-                var routingKey = exchangeParam.Exchange;
-                channel.BasicPublish(exchangeParam.Exchange, routingKey, properties, body);
+                properties = channel.CreateBasicProperties();
+                properties.Persistent = persistence;
             }
+
+            var routingKey = exchangeParam.Exchange;
+            channel.BasicPublish(exchangeParam.Exchange, routingKey, properties, body);
         });
     }
 
