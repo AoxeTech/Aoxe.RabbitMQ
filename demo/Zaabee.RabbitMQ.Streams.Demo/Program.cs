@@ -1,77 +1,93 @@
 ﻿// See https://aka.ms/new-console-template for more information
 
-using System.Net;
-using System.Text;
-using RabbitMQ.Stream.Client;
-using RabbitMQ.Stream.Client.Reliable;
-
 var config = new StreamSystemConfig
 {
-    Endpoints = new List<EndPoint>
-    {
-        new IPEndPoint(IPAddress.Parse("192.168.78.130"), 5552)
-    },
-    UserName = "admin",
-    Password = "123",
+    UserName = "guest",
+    Password = "guest",
     VirtualHost = "/"
 };
-
-// Connect to the broker 
-var streamSystem = await StreamSystem.Create(config);
+// Connect to the broker and create the system object
+// the entry point for the client.
+// Create it once and reuse it.
+var system = await StreamSystem.Create(config);
 
 const string stream = "my_first_stream";
 
 // Create the stream. It is important to put some retention policy 
 // in this case is 200000 bytes.
-await streamSystem.CreateStream(new StreamSpec(stream)
+await system.CreateStream(new StreamSpec(stream)
 {
-    MaxLengthBytes = 200000
+    MaxLengthBytes = 200000,
 });
 
-var producer = await streamSystem.CreateProducer(
-    new ProducerConfig
+var producer = await Producer.Create(
+    new ProducerConfig(system, stream)
     {
         Reference = Guid.NewGuid().ToString(),
-        Stream = stream,
-        // Here you can receive the messages confirmation
-        // it means the message is stored on the server
-        ConfirmHandler = conf =>
+
+
+        // Receive the confirmation of the messages sent
+        ConfirmationHandler = confirmation =>
         {
-            Console.WriteLine($"message: {conf.PublishingId} - confirmed");        
+            switch (confirmation.Status)
+            {
+                // ConfirmationStatus.Confirmed: The message was successfully sent
+                case ConfirmationStatus.Confirmed:
+                    Console.WriteLine($"Message {confirmation.PublishingId} confirmed");
+                    break;
+                // There is an error during the sending of the message
+                case ConfirmationStatus.WaitForConfirmation:
+                case ConfirmationStatus.ClientTimeoutError
+                    : // The client didn't receive the confirmation in time. 
+                // but it doesn't mean that the message was not sent
+                // maybe the broker needs more time to confirm the message
+                // see TimeoutMessageAfter in the ProducerConfig
+                case ConfirmationStatus.StreamNotAvailable:
+                case ConfirmationStatus.InternalError:
+                case ConfirmationStatus.AccessRefused:
+                case ConfirmationStatus.PreconditionFailed:
+                case ConfirmationStatus.PublisherDoesNotExist:
+                case ConfirmationStatus.UndefinedError:
+                default:
+                    Console.WriteLine(
+                        $"Message  {confirmation.PublishingId} not confirmed. Error {confirmation.Status}");
+                    break;
+            }
+
+            return Task.CompletedTask;
         }
     });
 
-// Publish the messages and set the publishingId that
-// should be sequential
-for (ulong i = 0; i < 100; i++)
+// Publish the messages
+for (var i = 0; i < 100; i++)
 {
     var message = new Message(Encoding.UTF8.GetBytes($"hello {i}"));
-    await producer.Send(i, message);
+    await producer.Send(message);
 }
 
 // not mandatory. Just to show the confirmation
-Thread.Sleep(1000);
+Thread.Sleep(TimeSpan.FromSeconds(1));
 
 // Create a consumer
-var consumer = await streamSystem.CreateConsumer(
-    new ConsumerConfig
+var consumer = await Consumer.Create(
+    new ConsumerConfig(system, stream)
     {
-        Reference = Guid.NewGuid().ToString(),
-        Stream = stream,
+        Reference = "my_consumer",
         // Consume the stream from the beginning 
         // See also other OffsetSpec 
         OffsetSpec = new OffsetTypeFirst(),
         // Receive the messages
-        MessageHandler = async (consumer, ctx, message) =>
+        MessageHandler = async (sourceStream, consumer, ctx, message) =>
         {
-            Console.WriteLine($"message: {Encoding.Default.GetString(message.Data.Contents.ToArray())} - consumed");
+            Console.WriteLine(
+                $"message: coming from {sourceStream} data: {Encoding.Default.GetString(message.Data.Contents.ToArray())} - consumed");
             await Task.CompletedTask;
         }
     });
-Console.WriteLine($"Press to stop");
+Console.WriteLine("Press to stop");
 Console.ReadLine();
 
 await producer.Close();
 await consumer.Close();
-await streamSystem.DeleteStream(stream);
-await streamSystem.Close();
+await system.DeleteStream(stream);
+await system.Close();
