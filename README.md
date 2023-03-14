@@ -17,11 +17,11 @@ Install-Package Zaabee.NewtonsoftJson
 
 In addition we have the following json serializers:
 
-[Zaabee.Jil](https://github.com/PicoHex/Zaabee.Serializers/tree/master/src/Zaabee.MsgPack)
+[Zaabee.Jil](https://github.com/PicoHex/Zaabee.Serialization/tree/master/src/Zaabee.MsgPack)
 
-[Zaabee.SystemTextJson](https://github.com/PicoHex/Zaabee.Serializers/tree/master/src/Zaabee.SystemTextJson)
+[Zaabee.SystemTextJson](https://github.com/PicoHex/Zaabee.Serialization/tree/master/src/Zaabee.SystemTextJson)
 
-[Zaabee.Utf8Json](https://github.com/PicoHex/Zaabee.Serializers/tree/master/src/Zaabee.Utf8Json)
+[Zaabee.Utf8Json](https://github.com/PicoHex/Zaabee.Serialization/tree/master/src/Zaabee.Utf8Json)
 
 ### Asp.net core
 
