@@ -8,12 +8,12 @@ namespace Zaabee.RabbitMQ.Demo.VNext;
 
 public static class Program
 {
-    private static string _exchangeNormal = "Exchange.Normal"; //定义一个用于接收 正常 消息的交换机
-    private static string _exchangeRetry = "Exchange.Retry"; //定义一个用于接收 重试 消息的交换机
-    private static string _exchangeFail = "Exchange.Fail"; //定义一个用于接收 失败 消息的交换机
-    private static string _queueNormal = "Queue.Noraml"; //定义一个用于接收 正常 消息的队列
-    private static string _queueRetry = "Queue.Retry"; //定义一个用于接收 重试 消息的队列
-    private static string _queueFail = "Queue.Fail"; //定义一个用于接收 失败 消息的队列
+    private const string ExchangeNormal = "Exchange.Normal"; //定义一个用于接收 正常 消息的交换机
+    private const string ExchangeRetry = "Exchange.Retry"; //定义一个用于接收 重试 消息的交换机
+    private const string ExchangeFail = "Exchange.Fail"; //定义一个用于接收 失败 消息的交换机
+    private const string QueueNormal = "Queue.Noraml"; //定义一个用于接收 正常 消息的队列
+    private const string QueueRetry = "Queue.Retry"; //定义一个用于接收 重试 消息的队列
+    private const string QueueFail = "Queue.Fail"; //定义一个用于接收 失败 消息的队列
 
     public static void Main()
     {
@@ -33,18 +33,18 @@ public static class Program
         var channel = connection.CreateModel();
 
         //声明交换机
-        channel.ExchangeDeclare(exchange: _exchangeNormal, type: "topic");
-        channel.ExchangeDeclare(exchange: _exchangeRetry, type: "topic");
-        channel.ExchangeDeclare(exchange: _exchangeFail, type: "topic");
+        channel.ExchangeDeclare(exchange: ExchangeNormal, type: "topic");
+        channel.ExchangeDeclare(exchange: ExchangeRetry, type: "topic");
+        channel.ExchangeDeclare(exchange: ExchangeFail, type: "topic");
 
         //定义队列参数
         var queueNormalArgs = new Dictionary<string, object>();
         {
-            queueNormalArgs.Add("x-dead-letter-exchange", _exchangeFail); //指定死信交换机，用于将 Noraml 队列中失败的消息投递给 Fail 交换机
+            queueNormalArgs.Add("x-dead-letter-exchange", ExchangeFail); //指定死信交换机，用于将 Noraml 队列中失败的消息投递给 Fail 交换机
         }
         var queueRetryArgs = new Dictionary<string, object>();
         {
-            queueRetryArgs.Add("x-dead-letter-exchange", _exchangeNormal); //指定死信交换机，用于将 Retry 队列中超时的消息投递给 Noraml 交换机
+            queueRetryArgs.Add("x-dead-letter-exchange", ExchangeNormal); //指定死信交换机，用于将 Retry 队列中超时的消息投递给 Noraml 交换机
             queueRetryArgs.Add("x-message-ttl", 60000); //定义 queueRetry 的消息最大停留时间 (原理是：等消息超时后由 broker 自动投递给当前绑定的死信交换机)
             //定义最大停留时间为防止一些 待重新投递 的消息、没有定义重试时间而导致内存溢出
         }
@@ -54,17 +54,17 @@ public static class Program
         }
 
         //声明队列
-        channel.QueueDeclare(queue: _queueNormal, durable: true, exclusive: false, autoDelete: false,
+        channel.QueueDeclare(queue: QueueNormal, durable: true, exclusive: false, autoDelete: false,
             arguments: queueNormalArgs);
-        channel.QueueDeclare(queue: _queueRetry, durable: true, exclusive: false, autoDelete: false,
+        channel.QueueDeclare(queue: QueueRetry, durable: true, exclusive: false, autoDelete: false,
             arguments: queueRetryArgs);
-        channel.QueueDeclare(queue: _queueFail, durable: true, exclusive: false, autoDelete: false,
+        channel.QueueDeclare(queue: QueueFail, durable: true, exclusive: false, autoDelete: false,
             arguments: queueFailArgs);
 
         //为队列绑定交换机
-        channel.QueueBind(queue: _queueNormal, exchange: _exchangeNormal, routingKey: "#");
-        channel.QueueBind(queue: _queueRetry, exchange: _exchangeRetry, routingKey: "#");
-        channel.QueueBind(queue: _queueFail, exchange: _exchangeFail, routingKey: "#");
+        channel.QueueBind(queue: QueueNormal, exchange: ExchangeNormal, routingKey: "#");
+        channel.QueueBind(queue: QueueRetry, exchange: ExchangeRetry, routingKey: "#");
+        channel.QueueBind(queue: QueueFail, exchange: ExchangeFail, routingKey: "#");
 
         #region 创建一个普通消息消费者
 
@@ -84,6 +84,7 @@ public static class Program
                     _death = (Dictionary<string, object>)(_headers["x-death"] as List<object>)[0];
 
                 #region 消息处理
+
                 try
                 {
                     Console.WriteLine();
@@ -99,11 +100,13 @@ public static class Program
                     //消息确认 (销毁当前消息)
                     _channel.BasicAck(deliveryTag: _message.DeliveryTag, multiple: false);
                 }
+
                 #endregion
 
                 catch (Exception ex)
                 {
                     #region 消息处理失败时
+
                     var retryCount = (long)(_death?["count"] ?? default(long)); //查询当前消息被重新投递的次数 (首次则为0)
 
                     Console.WriteLine(
@@ -121,6 +124,7 @@ public static class Program
                     #endregion
 
                     #region 否则转发给 exchangeRetry 交换机
+
                     else
                     {
                         var interval = (retryCount + 1) * 10; //定义下一次投递的间隔时间 (单位：秒)
@@ -130,17 +134,19 @@ public static class Program
                         _message.BasicProperties.Expiration = (interval * 1000).ToString();
 
                         //将消息投递给 _exchangeRetry (会自动增加 death 次数)
-                        _channel.BasicPublish(exchange: _exchangeRetry, routingKey: _message.RoutingKey,
+                        _channel.BasicPublish(exchange: ExchangeRetry, routingKey: _message.RoutingKey,
                             basicProperties: _message.BasicProperties, body: _message.Body);
 
                         //消息确认 (销毁当前消息)
                         _channel.BasicAck(deliveryTag: _message.DeliveryTag, multiple: false);
                     }
+
                     #endregion
                 }
+
                 #endregion
             };
-            channel.BasicConsume(queue: _queueNormal, autoAck: false, consumer: consumer);
+            channel.BasicConsume(queue: QueueNormal, autoAck: false, consumer: consumer);
         }
 
         #endregion
@@ -150,24 +156,24 @@ public static class Program
         {
             var consumer = new EventingBasicConsumer(channel);
 
-            consumer.Received += (sender, e) =>
+            consumer.Received += (_, e) =>
             {
-                var _message = (BasicDeliverEventArgs)e; //消息传送参数
-                var _content = Encoding.UTF8.GetString(_message.Body.Span); //消息内容
+                var message = (BasicDeliverEventArgs)e; //消息传送参数
+                var content = Encoding.UTF8.GetString(message.Body.Span); //消息内容
 
                 Console.WriteLine();
                 Console.WriteLine(
-                    $"{DateTime.Now:HH:mm:ss.fff}\t(2.0)发现失败消息：\r\n\t[deliveryTag={_message.DeliveryTag}]\r\n\t[consumerID={_message.ConsumerTag}]\r\n\t[exchange={_message.Exchange}]\r\n\t[routingKey={_message.RoutingKey}]\r\n\t[content={_content}]");
+                    $"{DateTime.Now:HH:mm:ss.fff}\t(2.0)发现失败消息：\r\n\t[deliveryTag={message.DeliveryTag}]\r\n\t[consumerID={message.ConsumerTag}]\r\n\t[exchange={message.Exchange}]\r\n\t[routingKey={message.RoutingKey}]\r\n\t[content={content}]");
             };
 
-            channel.BasicConsume(queue: _queueFail, autoAck: true, consumer: consumer);
+            channel.BasicConsume(queue: QueueFail, autoAck: true, consumer: consumer);
         }
 
         #endregion
 
         Console.WriteLine($"{DateTime.Now:HH:mm:ss.fff}\t 正在运行中...");
 
-        var cmd = default(string);
+        string? cmd;
         while ((cmd = Console.ReadLine()) != "close")
 
             #region 模拟正常消息发布
@@ -176,7 +182,7 @@ public static class Program
             var msgProperties = channel.CreateBasicProperties();
             var msgContent = $"消息内容_{DateTime.Now:HH:mm:ss.fff}_{cmd}";
 
-            channel.BasicPublish(exchange: _exchangeNormal, routingKey: "亚洲.中国.经济", basicProperties: msgProperties,
+            channel.BasicPublish(exchange: ExchangeNormal, routingKey: "亚洲.中国.经济", basicProperties: msgProperties,
                 body: Encoding.UTF8.GetBytes(msgContent));
 
             Console.WriteLine($"{DateTime.Now:HH:mm:ss.fff}\t 发送成功：{msgContent}");
@@ -187,12 +193,12 @@ public static class Program
 
         Console.WriteLine($"{DateTime.Now:HH:mm:ss.fff}\t 正在关闭...");
 
-        channel.ExchangeDelete(_exchangeNormal);
-        channel.ExchangeDelete(_exchangeRetry);
-        channel.ExchangeDelete(_exchangeFail);
-        channel.QueueDelete(_queueNormal);
-        channel.QueueDelete(_queueRetry);
-        channel.QueueDelete(_queueFail);
+        channel.ExchangeDelete(ExchangeNormal);
+        channel.ExchangeDelete(ExchangeRetry);
+        channel.ExchangeDelete(ExchangeFail);
+        channel.QueueDelete(QueueNormal);
+        channel.QueueDelete(QueueRetry);
+        channel.QueueDelete(QueueFail);
         //channel.Abort();
         channel.Close(200, "Goodbye!");
         channel.Dispose();

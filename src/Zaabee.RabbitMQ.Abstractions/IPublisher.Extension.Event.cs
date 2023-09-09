@@ -32,7 +32,7 @@ public static partial class PublisherExtension
     /// <param name="publisher"></param>
     /// <param name="topic"></param>
     /// <param name="body"></param>
-    public static void PublishEvent<T>(
+    public static void PublishEvent(
         this IPublisher publisher,
         string topic,
         byte[] body) =>

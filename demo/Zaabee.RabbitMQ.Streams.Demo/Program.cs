@@ -1,93 +1,108 @@
-﻿// See https://aka.ms/new-console-template for more information
+﻿using System.Net;
 
-var config = new StreamSystemConfig
-{
-    UserName = "guest",
-    Password = "guest",
-    VirtualHost = "/"
-};
-// Connect to the broker and create the system object
-// the entry point for the client.
-// Create it once and reuse it.
-var system = await StreamSystem.Create(config);
-
-const string stream = "my_first_stream";
-
-// Create the stream. It is important to put some retention policy 
-// in this case is 200000 bytes.
-await system.CreateStream(new StreamSpec(stream)
-{
-    MaxLengthBytes = 200000,
-});
-
-var producer = await Producer.Create(
-    new ProducerConfig(system, stream)
+var streamSystem = await StreamSystem.Create( // (1)
+    new StreamSystemConfig() // (2)
     {
-        Reference = Guid.NewGuid().ToString(),
+        UserName = "guest",
+        Password = "guest",
+        Endpoints = new List<EndPoint>() { new IPEndPoint(IPAddress.Loopback, 5552) }
+    }
+    // streamLogger // (3)
+).ConfigureAwait(false);
 
+// Create a stream
 
-        // Receive the confirmation of the messages sent
-        ConfirmationHandler = confirmation =>
+const string streamName = "my-stream";
+await streamSystem.CreateStream(
+    new StreamSpec(streamName) // (4)
+    {
+        MaxSegmentSizeBytes = 20_000_000 // (5)
+    }).ConfigureAwait(false);
+
+var confirmationTaskCompletionSource = new TaskCompletionSource<int>();
+var confirmationCount = 0;
+const int MessageCount = 100;
+var producer = await Producer.Create( // (1)
+        new ProducerConfig(streamSystem, streamName)
         {
-            switch (confirmation.Status)
+            ConfirmationHandler = async confirmation => // (2)
             {
-                // ConfirmationStatus.Confirmed: The message was successfully sent
-                case ConfirmationStatus.Confirmed:
-                    Console.WriteLine($"Message {confirmation.PublishingId} confirmed");
-                    break;
-                // There is an error during the sending of the message
-                case ConfirmationStatus.WaitForConfirmation:
-                case ConfirmationStatus.ClientTimeoutError
-                    : // The client didn't receive the confirmation in time. 
-                // but it doesn't mean that the message was not sent
-                // maybe the broker needs more time to confirm the message
-                // see TimeoutMessageAfter in the ProducerConfig
-                case ConfirmationStatus.StreamNotAvailable:
-                case ConfirmationStatus.InternalError:
-                case ConfirmationStatus.AccessRefused:
-                case ConfirmationStatus.PreconditionFailed:
-                case ConfirmationStatus.PublisherDoesNotExist:
-                case ConfirmationStatus.UndefinedError:
-                default:
-                    Console.WriteLine(
-                        $"Message  {confirmation.PublishingId} not confirmed. Error {confirmation.Status}");
-                    break;
+                Interlocked.Increment(ref confirmationCount);
+
+                // here you can handle the confirmation
+                switch (confirmation.Status)
+                {
+                    case ConfirmationStatus.Confirmed: // (3)
+                        // all the messages received here are confirmed
+                        if (confirmationCount == MessageCount)
+                        {
+                            Console.WriteLine("*********************************");
+                            Console.WriteLine($"All the {MessageCount} messages are confirmed");
+                            Console.WriteLine("*********************************");
+                        }
+
+                        break;
+
+                    case ConfirmationStatus.StreamNotAvailable:
+                    case ConfirmationStatus.InternalError:
+                    case ConfirmationStatus.AccessRefused:
+                    case ConfirmationStatus.PreconditionFailed:
+                    case ConfirmationStatus.PublisherDoesNotExist:
+                    case ConfirmationStatus.UndefinedError:
+                    case ConfirmationStatus.ClientTimeoutError:
+                        // (4)
+                        Console.WriteLine(
+                            $"Message {confirmation.PublishingId} failed with {confirmation.Status}");
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
+
+                if (confirmationCount == MessageCount)
+                {
+                    confirmationTaskCompletionSource.SetResult(MessageCount);
+                }
+
+                await Task.CompletedTask.ConfigureAwait(false);
             }
-
-            return Task.CompletedTask;
         }
-    });
+        // producerLogger // (5)
+    )
+    .ConfigureAwait(false);
 
-// Publish the messages
-for (var i = 0; i < 100; i++)
+
+// Send 100 messages
+Console.WriteLine("Starting publishing...");
+for (var i = 0; i < MessageCount; i++)
 {
-    var message = new Message(Encoding.UTF8.GetBytes($"hello {i}"));
-    await producer.Send(message);
+    await producer.Send( // (6)
+        new Message(Encoding.ASCII.GetBytes($"{i}"))
+    ).ConfigureAwait(false);
 }
 
-// not mandatory. Just to show the confirmation
-Thread.Sleep(TimeSpan.FromSeconds(1));
 
-// Create a consumer
-var consumer = await Consumer.Create(
-    new ConsumerConfig(system, stream)
-    {
-        Reference = "my_consumer",
-        // Consume the stream from the beginning 
-        // See also other OffsetSpec 
-        OffsetSpec = new OffsetTypeFirst(),
-        // Receive the messages
-        MessageHandler = async (sourceStream, consumer, ctx, message) =>
+confirmationTaskCompletionSource.Task.Wait(); // (7)
+await producer.Close().ConfigureAwait(false); // (8)
+
+Console.WriteLine("Starting consuming...");
+var consumer = await Consumer.Create( // (1)
+        new ConsumerConfig(streamSystem, streamName)
         {
-            Console.WriteLine(
-                $"message: coming from {sourceStream} data: {Encoding.Default.GetString(message.Data.Contents.ToArray())} - consumed");
-            await Task.CompletedTask;
-        }
-    });
-Console.WriteLine("Press to stop");
-Console.ReadLine();
-
-await producer.Close();
-await consumer.Close();
-await system.DeleteStream(stream);
-await system.Close();
+            OffsetSpec = new OffsetTypeFirst(), // (2)
+            MessageHandler = async (sourceStream, consumer, messageContext, message) => // (3)
+            {
+                if (Interlocked.Increment(ref consumerCount) == MessageCount)
+                {
+                    Console.WriteLine("*********************************");
+                    Console.WriteLine($"All the {MessageCount} messages are received");
+                    Console.WriteLine("*********************************");
+                    consumerTaskCompletionSource.SetResult(MessageCount);
+                }
+                await Task.CompletedTask.ConfigureAwait(false);
+            }
+        },
+        consumerLogger // (4)
+    )
+    .ConfigureAwait(false);
+consumerTaskCompletionSource.Task.Wait(); // (5)
+await consumer.Close().ConfigureAwait(false); // (6)

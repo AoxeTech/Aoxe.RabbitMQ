@@ -2,8 +2,6 @@
 
 public partial class ZaabeeRabbitMqClient : IZaabeeRabbitMqClient
 {
-    private readonly ushort _publishRetryCount;
-    private readonly ushort _handleRetryCount;
     private readonly IConnection _publishConn;
     private readonly IConnection _subscribeConn;
     private readonly IConnection _subscribeAsyncConn;
@@ -13,8 +11,6 @@ public partial class ZaabeeRabbitMqClient : IZaabeeRabbitMqClient
 
     public ZaabeeRabbitMqClient(ZaabeeRabbitMqOptions options)
     {
-        _publishRetryCount = options.PublishRetryCount;
-        _handleRetryCount = options.HandleRetryCount;
         if (options is null) throw new ArgumentNullException(nameof(options));
         if (options.Serializer is null) throw new ArgumentNullException(nameof(options.Serializer));
         if (options.Hosts.Count is 0) throw new ArgumentNullException(nameof(options.Hosts));
@@ -109,8 +105,9 @@ public partial class ZaabeeRabbitMqClient : IZaabeeRabbitMqClient
     {
         var queueParam = new QueueParam { Queue = queue, Durable = persistence };
         if (subscribeType is not SubscribeType.Listen) return queueParam;
-        queueParam.Exclusive = true;
+        queueParam.Exclusive = false;
         queueParam.AutoDelete = true;
+        queueParam.Arguments?.Add("x-queue-type", "quorum");
         return queueParam;
     }
 

@@ -3,21 +3,23 @@ namespace Zaabee.RabbitMQ;
 public partial class ZaabeeRabbitMqClient
 {
     private void Publish<T>(
+        T value,
         ExchangeParam exchangeParam,
         QueueParam? queueParam,
         bool persistence,
-        T value) =>
-        Publish(exchangeParam, queueParam, persistence, _serializer.ToBytes(value));
+        int publishRetry = 3) =>
+        Publish(_serializer.ToBytes(value), exchangeParam, queueParam, persistence, publishRetry);
 
     private void Publish(
+        byte[] body,
         ExchangeParam exchangeParam,
         QueueParam? queueParam,
         bool persistence,
-        byte[] body)
+        int publishRetry = 3)
     {
         var policy = Policy.Handle<BrokerUnreachableException>()
             .Or<SocketException>()
-            .WaitAndRetry(_publishRetryCount, retryAttempt =>
+            .WaitAndRetry(publishRetry, retryAttempt =>
                     TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)),
                 (ex, _) => throw ex);
 
@@ -58,7 +60,7 @@ public partial class ZaabeeRabbitMqClient
             exclusive: queueParam.Exclusive,
             autoDelete: queueParam.AutoDelete,
             arguments: queueParam.Arguments);
-        
+
         channel.QueueBind(
             queue: queueParam.Queue,
             exchange: exchangeParam.Exchange,

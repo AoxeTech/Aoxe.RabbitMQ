@@ -11,7 +11,7 @@ public partial class ZaabeeRabbitMqClient
         var topic = GetTypeName(typeof(T));
         var exchangeParam = GetExchangeParam(topic, persistence);
         var queueParam = GetQueueParam(topic, persistence, SubscribeType.Receive);
-        Publish(exchangeParam, queueParam, persistence, message);
+        Publish(message, exchangeParam, queueParam, persistence);
     }
 
     public void Send<T>(
@@ -23,7 +23,7 @@ public partial class ZaabeeRabbitMqClient
     {
         var exchangeParam = GetExchangeParam(topic, persistence);
         var queueParam = GetQueueParam(topic, persistence, SubscribeType.Receive);
-        Publish(exchangeParam, queueParam, persistence, message);
+        Publish(message, exchangeParam, queueParam, persistence);
     }
 
     public void Send(
@@ -35,6 +35,6 @@ public partial class ZaabeeRabbitMqClient
     {
         var exchangeParam = GetExchangeParam(topic, persistence);
         var queueParam = GetQueueParam(topic, persistence, SubscribeType.Receive);
-        Publish(exchangeParam, queueParam, persistence, body);
+        Publish(body, exchangeParam, queueParam, persistence);
     }
 }

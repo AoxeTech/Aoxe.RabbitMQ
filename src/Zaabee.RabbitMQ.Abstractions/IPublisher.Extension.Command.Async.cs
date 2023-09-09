@@ -45,7 +45,7 @@ public static partial class PublisherExtension
     /// <param name="retry"></param>
     /// <param name="dlx"></param>
     /// <returns></returns>
-    public static Task SendCommandAsync<T>(
+    public static Task SendCommandAsync(
         this IPublisher publisher,
         string topic,
         byte[] body,

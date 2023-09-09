@@ -8,7 +8,7 @@ public partial class ZaabeeRabbitMqClient
     {
         var topic = GetTypeName(typeof(T));
         var exchangeParam = GetExchangeParam(topic, persistence);
-        Publish(exchangeParam, null, persistence, message);
+        Publish(message, exchangeParam, null, persistence);
     }
 
     public void Publish<T>(
@@ -17,7 +17,7 @@ public partial class ZaabeeRabbitMqClient
         bool persistence = false)
     {
         var exchangeParam = GetExchangeParam(topic, persistence);
-        Publish(exchangeParam, null, persistence, message);
+        Publish(message, exchangeParam, null, persistence);
     }
 
     public void Publish(
@@ -26,6 +26,6 @@ public partial class ZaabeeRabbitMqClient
         bool persistence = false)
     {
         var exchangeParam = GetExchangeParam(topic, persistence);
-        Publish(exchangeParam, null, persistence, body);
+        Publish(body, exchangeParam, null, persistence);
     }
 }

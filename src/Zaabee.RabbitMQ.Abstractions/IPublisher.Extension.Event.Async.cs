@@ -35,7 +35,7 @@ public static partial class PublisherExtension
     /// <param name="topic"></param>
     /// <param name="body"></param>
     /// <returns></returns>
-    public static Task PublishEventAsync<T>(
+    public static Task PublishEventAsync(
         this IPublisher publisher,
         string topic,
         byte[] body) =>

@@ -42,7 +42,7 @@ public static partial class PublisherExtension
     /// <param name="body"></param>
     /// <param name="retry"></param>
     /// <param name="dlx"></param>
-    public static void SendCommand<T>(
+    public static void SendCommand(
         this IPublisher publisher,
         string topic,
         byte[] body,
