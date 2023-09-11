@@ -2,15 +2,15 @@ namespace Zaabee.RabbitMQ;
 
 public partial class ZaabeeRabbitMqClient
 {
-    public Task PublishAsync<T>(
+    public ValueTask PublishAsync<T>(
         T message,
         bool persistence = false)
     {
         Publish(message, persistence);
-        return Task.CompletedTask;
+        return ValueTask.CompletedTask;
     }
 
-    public Task PublishAsync<T>(
+    public ValueTask PublishAsync<T>(
         string topic,
         T message,
         bool persistence = false)
@@ -19,7 +19,7 @@ public partial class ZaabeeRabbitMqClient
         return Task.CompletedTask;
     }
 
-    public Task PublishAsync(
+    public ValueTask PublishAsync(
         string topic,
         byte[] body,
         bool persistence = false)

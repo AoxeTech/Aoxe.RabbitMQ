@@ -7,8 +7,9 @@
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
+
     <ItemGroup>
-      <ProjectReference Include="..\..\src\Zaabee.RabbitMQ\Zaabee.RabbitMQ.csproj" />
+      <ProjectReference Include="..\..\..\src\Zaabee.RabbitMQ\Zaabee.RabbitMQ\Zaabee.RabbitMQ.csproj" />
     </ItemGroup>
 
 </Project>

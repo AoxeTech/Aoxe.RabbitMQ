@@ -5,7 +5,7 @@
 		<Nullable>enable</Nullable>
 	</PropertyGroup>
 	<ItemGroup>
-		<ProjectReference Include="..\..\src\Zaabee.RabbitMQ\Zaabee.RabbitMQ\Zaabee.RabbitMQ.csproj" />
+		<ProjectReference Include="..\..\..\src\Zaabee.RabbitMQ\Zaabee.RabbitMQ\Zaabee.RabbitMQ.csproj" />
 	</ItemGroup>
 	<ItemGroup>
 		<PackageReference Include="NSwag.AspNetCore" Version="13.20.0" />

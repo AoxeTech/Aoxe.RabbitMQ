@@ -2,7 +2,7 @@ namespace Zaabee.RabbitMQ;
 
 public partial class ZaabeeRabbitMqClient
 {
-    public Task SendAsync<T>(
+    public ValueTask SendAsync<T>(
         T message,
         bool persistence = false,
         int retry = 3,
@@ -12,7 +12,7 @@ public partial class ZaabeeRabbitMqClient
         return Task.CompletedTask;
     }
 
-    public Task SendAsync<T>(
+    public ValueTask SendAsync<T>(
         string topic,
         T message,
         bool persistence = false,
@@ -23,7 +23,7 @@ public partial class ZaabeeRabbitMqClient
         return Task.CompletedTask;
     }
 
-    public Task SendAsync(
+    public ValueTask SendAsync(
         string topic,
         byte[] body,
         bool persistence = false,

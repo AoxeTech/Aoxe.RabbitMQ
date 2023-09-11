@@ -136,7 +136,7 @@ public class RabbitMqDemoController : Controller
         var sw = Stopwatch.StartNew();
         for (var i = 0; i < quantity; i++)
         {
-            await _messageBus.PublishMessageAsync(new TestMessage
+            await _messageBus.PublishAsync(new TestMessage
             {
                 Id = Guid.NewGuid(),
                 Timestamp = DateTimeOffset.Now
