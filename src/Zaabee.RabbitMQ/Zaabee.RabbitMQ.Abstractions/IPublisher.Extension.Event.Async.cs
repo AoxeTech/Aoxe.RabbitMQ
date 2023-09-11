@@ -9,7 +9,7 @@ public static partial class PublisherExtension
     /// <param name="event"></param>
     /// <typeparam name="T"></typeparam>
     /// <returns></returns>
-    public static Task PublishEventAsync<T>(
+    public static ValueTask PublishEventAsync<T>(
         this IPublisher publisher,
         T @event) =>
         publisher.PublishAsync(@event, true);
@@ -22,7 +22,7 @@ public static partial class PublisherExtension
     /// <param name="event"></param>
     /// <typeparam name="T"></typeparam>
     /// <returns></returns>
-    public static Task PublishEventAsync<T>(
+    public static ValueTask PublishEventAsync<T>(
         this IPublisher publisher,
         string topic,
         T @event) =>
@@ -35,7 +35,7 @@ public static partial class PublisherExtension
     /// <param name="topic"></param>
     /// <param name="body"></param>
     /// <returns></returns>
-    public static Task PublishEventAsync(
+    public static ValueTask PublishEventAsync(
         this IPublisher publisher,
         string topic,
         byte[] body) =>

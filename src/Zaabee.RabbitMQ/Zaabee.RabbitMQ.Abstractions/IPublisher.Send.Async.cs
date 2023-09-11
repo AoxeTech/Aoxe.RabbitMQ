@@ -11,7 +11,7 @@ public partial interface IPublisher
     /// <param name="dlx"></param>
     /// <typeparam name="T"></typeparam>
     /// <returns></returns>
-    Task SendAsync<T>(
+    ValueTask SendAsync<T>(
         T message,
         bool persistence,
         int retry = 3,
@@ -27,7 +27,7 @@ public partial interface IPublisher
     /// <param name="dlx"></param>
     /// <typeparam name="T"></typeparam>
     /// <returns></returns>
-    Task SendAsync<T>(
+    ValueTask SendAsync<T>(
         string topic,
         T message,
         bool persistence,
@@ -43,7 +43,7 @@ public partial interface IPublisher
     /// <param name="retry"></param>
     /// <param name="dlx"></param>
     /// <returns></returns>
-    Task SendAsync(
+    ValueTask SendAsync(
         string topic,
         byte[] body,
         bool persistence,

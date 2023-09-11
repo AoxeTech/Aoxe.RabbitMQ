@@ -9,7 +9,7 @@ public partial interface IPublisher
     /// <param name="persistence"></param>
     /// <typeparam name="T"></typeparam>
     /// <returns></returns>
-    Task PublishAsync<T>(
+    ValueTask PublishAsync<T>(
         T message,
         bool persistence);
 
@@ -21,7 +21,7 @@ public partial interface IPublisher
     /// <param name="persistence"></param>
     /// <typeparam name="T"></typeparam>
     /// <returns></returns>
-    Task PublishAsync<T>(
+    ValueTask PublishAsync<T>(
         string topic,
         T message,
         bool persistence);
@@ -33,7 +33,7 @@ public partial interface IPublisher
     /// <param name="body"></param>
     /// <param name="persistence"></param>
     /// <returns></returns>
-    Task PublishAsync(
+    ValueTask PublishAsync(
         string topic,
         byte[] body,
         bool persistence);

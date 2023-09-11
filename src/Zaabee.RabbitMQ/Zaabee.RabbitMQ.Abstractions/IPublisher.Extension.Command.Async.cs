@@ -11,7 +11,7 @@ public static partial class PublisherExtension
     /// <param name="dlx"></param>
     /// <typeparam name="T"></typeparam>
     /// <returns></returns>
-    public static Task SendCommandAsync<T>(
+    public static ValueTask SendCommandAsync<T>(
         this IPublisher publisher,
         T command,
         int retry = 3,
@@ -28,7 +28,7 @@ public static partial class PublisherExtension
     /// <param name="dlx"></param>
     /// <typeparam name="T"></typeparam>
     /// <returns></returns>
-    public static Task SendCommandAsync<T>(
+    public static ValueTask SendCommandAsync<T>(
         this IPublisher publisher,
         string topic,
         T command,
@@ -45,7 +45,7 @@ public static partial class PublisherExtension
     /// <param name="retry"></param>
     /// <param name="dlx"></param>
     /// <returns></returns>
-    public static Task SendCommandAsync(
+    public static ValueTask SendCommandAsync(
         this IPublisher publisher,
         string topic,
         byte[] body,
