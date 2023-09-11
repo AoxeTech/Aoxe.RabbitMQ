@@ -9,13 +9,15 @@ public partial interface IPublisher
     /// <param name="persistence"></param>
     /// <param name="retry"></param>
     /// <param name="dlx"></param>
+    /// <param name="cancellationToken"></param>
     /// <typeparam name="T"></typeparam>
     /// <returns></returns>
     ValueTask SendAsync<T>(
         T message,
         bool persistence,
         int retry = 3,
-        bool dlx = true);
+        bool dlx = true,
+        CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Send the message to the specified topic.
@@ -25,6 +27,7 @@ public partial interface IPublisher
     /// <param name="persistence"></param>
     /// <param name="retry"></param>
     /// <param name="dlx"></param>
+    /// <param name="cancellationToken"></param>
     /// <typeparam name="T"></typeparam>
     /// <returns></returns>
     ValueTask SendAsync<T>(
@@ -32,7 +35,8 @@ public partial interface IPublisher
         T message,
         bool persistence,
         int retry = 3,
-        bool dlx = true);
+        bool dlx = true,
+        CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Send the message to the specified topic.
@@ -42,11 +46,13 @@ public partial interface IPublisher
     /// <param name="persistence"></param>
     /// <param name="retry"></param>
     /// <param name="dlx"></param>
+    /// <param name="cancellationToken"></param>
     /// <returns></returns>
     ValueTask SendAsync(
         string topic,
         byte[] body,
         bool persistence,
         int retry = 3,
-        bool dlx = true);
+        bool dlx = true,
+        CancellationToken cancellationToken = default);
 }

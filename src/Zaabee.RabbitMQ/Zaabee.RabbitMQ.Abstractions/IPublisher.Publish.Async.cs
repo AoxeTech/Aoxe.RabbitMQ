@@ -7,11 +7,15 @@ public partial interface IPublisher
     /// </summary>
     /// <param name="message"></param>
     /// <param name="persistence"></param>
+    /// <param name="retry"></param>
+    /// <param name="cancellationToken"></param>
     /// <typeparam name="T"></typeparam>
     /// <returns></returns>
     ValueTask PublishAsync<T>(
         T message,
-        bool persistence);
+        bool persistence,
+        int retry = 3,
+        CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Publish the message to the specified topic.
@@ -19,12 +23,16 @@ public partial interface IPublisher
     /// <param name="topic"></param>
     /// <param name="message"></param>
     /// <param name="persistence"></param>
+    /// <param name="retry"></param>
+    /// <param name="cancellationToken"></param>
     /// <typeparam name="T"></typeparam>
     /// <returns></returns>
     ValueTask PublishAsync<T>(
         string topic,
         T message,
-        bool persistence);
+        bool persistence,
+        int retry = 3,
+        CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Publish the message to the specified topic.
@@ -32,9 +40,13 @@ public partial interface IPublisher
     /// <param name="topic"></param>
     /// <param name="body"></param>
     /// <param name="persistence"></param>
+    /// <param name="retry"></param>
+    /// <param name="cancellationToken"></param>
     /// <returns></returns>
     ValueTask PublishAsync(
         string topic,
         byte[] body,
-        bool persistence);
+        bool persistence,
+        int retry = 3,
+        CancellationToken cancellationToken = default);
 }
