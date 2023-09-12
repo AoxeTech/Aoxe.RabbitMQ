@@ -12,7 +12,7 @@ public partial interface ISubscriber
     /// <returns></returns>
     ValueTask ListenAsync<T>(
         Func<Action<T?>> resolve,
-        ushort prefetchCount = 10,
+        ushort prefetchCount = Consts.DefaultPrefetchCount,
         CancellationToken cancellationToken = default);
 
     /// <summary>
@@ -25,7 +25,7 @@ public partial interface ISubscriber
     /// <returns></returns>
     ValueTask ListenAsync<T>(
         Func<Func<T?, Task>> resolve,
-        ushort prefetchCount = 10,
+        ushort prefetchCount = Consts.DefaultPrefetchCount,
         CancellationToken cancellationToken = default);
 
     /// <summary>
@@ -40,7 +40,7 @@ public partial interface ISubscriber
     ValueTask ListenAsync<T>(
         string topic,
         Func<Action<T?>> resolve,
-        ushort prefetchCount = 10,
+        ushort prefetchCount = Consts.DefaultPrefetchCount,
         CancellationToken cancellationToken = default);
 
     /// <summary>
@@ -55,7 +55,7 @@ public partial interface ISubscriber
     ValueTask ListenAsync<T>(
         string topic,
         Func<Func<T?, Task>> resolve,
-        ushort prefetchCount = 10,
+        ushort prefetchCount = Consts.DefaultPrefetchCount,
         CancellationToken cancellationToken = default);
 
     /// <summary>
@@ -69,7 +69,7 @@ public partial interface ISubscriber
     ValueTask ListenAsync(
         string topic,
         Func<Action<byte[]>> resolve,
-        ushort prefetchCount = 10,
+        ushort prefetchCount = Consts.DefaultPrefetchCount,
         CancellationToken cancellationToken = default);
 
     /// <summary>
@@ -83,6 +83,6 @@ public partial interface ISubscriber
     ValueTask ListenAsync(
         string topic,
         Func<Func<byte[], Task>> resolve,
-        ushort prefetchCount = 10,
+        ushort prefetchCount = Consts.DefaultPrefetchCount,
         CancellationToken cancellationToken = default);
 }

@@ -7,7 +7,8 @@ public static partial class PublisherExtension
     /// </summary>
     /// <param name="publisher"></param>
     /// <param name="command"></param>
-    /// <param name="retry"></param>
+    /// <param name="publishRetry"></param>
+    /// <param name="consumeRetry"></param>
     /// <param name="dlx"></param>
     /// <param name="cancellationToken"></param>
     /// <typeparam name="T"></typeparam>
@@ -15,10 +16,11 @@ public static partial class PublisherExtension
     public static ValueTask SendCommandAsync<T>(
         this IPublisher publisher,
         T command,
-        int retry = 3,
+        int publishRetry = Consts.DefaultPublishRetry,
+        int consumeRetry = Consts.DefaultConsumeRetry,
         bool dlx = true,
         CancellationToken cancellationToken = default) =>
-        publisher.SendAsync(command, true, retry, dlx, cancellationToken);
+        publisher.SendAsync(command, true, publishRetry, consumeRetry, dlx, cancellationToken);
 
     /// <summary>
     /// Send the command to the specified topic.
@@ -26,7 +28,8 @@ public static partial class PublisherExtension
     /// <param name="publisher"></param>
     /// <param name="topic"></param>
     /// <param name="command"></param>
-    /// <param name="retry"></param>
+    /// <param name="publishRetry"></param>
+    /// <param name="consumeRetry"></param>
     /// <param name="dlx"></param>
     /// <param name="cancellationToken"></param>
     /// <typeparam name="T"></typeparam>
@@ -35,10 +38,11 @@ public static partial class PublisherExtension
         this IPublisher publisher,
         string topic,
         T command,
-        int retry = 3,
+        int publishRetry = Consts.DefaultPublishRetry,
+        int consumeRetry = Consts.DefaultConsumeRetry,
         bool dlx = true,
         CancellationToken cancellationToken = default) =>
-        publisher.SendAsync(topic, command, true, retry, dlx, cancellationToken);
+        publisher.SendAsync(topic, command, true, publishRetry, consumeRetry, dlx, cancellationToken);
 
     /// <summary>
     /// Send the command to the specified topic.
@@ -46,7 +50,8 @@ public static partial class PublisherExtension
     /// <param name="publisher"></param>
     /// <param name="topic"></param>
     /// <param name="body"></param>
-    /// <param name="retry"></param>
+    /// <param name="publishRetry"></param>
+    /// <param name="consumeRetry"></param>
     /// <param name="dlx"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
@@ -54,8 +59,9 @@ public static partial class PublisherExtension
         this IPublisher publisher,
         string topic,
         byte[] body,
-        int retry = 3,
+        int publishRetry = Consts.DefaultPublishRetry,
+        int consumeRetry = Consts.DefaultConsumeRetry,
         bool dlx = true,
         CancellationToken cancellationToken = default) =>
-        publisher.SendAsync(topic, body, true, retry, dlx, cancellationToken);
+        publisher.SendAsync(topic, body, true, publishRetry, consumeRetry, dlx, cancellationToken);
 }

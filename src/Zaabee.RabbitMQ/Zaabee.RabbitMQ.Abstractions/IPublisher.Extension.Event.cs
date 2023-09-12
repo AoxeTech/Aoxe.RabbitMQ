@@ -7,13 +7,13 @@ public static partial class PublisherExtension
     /// </summary>
     /// <param name="publisher"></param>
     /// <param name="event"></param>
-    /// <param name="retry"></param>
+    /// <param name="publishRetry"></param>
     /// <typeparam name="T"></typeparam>
     public static void PublishEvent<T>(
         this IPublisher publisher,
         T @event,
-        int retry = 3) =>
-        publisher.Publish(@event, true, retry);
+        int publishRetry = Consts.DefaultPublishRetry) =>
+        publisher.Publish(@event, true, publishRetry);
 
     /// <summary>
     /// Publish the event to the specified topic.
@@ -21,14 +21,14 @@ public static partial class PublisherExtension
     /// <param name="publisher"></param>
     /// <param name="topic"></param>
     /// <param name="event"></param>
-    /// <param name="retry"></param>
+    /// <param name="publishRetry"></param>
     /// <typeparam name="T"></typeparam>
     public static void PublishEvent<T>(
         this IPublisher publisher,
         string topic,
         T @event,
-        int retry = 3) =>
-        publisher.Publish(topic, @event, true, retry);
+        int publishRetry = Consts.DefaultPublishRetry) =>
+        publisher.Publish(topic, @event, true, publishRetry);
 
     /// <summary>
     /// Publish the event to the specified topic.
@@ -36,11 +36,11 @@ public static partial class PublisherExtension
     /// <param name="publisher"></param>
     /// <param name="topic"></param>
     /// <param name="body"></param>
-    /// <param name="retry"></param>
+    /// <param name="publishRetry"></param>
     public static void PublishEvent(
         this IPublisher publisher,
         string topic,
         byte[] body,
-        int retry = 3) =>
-        publisher.Publish(topic, body, true, retry);
+        int publishRetry = Consts.DefaultPublishRetry) =>
+        publisher.Publish(topic, body, true, publishRetry);
 }

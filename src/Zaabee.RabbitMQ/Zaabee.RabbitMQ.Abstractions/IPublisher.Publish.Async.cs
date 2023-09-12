@@ -7,14 +7,14 @@ public partial interface IPublisher
     /// </summary>
     /// <param name="message"></param>
     /// <param name="persistence"></param>
-    /// <param name="retry"></param>
+    /// <param name="publishRetry"></param>
     /// <param name="cancellationToken"></param>
     /// <typeparam name="T"></typeparam>
     /// <returns></returns>
     ValueTask PublishAsync<T>(
         T message,
         bool persistence,
-        int retry = 3,
+        int publishRetry = Consts.DefaultPublishRetry,
         CancellationToken cancellationToken = default);
 
     /// <summary>
@@ -23,7 +23,7 @@ public partial interface IPublisher
     /// <param name="topic"></param>
     /// <param name="message"></param>
     /// <param name="persistence"></param>
-    /// <param name="retry"></param>
+    /// <param name="publishRetry"></param>
     /// <param name="cancellationToken"></param>
     /// <typeparam name="T"></typeparam>
     /// <returns></returns>
@@ -31,7 +31,7 @@ public partial interface IPublisher
         string topic,
         T message,
         bool persistence,
-        int retry = 3,
+        int publishRetry = Consts.DefaultPublishRetry,
         CancellationToken cancellationToken = default);
 
     /// <summary>
@@ -40,13 +40,13 @@ public partial interface IPublisher
     /// <param name="topic"></param>
     /// <param name="body"></param>
     /// <param name="persistence"></param>
-    /// <param name="retry"></param>
+    /// <param name="publishRetry"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
     ValueTask PublishAsync(
         string topic,
         byte[] body,
         bool persistence,
-        int retry = 3,
+        int publishRetry = Consts.DefaultPublishRetry,
         CancellationToken cancellationToken = default);
 }

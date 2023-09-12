@@ -12,7 +12,7 @@ public static partial class SubscriberExtension
     public static void ReceiveCommand<T>(
         this ISubscriber subscriber,
         Func<Action<T?>> resolve,
-        ushort prefetchCount = 10) =>
+        ushort prefetchCount = Consts.DefaultPrefetchCount) =>
         subscriber.Receive(resolve, true, prefetchCount);
 
     /// <summary>
@@ -25,7 +25,7 @@ public static partial class SubscriberExtension
     public static void ReceiveCommand<T>(
         this ISubscriber subscriber,
         Func<Func<T?, Task>> resolve,
-        ushort prefetchCount = 10) =>
+        ushort prefetchCount = Consts.DefaultPrefetchCount) =>
         subscriber.Receive(resolve, true, prefetchCount);
 
     /// <summary>
@@ -40,7 +40,7 @@ public static partial class SubscriberExtension
         this ISubscriber subscriber,
         string topic,
         Func<Action<T?>> resolve,
-        ushort prefetchCount = 10) =>
+        ushort prefetchCount = Consts.DefaultPrefetchCount) =>
         subscriber.Receive(topic, resolve, true, prefetchCount);
 
     /// <summary>t
@@ -55,7 +55,7 @@ public static partial class SubscriberExtension
         this ISubscriber subscriber,
         string topic,
         Func<Func<T?, Task>> resolve,
-        ushort prefetchCount = 10) =>
+        ushort prefetchCount = Consts.DefaultPrefetchCount) =>
         subscriber.Receive(topic, resolve, true, prefetchCount);
 
     /// <summary>
@@ -69,7 +69,7 @@ public static partial class SubscriberExtension
         this ISubscriber subscriber,
         string topic,
         Func<Action<byte[]>> resolve,
-        ushort prefetchCount = 10) =>
+        ushort prefetchCount = Consts.DefaultPrefetchCount) =>
         subscriber.Receive(topic, resolve, true, prefetchCount);
 
     /// <summary>
@@ -83,6 +83,6 @@ public static partial class SubscriberExtension
         this ISubscriber subscriber,
         string topic,
         Func<Func<byte[], Task>> resolve,
-        ushort prefetchCount = 10) =>
+        ushort prefetchCount = Consts.DefaultPrefetchCount) =>
         subscriber.Receive(topic, resolve, true, prefetchCount);
 }

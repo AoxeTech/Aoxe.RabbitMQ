@@ -38,16 +38,16 @@ public static class Program
         channel.ExchangeDeclare(exchange: ExchangeFail, type: "topic");
 
         //定义队列参数
-        var queueNormalArgs = new Dictionary<string, object>();
+        var queueNormalArgs = new Dictionary<string, object>
         {
-            queueNormalArgs.Add("x-dead-letter-exchange", ExchangeFail); //指定死信交换机，用于将 Noraml 队列中失败的消息投递给 Fail 交换机
-        }
-        var queueRetryArgs = new Dictionary<string, object>();
+            { "x-dead-letter-exchange", ExchangeFail } //指定死信交换机，用于将 Noraml 队列中失败的消息投递给 Fail 交换机
+        };
+        var queueRetryArgs = new Dictionary<string, object>
         {
-            queueRetryArgs.Add("x-dead-letter-exchange", ExchangeNormal); //指定死信交换机，用于将 Retry 队列中超时的消息投递给 Noraml 交换机
-            queueRetryArgs.Add("x-message-ttl", 60000); //定义 queueRetry 的消息最大停留时间 (原理是：等消息超时后由 broker 自动投递给当前绑定的死信交换机)
-            //定义最大停留时间为防止一些 待重新投递 的消息、没有定义重试时间而导致内存溢出
-        }
+            { "x-dead-letter-exchange", ExchangeNormal }, //指定死信交换机，用于将 Retry 队列中超时的消息投递给 Noraml 交换机
+            { "x-message-ttl", 60000 } //定义 queueRetry 的消息最大停留时间 (原理是：等消息超时后由 broker 自动投递给当前绑定的死信交换机)
+        };
+        //定义最大停留时间为防止一些 待重新投递 的消息、没有定义重试时间而导致内存溢出
         var queueFailArgs = new Dictionary<string, object>();
         {
             //暂无

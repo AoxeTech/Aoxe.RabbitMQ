@@ -2,11 +2,10 @@ namespace Zaabee.RabbitMQ;
 
 public partial class ZaabeeRabbitMqClient
 {
-    public void Subscribe<T>(
-        Func<Action<T?>> resolve,
-        bool persistence = false,
-        ushort prefetchCount = DefaultPrefetchCount,
-        int retry = 0,
+    public void Subscribe<T>(Func<Action<T?>> resolve,
+        bool persistence,
+        ushort prefetchCount = Consts.DefaultPrefetchCount,
+        int retry = TODO,
         bool dlx = false)
     {
         var topic = GetTypeName(typeof(T));
@@ -16,11 +15,10 @@ public partial class ZaabeeRabbitMqClient
         Subscribe(exchangeParam, queueParam, resolve, MessageType.Message, prefetchCount);
     }
 
-    public void Subscribe<T>(
-        Func<Func<T?, Task>> resolve,
-        bool persistence = false,
-        ushort prefetchCount = DefaultPrefetchCount,
-        int retry = 0,
+    public void Subscribe<T>(Func<Func<T?, Task>> resolve,
+        bool persistence,
+        ushort prefetchCount = Consts.DefaultPrefetchCount,
+        int retry = TODO,
         bool dlx = false)
     {
         var topic = GetTypeName(typeof(T));
@@ -30,12 +28,11 @@ public partial class ZaabeeRabbitMqClient
         Subscribe(exchangeParam, queueParam, resolve, MessageType.Message, prefetchCount);
     }
 
-    public void Subscribe<T>(
-        string topic,
+    public void Subscribe<T>(string topic,
         Func<Action<T?>> resolve,
-        bool persistence = false,
-        ushort prefetchCount = DefaultPrefetchCount,
-        int retry = 0,
+        bool persistence,
+        ushort prefetchCount = Consts.DefaultPrefetchCount,
+        int retry = TODO,
         bool dlx = false)
     {
         var queue = GetQueueName(resolve);
@@ -44,12 +41,11 @@ public partial class ZaabeeRabbitMqClient
         Subscribe(exchangeParam, queueParam, resolve, MessageType.Message, prefetchCount);
     }
 
-    public void Subscribe<T>(
-        string topic,
+    public void Subscribe<T>(string topic,
         Func<Func<T?, Task>> resolve,
-        bool persistence = false,
-        ushort prefetchCount = DefaultPrefetchCount,
-        int retry = 0,
+        bool persistence,
+        ushort prefetchCount = Consts.DefaultPrefetchCount,
+        int retry = TODO,
         bool dlx = false)
     {
         var queue = GetQueueName(resolve);
@@ -58,12 +54,11 @@ public partial class ZaabeeRabbitMqClient
         Subscribe(exchangeParam, queueParam, resolve, MessageType.Message, prefetchCount);
     }
 
-    public void Subscribe(
-        string topic,
+    public void Subscribe(string topic,
         Func<Action<byte[]>> resolve,
-        bool persistence = false,
-        ushort prefetchCount = DefaultPrefetchCount,
-        int retry = 0,
+        bool persistence,
+        ushort prefetchCount = Consts.DefaultPrefetchCount,
+        int retry = TODO,
         bool dlx = false)
     {
         var queue = GetQueueName(resolve);
@@ -72,12 +67,11 @@ public partial class ZaabeeRabbitMqClient
         Subscribe(exchangeParam, queueParam, resolve, MessageType.Message, prefetchCount);
     }
 
-    public void Subscribe(
-        string topic,
+    public void Subscribe(string topic,
         Func<Func<byte[], Task>> resolve,
-        bool persistence = false,
-        ushort prefetchCount = DefaultPrefetchCount,
-        int retry = 0,
+        bool persistence,
+        ushort prefetchCount = Consts.DefaultPrefetchCount,
+        int retry = TODO,
         bool dlx = false)
     {
         var queue = GetQueueName(resolve);

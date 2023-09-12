@@ -8,6 +8,7 @@ public partial class ZaabeeRabbitMqClient : IZaabeeRabbitMqClient
     private readonly IJsonSerializer _serializer;
 
     private readonly ConcurrentDictionary<Type, string> _queueNameDic = new();
+    private const string DefaultRoutingKey = "#";
 
     public ZaabeeRabbitMqClient(ZaabeeRabbitMqOptions options)
     {
@@ -54,44 +55,149 @@ public partial class ZaabeeRabbitMqClient : IZaabeeRabbitMqClient
         _serializer = options.Serializer;
     }
 
-    // public void RepublishDeadLetterEvent<T>(string deadLetterQueueName, ushort prefetchCount = 1)
-    // {
-    //     var queueParam = new QueueParam { Queue = deadLetterQueueName };
-    //     var channel = GetReceiverChannel(null, queueParam, prefetchCount);
-    //
-    //     var consumer = new EventingBasicConsumer(channel);
-    //     consumer.Received += (_, ea) =>
-    //     {
-    //         try
-    //         {
-    //             var body = ea.Body;
-    //             var msg = _serializer.FromBytes<DeadLetterMsg>(body.ToArray())!;
-    //
-    //             var republishExchangeParam =
-    //                 new ExchangeParam { Exchange = $"republish-{deadLetterQueueName}", Durable = true };
-    //             var republishQueueParam =
-    //                 new QueueParam { Queue = FromDeadLetterName(deadLetterQueueName), Durable = true };
-    //             using (var republishChannel = GetPublisherChannel(republishExchangeParam, republishQueueParam))
-    //             {
-    //                 var properties = republishChannel.CreateBasicProperties();
-    //                 properties.Persistent = true;
-    //                 var routingKey = republishExchangeParam.Exchange;
-    //
-    //                 var deadLetter = _serializer.FromText<T>(msg.BodyString);
-    //
-    //                 republishChannel.BasicPublish(republishExchangeParam.Exchange, routingKey, properties,
-    //                     _serializer.ToBytes(deadLetter));
-    //             }
-    //
-    //             channel.BasicAck(ea.DeliveryTag, false);
-    //         }
-    //         catch
-    //         {
-    //             channel.BasicNack(ea.DeliveryTag, false, true);
-    //         }
-    //     };
-    //     channel.BasicConsume(queue: deadLetterQueueName, autoAck: false, consumer: consumer);
-    // }
+    private IModel GetPublisherChannel(
+        ExchangeParam normalExchangeParam,
+        QueueParam normalQueueParam,
+        ExchangeParam? dlxExchangeParam = null,
+        QueueParam? dlxQueueParam = null)=>
+        GenerateChannel(_publishConn,
+            normalExchangeParam,
+            normalQueueParam,
+            dlxExchangeParam, 
+            dlxQueueParam);
+
+    private IModel GetConsumerChannel(
+        ExchangeParam normalExchangeParam,
+        QueueParam normalQueueParam,
+        ExchangeParam? dlxExchangeParam = null,
+        QueueParam? dlxQueueParam = null,
+        ushort prefetchCount = Consts.DefaultPrefetchCount) =>
+        _subscriberChannelDic.GetOrAdd(normalQueueParam.Queue, _ =>
+        {
+            var channel = GenerateChannel(_subscribeConn,
+                normalExchangeParam,
+                normalQueueParam,
+                dlxExchangeParam, 
+                dlxQueueParam);
+            channel.BasicQos(0, prefetchCount, false);
+            return channel;
+        });
+
+    private IModel GetConsumerAsyncChannel(
+        ExchangeParam normalExchangeParam,
+        QueueParam normalQueueParam,
+        ExchangeParam? dlxExchangeParam = null,
+        QueueParam? dlxQueueParam = null,
+        ushort prefetchCount = Consts.DefaultPrefetchCount)=>
+        _subscriberAsyncChannelDic.GetOrAdd(normalQueueParam.Queue, _ =>
+        {
+            var channel = GenerateChannel(_subscribeConn,
+                normalExchangeParam,
+                normalQueueParam,
+                dlxExchangeParam, 
+                dlxQueueParam);
+            channel.BasicQos(0, prefetchCount, false);
+            return channel;
+        });
+
+    private static IModel GenerateChannel(
+        IConnection connection,
+        ExchangeParam normalExchangeParam,
+        QueueParam? normalQueueParam = null,
+        ExchangeParam? dlxExchangeParam = null,
+        QueueParam? dlxQueueParam = null)
+    {
+        var channel = connection.CreateModel();
+
+        Dictionary<string, object>? dlxArgs = null;
+
+        if (dlxExchangeParam is not null && dlxQueueParam is not null)
+            dlxArgs = DeclareDlxExchangeAndQueue(channel, dlxExchangeParam, dlxQueueParam);
+
+        DeclareNormalExchangeAndQueue(channel, normalExchangeParam, normalQueueParam, dlxArgs);
+
+        return channel;
+    }
+
+    /// <summary>
+    /// Declare the normal exchange and queue, if the dlx queue is defined, then the normal queue will bind to the dlx queue.
+    /// </summary>
+    /// <param name="channel"></param>
+    /// <param name="exchangeParam"></param>
+    /// <param name="queueParam"></param>
+    /// <param name="dlxArgs"></param>
+    private static void DeclareNormalExchangeAndQueue(
+        IModel channel,
+        ExchangeParam exchangeParam,
+        QueueParam? queueParam,
+        Dictionary<string, object>? dlxArgs)
+    {
+        channel.ExchangeDeclare(
+            exchange: exchangeParam.Exchange,
+            type: exchangeParam.Type.ToString().ToLower(),
+            durable: exchangeParam.Durable,
+            autoDelete: exchangeParam.AutoDelete,
+            arguments: exchangeParam.Arguments);
+
+        if (queueParam is null)
+            return;
+
+        if (dlxArgs is not null)
+        {
+            queueParam.Arguments ??= new Dictionary<string, object>();
+            foreach (var args in dlxArgs)
+                queueParam.Arguments.Add(args);
+        }
+
+        channel.QueueDeclare(
+            queue: queueParam.Queue,
+            durable: queueParam.Durable,
+            exclusive: queueParam.Exclusive,
+            autoDelete: queueParam.AutoDelete,
+            arguments: queueParam.Arguments);
+
+        channel.QueueBind(
+            queue: queueParam.Queue,
+            exchange: exchangeParam.Exchange,
+            routingKey: DefaultRoutingKey);
+    }
+
+    /// <summary>
+    /// Declare the dlx exchange and queue
+    /// </summary>
+    /// <param name="channel"></param>
+    /// <param name="dlxExchangeParam"></param>
+    /// <param name="dlxQueueParam"></param>
+    /// <returns></returns>
+    private static Dictionary<string, object> DeclareDlxExchangeAndQueue(
+        IModel channel,
+        ExchangeParam dlxExchangeParam,
+        QueueParam dlxQueueParam)
+    {
+        channel.ExchangeDeclare(
+            exchange: dlxExchangeParam.Exchange,
+            type: dlxExchangeParam.Type.ToString().ToLower(),
+            durable: dlxExchangeParam.Durable,
+            autoDelete: dlxExchangeParam.AutoDelete,
+            arguments: dlxExchangeParam.Arguments);
+
+        channel.QueueDeclare(
+            queue: dlxQueueParam.Queue,
+            durable: dlxQueueParam.Durable,
+            exclusive: dlxQueueParam.Exclusive,
+            autoDelete: dlxQueueParam.AutoDelete,
+            arguments: dlxQueueParam.Arguments);
+
+        channel.QueueBind(
+            queue: dlxQueueParam.Queue,
+            exchange: dlxExchangeParam.Exchange,
+            routingKey: DefaultRoutingKey);
+
+        return new Dictionary<string, object>
+        {
+            { "x-dead-letter-exchange", dlxExchangeParam.Exchange }
+        };
+    }
 
     private static ExchangeParam GetExchangeParam(
         string topic,
@@ -131,12 +237,6 @@ public partial class ZaabeeRabbitMqClient : IZaabeeRabbitMqClient
                 is MessageVersionAttribute msgVerAttr
                 ? $"{type}[{msgVerAttr.Version}]"
                 : type.ToString());
-
-    // private static string GetDeadLetterName(string name) =>
-    //     $"dead-letter-{name}";
-    //
-    // private static string FromDeadLetterName(string deadLetterName) =>
-    //     deadLetterName.Replace("dead-letter-", "");
 
     public void Dispose()
     {

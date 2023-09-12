@@ -7,16 +7,16 @@ public static partial class PublisherExtension
     /// </summary>
     /// <param name="publisher"></param>
     /// <param name="event"></param>
-    /// <param name="retry"></param>
+    /// <param name="publishRetry"></param>
     /// <param name="cancellationToken"></param>
     /// <typeparam name="T"></typeparam>
     /// <returns></returns>
     public static ValueTask PublishEventAsync<T>(
         this IPublisher publisher,
         T @event,
-        int retry = 3,
+        int publishRetry = Consts.DefaultPublishRetry,
         CancellationToken cancellationToken = default) =>
-        publisher.PublishAsync(@event, true, retry, cancellationToken);
+        publisher.PublishAsync(@event, true, publishRetry, cancellationToken);
 
     /// <summary>
     /// Publish the event to the specified topic.
@@ -24,7 +24,7 @@ public static partial class PublisherExtension
     /// <param name="publisher"></param>
     /// <param name="topic"></param>
     /// <param name="event"></param>
-    /// <param name="retry"></param>
+    /// <param name="publishRetry"></param>
     /// <param name="cancellationToken"></param>
     /// <typeparam name="T"></typeparam>
     /// <returns></returns>
@@ -32,9 +32,9 @@ public static partial class PublisherExtension
         this IPublisher publisher,
         string topic,
         T @event,
-        int retry = 3,
+        int publishRetry = Consts.DefaultPublishRetry,
         CancellationToken cancellationToken = default) =>
-        publisher.PublishAsync(topic, @event, true, retry, cancellationToken);
+        publisher.PublishAsync(topic, @event, true, publishRetry, cancellationToken);
 
     /// <summary>
     /// Publish the event to the specified topic.
@@ -42,14 +42,14 @@ public static partial class PublisherExtension
     /// <param name="publisher"></param>
     /// <param name="topic"></param>
     /// <param name="body"></param>
-    /// <param name="retry"></param>
+    /// <param name="publishRetry"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
     public static ValueTask PublishEventAsync(
         this IPublisher publisher,
         string topic,
         byte[] body,
-        int retry = 3,
+        int publishRetry = Consts.DefaultPublishRetry,
         CancellationToken cancellationToken = default) =>
-        publisher.PublishAsync(topic, body, true, retry, cancellationToken);
+        publisher.PublishAsync(topic, body, true, publishRetry, cancellationToken);
 }

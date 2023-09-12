@@ -2,136 +2,22 @@ namespace Zaabee.RabbitMQ;
 
 public partial class ZaabeeRabbitMqClient
 {
-    private const ushort DefaultPrefetchCount = 10;
-
     private readonly ConcurrentDictionary<string, IModel> _subscriberChannelDic = new();
+    private const string XDeath = "x-death";
+    private const string XDeathCount = "count";
 
-    private void Subscribe<T>(
+    private void Listen<T>(
         ExchangeParam exchangeParam,
         QueueParam queueParam,
         Func<Action<T?>> resolve,
-        ushort prefetchCount = DefaultPrefetchCount,
-        int retry = 0,
-        bool dlx = false)
+        ushort prefetchCount = Consts.DefaultPrefetchCount)
     {
-        var channel = GetReceiverChannel(exchangeParam, queueParam, prefetchCount);
-        
-        if (dlx)
-            ConsumeEvent(channel, resolve, queueParam.Queue);
-        else
-            ConsumeMessage(channel, resolve, queueParam.Queue);
-    }
-
-    private void Subscribe(
-        ExchangeParam exchangeParam,
-        QueueParam queueParam,
-        Func<Action<byte[]>> resolve,
-        ushort prefetchCount = DefaultPrefetchCount,
-        int retry = 0,
-        bool dlx = false)
-    {
-        var channel = GetReceiverChannel(exchangeParam, queueParam, prefetchCount);
-        
-        if (dlx)
-            ConsumeEvent(channel, resolve, queueParam.Queue);
-        else
-            ConsumeMessage(channel, resolve, queueParam.Queue);
-    }
-
-    private void Subscribe<T>(
-        ExchangeParam exchangeParam,
-        QueueParam queueParam,
-        Func<Func<T?, Task>> resolve,
-        ushort prefetchCount = DefaultPrefetchCount,
-        int retry = 0,
-        bool dlx = false)
-    {
-        var channel = GetReceiverChannel(exchangeParam, queueParam, prefetchCount);
-        
-        if (dlx)
-            ConsumeEvent(channel, resolve, queueParam.Queue);
-        else
-            ConsumeMessage(channel, resolve, queueParam.Queue);
-    }
-
-    private void Subscribe(
-        ExchangeParam exchangeParam,
-        QueueParam queueParam,
-        Func<Func<byte[], Task>> resolve,
-        ushort prefetchCount = DefaultPrefetchCount,
-        int retry = 0,
-        bool dlx = false)
-    {
-        var channel = GetReceiverChannel(exchangeParam, queueParam, prefetchCount);
-        
-        if (dlx)
-            ConsumeEvent(channel, resolve, queueParam.Queue);
-        else
-            ConsumeMessage(channel, resolve, queueParam.Queue);
-    }
-
-    private void ConsumeEvent<T>(
-        IModel channel,
-        Func<Action<T?>> resolve,
-        string queue)
-    {
+        var channel = GetConsumerChannel(exchangeParam, queueParam, prefetchCount: prefetchCount);
         var consumer = new EventingBasicConsumer(channel);
-
-        void OnConsumerOnReceived(object model, BasicDeliverEventArgs ea)
-        {
-            try
-            {
-                var msg = _serializer.FromBytes<T>(ea.Body.ToArray());
-                resolve.Invoke()(msg);
-            }
-            catch (Exception ex)
-            {
-                PublishDlx<T>(ea, queue, ex);
-            }
-            finally
-            {
-                channel.BasicAck(ea.DeliveryTag, false);
-            }
-        }
 
         consumer.Received += OnConsumerOnReceived;
-        channel.BasicConsume(queue: queue, autoAck: false, consumer: consumer);
-    }
-
-    private void ConsumeEvent<T>(
-        IModel channel,
-        Func<Func<T?, Task>> resolve,
-        string queue)
-    {
-        var consumer = new EventingBasicConsumer(channel);
-
-        async void OnConsumerOnReceived(object model, BasicDeliverEventArgs ea)
-        {
-            try
-            {
-                var msg = _serializer.FromBytes<T>(ea.Body.ToArray());
-                await resolve.Invoke()(msg);
-            }
-            catch (Exception ex)
-            {
-                PublishDlx<T>(ea, queue, ex);
-            }
-            finally
-            {
-                channel.BasicAck(ea.DeliveryTag, false);
-            }
-        }
-
-        consumer.Received += OnConsumerOnReceived;
-        channel.BasicConsume(queue: queue, autoAck: false, consumer: consumer);
-    }
-    
-    private void ConsumeMessage<T>(
-        IModel channel,
-        Func<Action<T?>> resolve,
-        string queue)
-    {
-        var consumer = new EventingBasicConsumer(channel);
+        channel.BasicConsume(queue: queueParam.Queue, autoAck: false, consumer: consumer);
+        return;
 
         void OnConsumerOnReceived(object model, BasicDeliverEventArgs ea)
         {
@@ -146,61 +32,52 @@ public partial class ZaabeeRabbitMqClient
                 channel.BasicAck(ea.DeliveryTag, false);
             }
         }
-
-        consumer.Received += OnConsumerOnReceived;
-        channel.BasicConsume(queue: queue, autoAck: false, consumer: consumer);
     }
 
-    private void ConsumeMessage<T>(
-        IModel channel,
-        Func<Func<T?, Task>> resolve,
-        string queue)
+    private void Consume<T>(
+        ExchangeParam exchangeParam,
+        QueueParam queueParam,
+        ExchangeParam? dlxExchangeParam,
+        QueueParam? dlxQueueParam,
+        Func<Action<T?>> resolve,
+        int consumeRetry = Consts.DefaultConsumeRetry,
+        ushort prefetchCount = Consts.DefaultPrefetchCount)
     {
+        var channel = GetConsumerChannel(
+            exchangeParam,
+            queueParam,
+            dlxExchangeParam,
+            dlxQueueParam,
+            prefetchCount);
         var consumer = new EventingBasicConsumer(channel);
 
-        async void OnConsumerOnReceived(object model, BasicDeliverEventArgs ea)
+        consumer.Received += OnConsumerOnReceived;
+        channel.BasicConsume(queue: queueParam.Queue, autoAck: false, consumer: consumer);
+        return;
+
+        void OnConsumerOnReceived(object model, BasicDeliverEventArgs ea)
         {
             try
             {
                 var body = ea.Body;
                 var msg = _serializer.FromBytes<T>(body.ToArray());
-                await resolve.Invoke()(msg);
-            }
-            finally
-            {
+                resolve.Invoke()(msg);
                 channel.BasicAck(ea.DeliveryTag, false);
             }
+            catch
+            {
+                var retryCount = GetRetryCount(ea.BasicProperties);
+                channel.BasicNack(ea.DeliveryTag, false, retryCount < consumeRetry);
+            }
         }
-
-        consumer.Received += OnConsumerOnReceived;
-        channel.BasicConsume(queue: queue, autoAck: false, consumer: consumer);
     }
 
-    private IModel GetReceiverChannel(
-        ExchangeParam? exchangeParam,
-        QueueParam queueParam,
-        ushort prefetchCount)
+    private static long? GetRetryCount(IBasicProperties properties)
     {
-        return _subscriberChannelDic.GetOrAdd(queueParam.Queue, _ =>
-        {
-            var channel = _subscribeConn.CreateModel();
-
-            channel.QueueDeclare(queue: queueParam.Queue, durable: queueParam.Durable,
-                exclusive: queueParam.Exclusive, autoDelete: queueParam.AutoDelete,
-                arguments: queueParam.Arguments);
-
-            if (exchangeParam is not null)
-            {
-                channel.ExchangeDeclare(exchange: exchangeParam.Exchange,
-                    type: exchangeParam.Type.ToString().ToLower(),
-                    durable: exchangeParam.Durable, autoDelete: exchangeParam.AutoDelete,
-                    arguments: exchangeParam.Arguments);
-                channel.QueueBind(queue: queueParam.Queue, exchange: exchangeParam.Exchange,
-                    routingKey: queueParam.Queue);
-            }
-
-            channel.BasicQos(0, prefetchCount, false);
-            return channel;
-        });
+        if (!properties.Headers.TryGetValue(XDeath, out var header)) return null;
+        var deathProperties = (List<object>)header;
+        var lastRetry = (Dictionary<string, object>)deathProperties[0];
+        var count = lastRetry[XDeathCount];
+        return (long)count;
     }
 }

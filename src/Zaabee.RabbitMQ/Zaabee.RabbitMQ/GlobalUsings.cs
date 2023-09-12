@@ -3,6 +3,7 @@ global using System.Collections.Generic;
 global using System.Collections.Concurrent;
 global using System.Linq;
 global using System.Net.Sockets;
+global using System.Threading;
 global using System.Threading.Tasks;
 global using Polly;
 global using Polly.Retry;

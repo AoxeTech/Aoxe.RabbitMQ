@@ -14,7 +14,7 @@ public static partial class SubscriberExtension
     public static ValueTask ReceiveCommandAsync<T>(
         this ISubscriber subscriber,
         Func<Action<T?>> resolve,
-        ushort prefetchCount = 10,
+        ushort prefetchCount = Consts.DefaultPrefetchCount,
         CancellationToken cancellationToken = default) =>
         subscriber.ReceiveAsync(resolve, true, prefetchCount, cancellationToken);
 
@@ -30,7 +30,7 @@ public static partial class SubscriberExtension
     public static ValueTask ReceiveCommandAsync<T>(
         this ISubscriber subscriber,
         Func<Func<T?, Task>> resolve,
-        ushort prefetchCount = 10,
+        ushort prefetchCount = Consts.DefaultPrefetchCount,
         CancellationToken cancellationToken = default) =>
         subscriber.ReceiveAsync(resolve, true, prefetchCount, cancellationToken);
 
@@ -48,7 +48,7 @@ public static partial class SubscriberExtension
         this ISubscriber subscriber,
         string topic,
         Func<Action<T?>> resolve,
-        ushort prefetchCount = 10,
+        ushort prefetchCount = Consts.DefaultPrefetchCount,
         CancellationToken cancellationToken = default) =>
         subscriber.ReceiveAsync(topic, resolve, true, prefetchCount, cancellationToken);
 
@@ -66,7 +66,7 @@ public static partial class SubscriberExtension
         this ISubscriber subscriber,
         string topic,
         Func<Func<T?, Task>> resolve,
-        ushort prefetchCount = 10,
+        ushort prefetchCount = Consts.DefaultPrefetchCount,
         CancellationToken cancellationToken = default) =>
         subscriber.ReceiveAsync(topic, resolve, true, prefetchCount, cancellationToken);
 
@@ -83,7 +83,7 @@ public static partial class SubscriberExtension
         this ISubscriber subscriber,
         string topic,
         Func<Action<byte[]>> resolve,
-        ushort prefetchCount = 10,
+        ushort prefetchCount = Consts.DefaultPrefetchCount,
         CancellationToken cancellationToken = default) =>
         subscriber.ReceiveAsync(topic, resolve, true, prefetchCount, cancellationToken);
 
@@ -100,7 +100,7 @@ public static partial class SubscriberExtension
         this ISubscriber subscriber,
         string topic,
         Func<Func<byte[], Task>> resolve,
-        ushort prefetchCount = 10,
+        ushort prefetchCount = Consts.DefaultPrefetchCount,
         CancellationToken cancellationToken = default) =>
         subscriber.ReceiveAsync(topic, resolve, true, prefetchCount, cancellationToken);
 }

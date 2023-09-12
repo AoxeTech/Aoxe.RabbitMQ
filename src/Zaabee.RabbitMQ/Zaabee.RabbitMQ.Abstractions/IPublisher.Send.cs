@@ -7,13 +7,15 @@ public partial interface IPublisher
     /// </summary>
     /// <param name="message"></param>
     /// <param name="persistence"></param>
-    /// <param name="retry"></param>
+    /// <param name="publishRetry"></param>
+    /// <param name="consumeRetry"></param>
     /// <param name="dlx"></param>
     /// <typeparam name="T"></typeparam>
     void Send<T>(
         T message,
         bool persistence,
-        int retry = 3,
+        int publishRetry = Consts.DefaultPublishRetry,
+        int consumeRetry = Consts.DefaultConsumeRetry,
         bool dlx = true);
 
     /// <summary>
@@ -22,14 +24,16 @@ public partial interface IPublisher
     /// <param name="topic"></param>
     /// <param name="message"></param>
     /// <param name="persistence"></param>
-    /// <param name="retry"></param>
+    /// <param name="publishRetry"></param>
+    /// <param name="consumeRetry"></param>
     /// <param name="dlx"></param>
     /// <typeparam name="T"></typeparam>
     void Send<T>(
         string topic,
         T message,
         bool persistence,
-        int retry = 3,
+        int publishRetry = Consts.DefaultPublishRetry,
+        int consumeRetry = Consts.DefaultConsumeRetry,
         bool dlx = true);
 
     /// <summary>
@@ -38,12 +42,14 @@ public partial interface IPublisher
     /// <param name="topic"></param>
     /// <param name="body"></param>
     /// <param name="persistence"></param>
-    /// <param name="retry"></param>
+    /// <param name="publishRetry"></param>
+    /// <param name="consumeRetry"></param>
     /// <param name="dlx"></param>
     void Send(
         string topic,
         byte[] body,
         bool persistence,
-        int retry = 3,
+        int publishRetry = Consts.DefaultPublishRetry,
+        int consumeRetry = Consts.DefaultConsumeRetry,
         bool dlx = true);
 }

@@ -8,12 +8,14 @@ public partial interface ISubscriber
     /// <param name="resolve"></param>
     /// <param name="persistence"></param>
     /// <param name="prefetchCount"></param>
+    /// <param name="consumeRetry"></param>
     /// <param name="dlx"></param>
     /// <typeparam name="T"></typeparam>
     void Subscribe<T>(
         Func<Action<T?>> resolve,
         bool persistence,
-        ushort prefetchCount = 10,
+        ushort prefetchCount = Consts.DefaultPrefetchCount,
+        int consumeRetry = Consts.DefaultConsumeRetry,
         bool dlx = false);
 
     /// <summary>
@@ -22,12 +24,14 @@ public partial interface ISubscriber
     /// <param name="resolve"></param>
     /// <param name="persistence"></param>
     /// <param name="prefetchCount"></param>
+    /// <param name="consumeRetry"></param>
     /// <param name="dlx"></param>
     /// <typeparam name="T"></typeparam>
     void Subscribe<T>(
         Func<Func<T?, Task>> resolve,
         bool persistence,
-        ushort prefetchCount = 10,
+        ushort prefetchCount = Consts.DefaultPrefetchCount,
+        int consumeRetry = Consts.DefaultConsumeRetry,
         bool dlx = false);
 
     /// <summary>
@@ -37,13 +41,15 @@ public partial interface ISubscriber
     /// <param name="resolve"></param>
     /// <param name="persistence"></param>
     /// <param name="prefetchCount"></param>
+    /// <param name="consumeRetry"></param>
     /// <param name="dlx"></param>
     /// <typeparam name="T"></typeparam>
     void Subscribe<T>(
         string topic,
         Func<Action<T?>> resolve,
         bool persistence,
-        ushort prefetchCount = 10,
+        ushort prefetchCount = Consts.DefaultPrefetchCount,
+        int consumeRetry = Consts.DefaultConsumeRetry,
         bool dlx = false);
 
     /// <summary>
@@ -53,13 +59,15 @@ public partial interface ISubscriber
     /// <param name="resolve"></param>
     /// <param name="persistence"></param>
     /// <param name="prefetchCount"></param>
+    /// <param name="consumeRetry"></param>
     /// <param name="dlx"></param>
     /// <typeparam name="T"></typeparam>
     void Subscribe<T>(
         string topic,
         Func<Func<T?, Task>> resolve,
         bool persistence,
-        ushort prefetchCount = 10,
+        ushort prefetchCount = Consts.DefaultPrefetchCount,
+        int consumeRetry = Consts.DefaultConsumeRetry,
         bool dlx = false);
 
     /// <summary>
@@ -69,12 +77,14 @@ public partial interface ISubscriber
     /// <param name="resolve"></param>
     /// <param name="persistence"></param>
     /// <param name="prefetchCount"></param>
+    /// <param name="consumeRetry"></param>
     /// <param name="dlx"></param>
     void Subscribe(
         string topic,
         Func<Action<byte[]>> resolve,
         bool persistence,
-        ushort prefetchCount = 10,
+        ushort prefetchCount = Consts.DefaultPrefetchCount,
+        int consumeRetry = Consts.DefaultConsumeRetry,
         bool dlx = false);
 
     /// <summary>
@@ -84,11 +94,13 @@ public partial interface ISubscriber
     /// <param name="resolve"></param>
     /// <param name="persistence"></param>
     /// <param name="prefetchCount"></param>
+    /// <param name="consumeRetry"></param>
     /// <param name="dlx"></param>
     void Subscribe(
         string topic,
         Func<Func<byte[], Task>> resolve,
         bool persistence,
-        ushort prefetchCount = 10,
+        ushort prefetchCount = Consts.DefaultPrefetchCount,
+        int consumeRetry = Consts.DefaultConsumeRetry,
         bool dlx = false);
 }
