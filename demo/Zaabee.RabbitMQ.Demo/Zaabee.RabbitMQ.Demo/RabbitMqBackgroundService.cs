@@ -9,18 +9,15 @@ public class RabbitMqBackgroundService : BackgroundService
         _messageBus = messageBus;
     }
 
-    protected override async Task ExecuteAsync(CancellationToken stoppingToken)
+    protected override Task ExecuteAsync(CancellationToken stoppingToken)
     {
-        await _messageBus.SubscribeEventAsync<TestEvent>(() => new Subscriber().TestEventHandler);
-        await _messageBus.SubscribeEventAsync<TestEvent>(() => new Subscriber().TestEventHandlerAsync);
-        await _messageBus.SubscribeEventAsync<TestEvent>(() => new Subscriber().TestEventHandler, 30);
-        await _messageBus.SubscribeEventAsync<TestEventWithVersion>(
+        _messageBus.SubscribeEvent<TestEvent>(() => new Subscriber().TestEventHandler);
+        _messageBus.SubscribeEvent<TestEvent>(() => new Subscriber().TestEventHandlerAsync);
+        _messageBus.SubscribeEvent<TestEvent>(() => new Subscriber().TestEventHandler, 30);
+        _messageBus.SubscribeEvent<TestEventWithVersion>(
             () => new Subscriber().TestEventExceptionWithVersionHandler, 20);
-        await _messageBus.SubscribeMessageAsync<TestMessage>(() => new Subscriber().TestMessageHandler);
-        _messageBus.RepublishDeadLetterEvent<TestEvent>(
-            "dead-letter-Zaabee.RabbitMQ.Demo.Subscriber.TestEventExceptionHandler[Zaabee.RabbitMQ.Demo.TestEvent]");
-        _messageBus.RepublishDeadLetterEvent<TestEvent>(
-            "dead-letter-Zaabee.RabbitMQ.Demo.TestEvent");
+        _messageBus.SubscribeMessage<TestMessage>(() => new Subscriber().TestMessageHandler);
+        return Task.CompletedTask;
     }
 
     public override async Task StopAsync(CancellationToken cancellationToken)

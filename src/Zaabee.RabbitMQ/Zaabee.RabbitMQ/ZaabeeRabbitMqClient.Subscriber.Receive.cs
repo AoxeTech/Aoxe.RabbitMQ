@@ -8,9 +8,16 @@ public partial class ZaabeeRabbitMqClient
         ushort prefetchCount = Consts.DefaultPrefetchCount)
     {
         var topic = GetTypeName(typeof(T));
-        var exchangeParam = GetExchangeParam(topic, MessageType.Message);
-        var queueParam = GetQueueParam(topic, persistence, SubscribeType.Receive);
-        Subscribe(exchangeParam, queueParam, resolve, MessageType.Message, prefetchCount);
+        var normalExchangeParam = GetExchangeParam(topic, persistence);
+        var normalQueueParam = GetQueueParam(topic, persistence);
+        Consume(
+            normalExchangeParam,
+            normalQueueParam,
+            null,
+            null,
+            resolve,
+            prefetchCount,
+            0);
     }
 
     public void Receive<T>(
@@ -19,9 +26,16 @@ public partial class ZaabeeRabbitMqClient
         ushort prefetchCount = Consts.DefaultPrefetchCount)
     {
         var topic = GetTypeName(typeof(T));
-        var exchangeParam = GetExchangeParam(topic, MessageType.Message);
-        var queueParam = GetQueueParam(topic, persistence, SubscribeType.Receive);
-        Subscribe(exchangeParam, queueParam, resolve, MessageType.Message, prefetchCount);
+        var normalExchangeParam = GetExchangeParam(topic, persistence);
+        var normalQueueParam = GetQueueParam(topic, persistence);
+        Consume(
+            normalExchangeParam,
+            normalQueueParam,
+            null,
+            null,
+            resolve,
+            prefetchCount,
+            0);
     }
 
     public void Receive<T>(
@@ -30,9 +44,16 @@ public partial class ZaabeeRabbitMqClient
         bool persistence,
         ushort prefetchCount = Consts.DefaultPrefetchCount)
     {
-        var exchangeParam = GetExchangeParam(topic, MessageType.Message);
-        var queueParam = GetQueueParam(topic, persistence, SubscribeType.Receive);
-        Subscribe(exchangeParam, queueParam, resolve, MessageType.Message, prefetchCount);
+        var normalExchangeParam = GetExchangeParam(topic, persistence);
+        var normalQueueParam = GetQueueParam(topic, persistence);
+        Consume(
+            normalExchangeParam,
+            normalQueueParam,
+            null,
+            null,
+            resolve,
+            prefetchCount,
+            0);
     }
 
     public void Receive<T>(
@@ -41,9 +62,16 @@ public partial class ZaabeeRabbitMqClient
         bool persistence,
         ushort prefetchCount = Consts.DefaultPrefetchCount)
     {
-        var exchangeParam = GetExchangeParam(topic, MessageType.Message);
-        var queueParam = GetQueueParam(topic, persistence, SubscribeType.Receive);
-        Subscribe(exchangeParam, queueParam, resolve, MessageType.Message, prefetchCount);
+        var normalExchangeParam = GetExchangeParam(topic, persistence);
+        var normalQueueParam = GetQueueParam(topic, persistence);
+        Consume(
+            normalExchangeParam,
+            normalQueueParam,
+            null,
+            null,
+            resolve,
+            prefetchCount,
+            0);
     }
 
     public void Receive(
@@ -52,9 +80,16 @@ public partial class ZaabeeRabbitMqClient
         bool persistence,
         ushort prefetchCount = Consts.DefaultPrefetchCount)
     {
-        var exchangeParam = GetExchangeParam(topic, MessageType.Message);
-        var queueParam = GetQueueParam(topic, persistence, SubscribeType.Receive);
-        Subscribe(exchangeParam, queueParam, resolve, MessageType.Message, prefetchCount);
+        var normalExchangeParam = GetExchangeParam(topic, persistence);
+        var normalQueueParam = GetQueueParam(topic, persistence);
+        Consume(
+            normalExchangeParam,
+            normalQueueParam,
+            null,
+            null,
+            resolve,
+            prefetchCount,
+            0);
     }
 
     public void Receive(
@@ -63,8 +98,15 @@ public partial class ZaabeeRabbitMqClient
         bool persistence,
         ushort prefetchCount = Consts.DefaultPrefetchCount)
     {
-        var exchangeParam = GetExchangeParam(topic, MessageType.Message);
-        var queueParam = GetQueueParam(topic, persistence, SubscribeType.Receive);
-        Subscribe(exchangeParam, queueParam, resolve, MessageType.Message, prefetchCount);
+        var normalExchangeParam = GetExchangeParam(topic, persistence);
+        var normalQueueParam = GetQueueParam(topic, persistence);
+        Consume(
+            normalExchangeParam,
+            normalQueueParam,
+            null,
+            null,
+            resolve,
+            prefetchCount,
+            0);
     }
 }

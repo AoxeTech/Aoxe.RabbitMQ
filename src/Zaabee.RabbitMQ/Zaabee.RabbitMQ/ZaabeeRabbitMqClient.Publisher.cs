@@ -26,15 +26,13 @@ public partial class ZaabeeRabbitMqClient
         byte[] body,
         ExchangeParam normalExchangeParam,
         QueueParam? normalQueueParam,
-        ExchangeParam? dlxExchangeParam,
-        QueueParam? dlxQueueParam,
         bool persistence,
         int publishRetry = Consts.DefaultPublishRetry)
     {
         GetRetryPolicy(publishRetry).Execute(() =>
         {
             IBasicProperties? properties = null;
-            using var channel = GetPublisherChannel(normalExchangeParam, normalQueueParam, dlxExchangeParam, dlxQueueParam);
+            using var channel = GetPublisherChannel(normalExchangeParam, normalQueueParam);
             if (persistence)
             {
                 properties = channel.CreateBasicProperties();

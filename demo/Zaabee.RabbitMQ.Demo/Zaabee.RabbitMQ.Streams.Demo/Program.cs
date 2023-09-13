@@ -85,24 +85,24 @@ confirmationTaskCompletionSource.Task.Wait(); // (7)
 await producer.Close().ConfigureAwait(false); // (8)
 
 Console.WriteLine("Starting consuming...");
-var consumer = await Consumer.Create( // (1)
-        new ConsumerConfig(streamSystem, streamName)
-        {
-            OffsetSpec = new OffsetTypeFirst(), // (2)
-            MessageHandler = async (sourceStream, consumer, messageContext, message) => // (3)
-            {
-                if (Interlocked.Increment(ref consumerCount) == MessageCount)
-                {
-                    Console.WriteLine("*********************************");
-                    Console.WriteLine($"All the {MessageCount} messages are received");
-                    Console.WriteLine("*********************************");
-                    consumerTaskCompletionSource.SetResult(MessageCount);
-                }
-                await Task.CompletedTask.ConfigureAwait(false);
-            }
-        },
-        consumerLogger // (4)
-    )
-    .ConfigureAwait(false);
-consumerTaskCompletionSource.Task.Wait(); // (5)
-await consumer.Close().ConfigureAwait(false); // (6)
+// var consumer = await Consumer.Create( // (1)
+//         new ConsumerConfig(streamSystem, streamName)
+//         {
+//             OffsetSpec = new OffsetTypeFirst(), // (2)
+//             MessageHandler = async (sourceStream, consumer, messageContext, message) => // (3)
+//             {
+//                 if (Interlocked.Increment(ref consumerCount) == MessageCount)
+//                 {
+//                     Console.WriteLine("*********************************");
+//                     Console.WriteLine($"All the {MessageCount} messages are received");
+//                     Console.WriteLine("*********************************");
+//                     consumerTaskCompletionSource.SetResult(MessageCount);
+//                 }
+//                 await Task.CompletedTask.ConfigureAwait(false);
+//             }
+//         },
+//         consumerLogger // (4)
+//     )
+//     .ConfigureAwait(false);
+// consumerTaskCompletionSource.Task.Wait(); // (5)
+// await consumer.Close().ConfigureAwait(false); // (6)

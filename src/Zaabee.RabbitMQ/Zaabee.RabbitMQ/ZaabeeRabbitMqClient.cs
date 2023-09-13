@@ -8,6 +8,8 @@ public partial class ZaabeeRabbitMqClient : IZaabeeRabbitMqClient
     private readonly IJsonSerializer _serializer;
 
     private readonly ConcurrentDictionary<Type, string> _queueNameDic = new();
+    private readonly ConcurrentDictionary<string, IModel> _subscriberChannelDic = new();
+    private readonly ConcurrentDictionary<string, IModel> _subscriberAsyncChannelDic = new();
     private const string DefaultRoutingKey = "#";
 
     public ZaabeeRabbitMqClient(ZaabeeRabbitMqOptions options)
@@ -15,7 +17,6 @@ public partial class ZaabeeRabbitMqClient : IZaabeeRabbitMqClient
         if (options is null) throw new ArgumentNullException(nameof(options));
         if (options.Serializer is null) throw new ArgumentNullException(nameof(options.Serializer));
         if (options.Hosts.Count is 0) throw new ArgumentNullException(nameof(options.Hosts));
-
         var factory = new ConnectionFactory
         {
             RequestedHeartbeat = options.HeartBeat,
@@ -57,14 +58,10 @@ public partial class ZaabeeRabbitMqClient : IZaabeeRabbitMqClient
 
     private IModel GetPublisherChannel(
         ExchangeParam normalExchangeParam,
-        QueueParam normalQueueParam,
-        ExchangeParam? dlxExchangeParam = null,
-        QueueParam? dlxQueueParam = null)=>
+        QueueParam? normalQueueParam) =>
         GenerateChannel(_publishConn,
             normalExchangeParam,
-            normalQueueParam,
-            dlxExchangeParam, 
-            dlxQueueParam);
+            normalQueueParam);
 
     private IModel GetConsumerChannel(
         ExchangeParam normalExchangeParam,
@@ -77,7 +74,7 @@ public partial class ZaabeeRabbitMqClient : IZaabeeRabbitMqClient
             var channel = GenerateChannel(_subscribeConn,
                 normalExchangeParam,
                 normalQueueParam,
-                dlxExchangeParam, 
+                dlxExchangeParam,
                 dlxQueueParam);
             channel.BasicQos(0, prefetchCount, false);
             return channel;
@@ -88,13 +85,13 @@ public partial class ZaabeeRabbitMqClient : IZaabeeRabbitMqClient
         QueueParam normalQueueParam,
         ExchangeParam? dlxExchangeParam = null,
         QueueParam? dlxQueueParam = null,
-        ushort prefetchCount = Consts.DefaultPrefetchCount)=>
+        ushort prefetchCount = Consts.DefaultPrefetchCount) =>
         _subscriberAsyncChannelDic.GetOrAdd(normalQueueParam.Queue, _ =>
         {
             var channel = GenerateChannel(_subscribeConn,
                 normalExchangeParam,
                 normalQueueParam,
-                dlxExchangeParam, 
+                dlxExchangeParam,
                 dlxQueueParam);
             channel.BasicQos(0, prefetchCount, false);
             return channel;
@@ -201,19 +198,30 @@ public partial class ZaabeeRabbitMqClient : IZaabeeRabbitMqClient
 
     private static ExchangeParam GetExchangeParam(
         string topic,
-        bool persistence) =>
-        new() { Exchange = topic, Durable = persistence };
+        bool persistence,
+        bool dlx = false) =>
+        new()
+        {
+            Exchange = dlx ? $"{topic}[dlx]" : topic,
+            Durable = persistence
+        };
 
     private static QueueParam GetQueueParam(
         string queue,
         bool persistence,
-        SubscribeType subscribeType)
+        bool isExclusive = false,
+        bool dlx = false)
     {
-        var queueParam = new QueueParam { Queue = queue, Durable = persistence };
-        if (subscribeType is not SubscribeType.Listen) return queueParam;
-        queueParam.Exclusive = false;
-        queueParam.AutoDelete = true;
+        var queueParam = new QueueParam
+        {
+            Queue = dlx ? $"{queue}[dlx]" : queue,
+            Durable = persistence
+        };
         queueParam.Arguments?.Add("x-queue-type", "quorum");
+        if (!isExclusive) return queueParam;
+        queueParam.Queue += $"[{Guid.NewGuid()}]";
+        queueParam.Exclusive = true;
+        queueParam.AutoDelete = true;
         return queueParam;
     }
 
