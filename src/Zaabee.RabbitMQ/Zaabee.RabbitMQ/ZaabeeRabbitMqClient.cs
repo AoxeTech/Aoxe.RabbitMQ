@@ -66,6 +66,7 @@ public partial class ZaabeeRabbitMqClient : IZaabeeRabbitMqClient
     private IModel GetConsumerChannel(
         ExchangeParam normalExchangeParam,
         QueueParam normalQueueParam,
+        ExchangeParam? retryExchangeParam = null,
         ExchangeParam? dlxExchangeParam = null,
         QueueParam? dlxQueueParam = null,
         ushort prefetchCount = Consts.DefaultPrefetchCount) =>
@@ -74,6 +75,7 @@ public partial class ZaabeeRabbitMqClient : IZaabeeRabbitMqClient
             var channel = GenerateChannel(_subscribeConn,
                 normalExchangeParam,
                 normalQueueParam,
+                retryExchangeParam,
                 dlxExchangeParam,
                 dlxQueueParam);
             channel.BasicQos(0, prefetchCount, false);
@@ -83,6 +85,7 @@ public partial class ZaabeeRabbitMqClient : IZaabeeRabbitMqClient
     private IModel GetConsumerAsyncChannel(
         ExchangeParam normalExchangeParam,
         QueueParam normalQueueParam,
+        ExchangeParam? retryExchangeParam = null,
         ExchangeParam? dlxExchangeParam = null,
         QueueParam? dlxQueueParam = null,
         ushort prefetchCount = Consts.DefaultPrefetchCount) =>
@@ -91,6 +94,7 @@ public partial class ZaabeeRabbitMqClient : IZaabeeRabbitMqClient
             var channel = GenerateChannel(_subscribeConn,
                 normalExchangeParam,
                 normalQueueParam,
+                retryExchangeParam,
                 dlxExchangeParam,
                 dlxQueueParam);
             channel.BasicQos(0, prefetchCount, false);
@@ -101,6 +105,7 @@ public partial class ZaabeeRabbitMqClient : IZaabeeRabbitMqClient
         IConnection connection,
         ExchangeParam normalExchangeParam,
         QueueParam? normalQueueParam = null,
+        ExchangeParam? retryExchangeParam = null,
         ExchangeParam? dlxExchangeParam = null,
         QueueParam? dlxQueueParam = null)
     {
@@ -113,6 +118,9 @@ public partial class ZaabeeRabbitMqClient : IZaabeeRabbitMqClient
 
         DeclareNormalExchangeAndQueue(channel, normalExchangeParam, normalQueueParam, dlxArgs);
 
+        if (retryExchangeParam is not null && normalQueueParam is not null)
+            DeclareRetryExchangeAndQueue(channel, retryExchangeParam, normalQueueParam.Queue);
+
         return channel;
     }
 
@@ -120,42 +128,60 @@ public partial class ZaabeeRabbitMqClient : IZaabeeRabbitMqClient
     /// Declare the normal exchange and queue, if the dlx queue is defined, then the normal queue will bind to the dlx queue.
     /// </summary>
     /// <param name="channel"></param>
-    /// <param name="exchangeParam"></param>
-    /// <param name="queueParam"></param>
+    /// <param name="normalExchangeParam"></param>
+    /// <param name="normalQueueParam"></param>
     /// <param name="dlxArgs"></param>
     private static void DeclareNormalExchangeAndQueue(
         IModel channel,
-        ExchangeParam exchangeParam,
-        QueueParam? queueParam,
+        ExchangeParam normalExchangeParam,
+        QueueParam? normalQueueParam,
         Dictionary<string, object>? dlxArgs)
     {
         channel.ExchangeDeclare(
-            exchange: exchangeParam.Exchange,
-            type: exchangeParam.Type.ToString().ToLower(),
-            durable: exchangeParam.Durable,
-            autoDelete: exchangeParam.AutoDelete,
-            arguments: exchangeParam.Arguments);
+            exchange: normalExchangeParam.Exchange,
+            type: normalExchangeParam.Type.ToString().ToLower(),
+            durable: normalExchangeParam.Durable,
+            autoDelete: normalExchangeParam.AutoDelete,
+            arguments: normalExchangeParam.Arguments);
 
-        if (queueParam is null)
+        if (normalQueueParam is null)
             return;
 
         if (dlxArgs is not null)
         {
-            queueParam.Arguments ??= new Dictionary<string, object>();
+            normalQueueParam.Arguments ??= new Dictionary<string, object>();
             foreach (var args in dlxArgs)
-                queueParam.Arguments.Add(args);
+                normalQueueParam.Arguments.Add(args);
         }
 
         channel.QueueDeclare(
-            queue: queueParam.Queue,
-            durable: queueParam.Durable,
-            exclusive: queueParam.Exclusive,
-            autoDelete: queueParam.AutoDelete,
-            arguments: queueParam.Arguments);
+            queue: normalQueueParam.Queue,
+            durable: normalQueueParam.Durable,
+            exclusive: normalQueueParam.Exclusive,
+            autoDelete: normalQueueParam.AutoDelete,
+            arguments: normalQueueParam.Arguments);
 
         channel.QueueBind(
-            queue: queueParam.Queue,
-            exchange: exchangeParam.Exchange,
+            queue: normalQueueParam.Queue,
+            exchange: normalExchangeParam.Exchange,
+            routingKey: DefaultRoutingKey);
+    }
+
+    private static void DeclareRetryExchangeAndQueue(
+        IModel channel,
+        ExchangeParam retryExchangeParam,
+        string queueName)
+    {
+        channel.ExchangeDeclare(
+            exchange: retryExchangeParam.Exchange,
+            type: retryExchangeParam.Type.ToString().ToLower(),
+            durable: retryExchangeParam.Durable,
+            autoDelete: retryExchangeParam.AutoDelete,
+            arguments: retryExchangeParam.Arguments);
+
+        channel.QueueBind(
+            queue: queueName,
+            exchange: retryExchangeParam.Exchange,
             routingKey: DefaultRoutingKey);
     }
 
@@ -199,10 +225,15 @@ public partial class ZaabeeRabbitMqClient : IZaabeeRabbitMqClient
     private static ExchangeParam GetExchangeParam(
         string topic,
         bool persistence,
-        bool dlx = false) =>
+        ExchangeRole exchangeRole = ExchangeRole.Normal) =>
         new()
         {
-            Exchange = dlx ? $"{topic}[dlx]" : topic,
+            Exchange = exchangeRole switch
+            {
+                ExchangeRole.Retry => $"{topic}[retry]",
+                ExchangeRole.Dlx => $"{topic}[dlx]",
+                _ => topic
+            },
             Durable = persistence
         };
 

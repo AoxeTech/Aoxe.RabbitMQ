@@ -19,7 +19,8 @@ public partial class ZaabeeRabbitMqClient
     }
 
     /// <inheritdoc />
-    public void Send<T>(string topic,
+    public void Send<T>(
+        string topic,
         T message,
         bool persistence,
         int publishRetry = Consts.DefaultPublishRetry)
@@ -34,7 +35,8 @@ public partial class ZaabeeRabbitMqClient
     }
 
     /// <inheritdoc />
-    public void Send(string topic,
+    public void Send(
+        string topic,
         byte[] body,
         bool persistence,
         int publishRetry = Consts.DefaultPublishRetry)

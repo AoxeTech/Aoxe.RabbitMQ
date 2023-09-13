@@ -24,7 +24,7 @@ public partial class ZaabeeRabbitMqClient
                 prefetchCount,
                 consumeRetry);
         }
-        var dlxExchangeParam = dlx ? GetExchangeParam(topic, persistence, true) : null;
+        var dlxExchangeParam = dlx ? GetExchangeParam(topic, persistence, ExchangeRole.Dlx) : null;
         var dlxQueueParam = dlx ? GetQueueParam(queue, persistence, isExclusive, true) : null;
         Consume(
             normalExchangeParam,
@@ -58,7 +58,7 @@ public partial class ZaabeeRabbitMqClient
                 prefetchCount,
                 consumeRetry);
         }
-        var dlxExchangeParam = dlx ? GetExchangeParam(topic, persistence, true) : null;
+        var dlxExchangeParam = dlx ? GetExchangeParam(topic, persistence, ExchangeRole.Dlx) : null;
         var dlxQueueParam = dlx ? GetQueueParam(queue, persistence, isExclusive, true) : null;
         Consume(
             normalExchangeParam,
@@ -92,7 +92,7 @@ public partial class ZaabeeRabbitMqClient
                 prefetchCount,
                 consumeRetry);
         }
-        var dlxExchangeParam = dlx ? GetExchangeParam(topic, persistence, true) : null;
+        var dlxExchangeParam = dlx ? GetExchangeParam(topic, persistence, ExchangeRole.Dlx) : null;
         var dlxQueueParam = dlx ? GetQueueParam(queue, persistence, isExclusive, true) : null;
         Consume(
             normalExchangeParam,
@@ -126,7 +126,7 @@ public partial class ZaabeeRabbitMqClient
                 prefetchCount,
                 consumeRetry);
         }
-        var dlxExchangeParam = dlx ? GetExchangeParam(topic, persistence, true) : null;
+        var dlxExchangeParam = dlx ? GetExchangeParam(topic, persistence, ExchangeRole.Dlx) : null;
         var dlxQueueParam = dlx ? GetQueueParam(queue, persistence, isExclusive, true) : null;
         Consume(
             normalExchangeParam,
@@ -160,7 +160,7 @@ public partial class ZaabeeRabbitMqClient
                 prefetchCount,
                 consumeRetry);
         }
-        var dlxExchangeParam = dlx ? GetExchangeParam(topic, persistence, true) : null;
+        var dlxExchangeParam = dlx ? GetExchangeParam(topic, persistence, ExchangeRole.Dlx) : null;
         var dlxQueueParam = dlx ? GetQueueParam(queue, persistence, isExclusive, true) : null;
         Consume(
             normalExchangeParam,
@@ -194,7 +194,7 @@ public partial class ZaabeeRabbitMqClient
                 prefetchCount,
                 consumeRetry);
         }
-        var dlxExchangeParam = dlx ? GetExchangeParam(topic, persistence, true) : null;
+        var dlxExchangeParam = dlx ? GetExchangeParam(topic, persistence, ExchangeRole.Dlx) : null;
         var dlxQueueParam = dlx ? GetQueueParam(queue, persistence, isExclusive, true) : null;
         Consume(
             normalExchangeParam,

@@ -17,6 +17,12 @@ public partial class ZaabeeRabbitMqClient
             {
                 properties = channel.CreateBasicProperties();
                 properties.Persistent = persistence;
+                properties.Headers = new Dictionary<string, object>
+                {
+                    {
+                        RetryCount, 0
+                    }
+                };
             }
             channel.BasicPublish(exchangeParam.Exchange, DefaultRoutingKey, properties, body);
         });
