@@ -10,6 +10,7 @@ public partial interface ISubscriber
     /// <param name="prefetchCount"></param>
     /// <param name="consumeRetry"></param>
     /// <param name="dlx"></param>
+    /// <param name="isExclusive"></param>
     /// <param name="cancellationToken"></param>
     /// <typeparam name="T"></typeparam>
     /// <returns></returns>
@@ -19,6 +20,7 @@ public partial interface ISubscriber
         ushort prefetchCount = Consts.DefaultPrefetchCount,
         int consumeRetry = Consts.DefaultConsumeRetry,
         bool dlx = false,
+        bool isExclusive = false,
         CancellationToken cancellationToken = default);
 
     /// <summary>
@@ -29,6 +31,7 @@ public partial interface ISubscriber
     /// <param name="prefetchCount"></param>
     /// <param name="consumeRetry"></param>
     /// <param name="dlx"></param>
+    /// <param name="isExclusive"></param>
     /// <param name="cancellationToken"></param>
     /// <typeparam name="T"></typeparam>
     /// <returns></returns>
@@ -38,6 +41,7 @@ public partial interface ISubscriber
         ushort prefetchCount = Consts.DefaultPrefetchCount,
         int consumeRetry = Consts.DefaultConsumeRetry,
         bool dlx = false,
+        bool isExclusive = false,
         CancellationToken cancellationToken = default);
 
     /// <summary>
@@ -49,6 +53,7 @@ public partial interface ISubscriber
     /// <param name="prefetchCount"></param>
     /// <param name="consumeRetry"></param>
     /// <param name="dlx"></param>
+    /// <param name="isExclusive"></param>
     /// <param name="cancellationToken"></param>
     /// <typeparam name="T"></typeparam>
     /// <returns></returns>
@@ -59,6 +64,7 @@ public partial interface ISubscriber
         ushort prefetchCount = Consts.DefaultPrefetchCount,
         int consumeRetry = Consts.DefaultConsumeRetry,
         bool dlx = false,
+        bool isExclusive = false,
         CancellationToken cancellationToken = default);
 
     /// <summary>
@@ -70,6 +76,7 @@ public partial interface ISubscriber
     /// <param name="prefetchCount"></param>
     /// <param name="consumeRetry"></param>
     /// <param name="dlx"></param>
+    /// <param name="isExclusive"></param>
     /// <param name="cancellationToken"></param>
     /// <typeparam name="T"></typeparam>
     /// <returns></returns>
@@ -80,6 +87,7 @@ public partial interface ISubscriber
         ushort prefetchCount = Consts.DefaultPrefetchCount,
         int consumeRetry = Consts.DefaultConsumeRetry,
         bool dlx = false,
+        bool isExclusive = false,
         CancellationToken cancellationToken = default);
 
     /// <summary>
@@ -91,6 +99,7 @@ public partial interface ISubscriber
     /// <param name="prefetchCount"></param>
     /// <param name="consumeRetry"></param>
     /// <param name="dlx"></param>
+    /// <param name="isExclusive"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
     ValueTask SubscribeAsync(
@@ -100,6 +109,7 @@ public partial interface ISubscriber
         ushort prefetchCount = Consts.DefaultPrefetchCount,
         int consumeRetry = Consts.DefaultConsumeRetry,
         bool dlx = false,
+        bool isExclusive = false,
         CancellationToken cancellationToken = default);
 
     /// <summary>
@@ -111,6 +121,7 @@ public partial interface ISubscriber
     /// <param name="prefetchCount"></param>
     /// <param name="consumeRetry"></param>
     /// <param name="dlx"></param>
+    /// <param name="isExclusive"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
     ValueTask SubscribeAsync(
@@ -120,5 +131,6 @@ public partial interface ISubscriber
         ushort prefetchCount = Consts.DefaultPrefetchCount,
         int consumeRetry = Consts.DefaultConsumeRetry,
         bool dlx = false,
+        bool isExclusive = false,
         CancellationToken cancellationToken = default);
 }

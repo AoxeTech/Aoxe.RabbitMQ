@@ -1,67 +1,55 @@
-namespace Zaabee.RabbitMQ.Abstractions;
+﻿namespace Zaabee.RabbitMQ.Abstractions;
 
 public static partial class PublisherExtension
 {
     /// <summary>
-    /// Send the command to the default topic.
+    /// Publish the Message to the default topic.
     /// </summary>
     /// <param name="publisher"></param>
-    /// <param name="command"></param>
+    /// <param name="message"></param>
     /// <param name="publishRetry"></param>
-    /// <param name="consumeRetry"></param>
-    /// <param name="dlx"></param>
     /// <param name="cancellationToken"></param>
     /// <typeparam name="T"></typeparam>
     /// <returns></returns>
-    public static ValueTask SendCommandAsync<T>(
+    public static ValueTask PublishMessageAsync<T>(
         this IPublisher publisher,
-        T command,
+        T message,
         int publishRetry = Consts.DefaultPublishRetry,
-        int consumeRetry = Consts.DefaultConsumeRetry,
-        bool dlx = true,
         CancellationToken cancellationToken = default) =>
-        publisher.SendAsync(command, true, publishRetry, consumeRetry, dlx, cancellationToken);
+        publisher.PublishAsync(message, false, publishRetry, cancellationToken);
 
     /// <summary>
-    /// Send the command to the specified topic.
+    /// Publish the Message to the specified topic.
     /// </summary>
     /// <param name="publisher"></param>
     /// <param name="topic"></param>
-    /// <param name="command"></param>
+    /// <param name="message"></param>
     /// <param name="publishRetry"></param>
-    /// <param name="consumeRetry"></param>
-    /// <param name="dlx"></param>
     /// <param name="cancellationToken"></param>
     /// <typeparam name="T"></typeparam>
     /// <returns></returns>
-    public static ValueTask SendCommandAsync<T>(
+    public static ValueTask PublishMessageAsync<T>(
         this IPublisher publisher,
         string topic,
-        T command,
+        T message,
         int publishRetry = Consts.DefaultPublishRetry,
-        int consumeRetry = Consts.DefaultConsumeRetry,
-        bool dlx = true,
         CancellationToken cancellationToken = default) =>
-        publisher.SendAsync(topic, command, true, publishRetry, consumeRetry, dlx, cancellationToken);
+        publisher.PublishAsync(topic, message, false, publishRetry, cancellationToken);
 
     /// <summary>
-    /// Send the command to the specified topic.
+    /// Publish the Message to the specified topic.
     /// </summary>
     /// <param name="publisher"></param>
     /// <param name="topic"></param>
     /// <param name="body"></param>
     /// <param name="publishRetry"></param>
-    /// <param name="consumeRetry"></param>
-    /// <param name="dlx"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    public static ValueTask SendCommandAsync(
+    public static ValueTask PublishMessageAsync(
         this IPublisher publisher,
         string topic,
         byte[] body,
         int publishRetry = Consts.DefaultPublishRetry,
-        int consumeRetry = Consts.DefaultConsumeRetry,
-        bool dlx = true,
         CancellationToken cancellationToken = default) =>
-        publisher.SendAsync(topic, body, true, publishRetry, consumeRetry, dlx, cancellationToken);
+        publisher.PublishAsync(topic, body, false, publishRetry, cancellationToken);
 }
