@@ -224,7 +224,7 @@ public partial class ZaabeeRabbitMqClient
         return (int)retryCount;
     }
 
-    private void IncreaseRetryCount(IBasicProperties properties)
+    private static void IncreaseRetryCount(IBasicProperties properties)
     {
         properties.Headers ??= new Dictionary<string, object>();
         if (!properties.Headers.TryGetValue(RetryCount, out var retryCount))

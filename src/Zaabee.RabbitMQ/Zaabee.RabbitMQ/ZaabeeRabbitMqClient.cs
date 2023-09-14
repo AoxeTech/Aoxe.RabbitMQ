@@ -1,6 +1,6 @@
 ﻿namespace Zaabee.RabbitMQ;
 
-public partial class ZaabeeRabbitMqClient : IZaabeeRabbitMqClient
+public sealed partial class ZaabeeRabbitMqClient : IZaabeeRabbitMqClient
 {
     private readonly IConnection _publishConn;
     private readonly IConnection _subscribeConn;
@@ -55,13 +55,6 @@ public partial class ZaabeeRabbitMqClient : IZaabeeRabbitMqClient
 
         _serializer = options.Serializer;
     }
-
-    private IModel GetPublisherChannel(
-        ExchangeParam normalExchangeParam,
-        QueueParam? normalQueueParam) =>
-        GenerateChannel(_publishConn,
-            normalExchangeParam,
-            normalQueueParam);
 
     private IModel GetConsumerChannel(
         ExchangeParam normalExchangeParam,
@@ -241,11 +234,11 @@ public partial class ZaabeeRabbitMqClient : IZaabeeRabbitMqClient
         string queue,
         bool persistence,
         bool isExclusive = false,
-        bool dlx = false)
+        QueueRole queueRole = QueueRole.Normal)
     {
         var queueParam = new QueueParam
         {
-            Queue = dlx ? $"{queue}[dlx]" : queue,
+            Queue = queueRole is QueueRole.Dlx ? $"{queue}[dlx]" : queue,
             Durable = persistence
         };
         queueParam.Arguments?.Add("x-queue-type", "quorum");

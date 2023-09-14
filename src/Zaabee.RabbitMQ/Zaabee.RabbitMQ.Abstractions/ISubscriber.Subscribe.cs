@@ -17,7 +17,7 @@ public partial interface ISubscriber
         bool persistence,
         ushort prefetchCount = Consts.DefaultPrefetchCount,
         int consumeRetry = Consts.DefaultConsumeRetry,
-        bool dlx = false,
+        bool dlx = true,
         bool isExclusive = false);
 
     /// <summary>
@@ -35,7 +35,7 @@ public partial interface ISubscriber
         bool persistence,
         ushort prefetchCount = Consts.DefaultPrefetchCount,
         int consumeRetry = Consts.DefaultConsumeRetry,
-        bool dlx = false,
+        bool dlx = true,
         bool isExclusive = false);
 
     /// <summary>
@@ -55,7 +55,7 @@ public partial interface ISubscriber
         bool persistence,
         ushort prefetchCount = Consts.DefaultPrefetchCount,
         int consumeRetry = Consts.DefaultConsumeRetry,
-        bool dlx = false,
+        bool dlx = true,
         bool isExclusive = false);
 
     /// <summary>
@@ -75,7 +75,7 @@ public partial interface ISubscriber
         bool persistence,
         ushort prefetchCount = Consts.DefaultPrefetchCount,
         int consumeRetry = Consts.DefaultConsumeRetry,
-        bool dlx = false,
+        bool dlx = true,
         bool isExclusive = false);
 
     /// <summary>
@@ -94,7 +94,7 @@ public partial interface ISubscriber
         bool persistence,
         ushort prefetchCount = Consts.DefaultPrefetchCount,
         int consumeRetry = Consts.DefaultConsumeRetry,
-        bool dlx = false,
+        bool dlx = true,
         bool isExclusive = false);
 
     /// <summary>
@@ -113,6 +113,6 @@ public partial interface ISubscriber
         bool persistence,
         ushort prefetchCount = Consts.DefaultPrefetchCount,
         int consumeRetry = Consts.DefaultConsumeRetry,
-        bool dlx = false,
+        bool dlx = true,
         bool isExclusive = false);
 }

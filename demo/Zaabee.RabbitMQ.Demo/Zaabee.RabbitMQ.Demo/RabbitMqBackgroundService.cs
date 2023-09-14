@@ -13,9 +13,8 @@ public class RabbitMqBackgroundService : BackgroundService
     {
         _messageBus.SubscribeEvent<TestEvent>(() => new Subscriber().TestEventHandler);
         _messageBus.SubscribeEvent<TestEvent>(() => new Subscriber().TestEventHandlerAsync);
-        _messageBus.SubscribeEvent<TestEvent>(() => new Subscriber().TestEventHandler, 30);
-        _messageBus.SubscribeEvent<TestEventWithVersion>(
-            () => new Subscriber().TestEventExceptionWithVersionHandler, 20);
+        _messageBus.ReceiveCommand<TestEvent>(() => new Subscriber().TestEventHandler);
+        _messageBus.SubscribeEvent<TestEventWithVersion>(() => new Subscriber().TestEventExceptionWithVersionHandler, 20);
         _messageBus.SubscribeMessage<TestMessage>(() => new Subscriber().TestMessageHandler);
         return Task.CompletedTask;
     }

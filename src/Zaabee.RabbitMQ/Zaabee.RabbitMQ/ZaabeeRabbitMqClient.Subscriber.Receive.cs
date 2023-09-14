@@ -2,6 +2,7 @@ namespace Zaabee.RabbitMQ;
 
 public partial class ZaabeeRabbitMqClient
 {
+    /// <inheritdoc />
     public void Receive<T>(
         Func<Action<T?>> resolve,
         bool persistence,
@@ -20,6 +21,7 @@ public partial class ZaabeeRabbitMqClient
             0);
     }
 
+    /// <inheritdoc />
     public void Receive<T>(
         Func<Func<T?, Task>> resolve,
         bool persistence,
@@ -38,6 +40,7 @@ public partial class ZaabeeRabbitMqClient
             0);
     }
 
+    /// <inheritdoc />
     public void Receive<T>(
         string topic,
         Func<Action<T?>> resolve,
@@ -56,6 +59,7 @@ public partial class ZaabeeRabbitMqClient
             0);
     }
 
+    /// <inheritdoc />
     public void Receive<T>(
         string topic,
         Func<Func<T?, Task>> resolve,
@@ -74,6 +78,7 @@ public partial class ZaabeeRabbitMqClient
             0);
     }
 
+    /// <inheritdoc />
     public void Receive(
         string topic,
         Func<Action<byte[]>> resolve,
@@ -92,6 +97,7 @@ public partial class ZaabeeRabbitMqClient
             0);
     }
 
+    /// <inheritdoc />
     public void Receive(
         string topic,
         Func<Func<byte[], Task>> resolve,
