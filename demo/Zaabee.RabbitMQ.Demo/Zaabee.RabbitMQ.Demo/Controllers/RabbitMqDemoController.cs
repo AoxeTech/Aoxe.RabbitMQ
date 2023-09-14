@@ -10,7 +10,6 @@ public class RabbitMqDemoController : Controller
         _messageBus = messageBus;
     }
 
-    [HttpGet]
     [HttpPost]
     public long PublishEventSync(int quantity)
     {
@@ -27,7 +26,6 @@ public class RabbitMqDemoController : Controller
         return sw.ElapsedMilliseconds;
     }
 
-    [HttpGet]
     [HttpPost]
     public long PublishEventWithVersion(int quantity)
     {
@@ -44,7 +42,6 @@ public class RabbitMqDemoController : Controller
         return sw.ElapsedMilliseconds;
     }
 
-    [HttpGet]
     [HttpPost]
     public long SendCommandSync(int quantity)
     {
@@ -61,7 +58,6 @@ public class RabbitMqDemoController : Controller
         return sw.ElapsedMilliseconds;
     }
 
-    [HttpGet]
     [HttpPost]
     public long SendCommandWithVersion(int quantity)
     {
@@ -78,7 +74,6 @@ public class RabbitMqDemoController : Controller
         return sw.ElapsedMilliseconds;
     }
 
-    [HttpGet]
     [HttpPost]
     public long PublishMessageSync(int quantity)
     {
@@ -95,7 +90,6 @@ public class RabbitMqDemoController : Controller
         return sw.ElapsedMilliseconds;
     }
 
-    [HttpGet]
     [HttpPost]
     public long SendMessageSync(int quantity)
     {
