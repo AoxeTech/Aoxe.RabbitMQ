@@ -25,10 +25,9 @@ public partial class ZaabeeRabbitMqClient
             prefetchCount);
         var consumer = new EventingBasicConsumer(channel);
 
-        consumer.Received += (model, ea) =>
+        consumer.Received += (_, ea) =>
         {
-            var eventingBasicConsumer = (EventingBasicConsumer)model;
-            var consumerChannel = eventingBasicConsumer.Model;
+            var consumerChannel = consumer.Model;
             try
             {
                 var body = ea.Body;
@@ -75,10 +74,9 @@ public partial class ZaabeeRabbitMqClient
             prefetchCount);
         var consumer = new EventingBasicConsumer(channel);
 
-        consumer.Received += (model, ea) =>
+        consumer.Received += (_, ea) =>
         {
-            var eventingBasicConsumer = (EventingBasicConsumer)model;
-            var consumerChannel = eventingBasicConsumer.Model;
+            var consumerChannel = consumer.Model;
             try
             {
                 resolve.Invoke()(ea.Body.ToArray());
@@ -123,10 +121,9 @@ public partial class ZaabeeRabbitMqClient
             prefetchCount);
         var consumer = new EventingBasicConsumer(channel);
 
-        consumer.Received += async (model, ea) =>
+        consumer.Received += async (_, ea) =>
         {
-            var eventingBasicConsumer = (EventingBasicConsumer)model;
-            var consumerChannel = eventingBasicConsumer.Model;
+            var consumerChannel = consumer.Model;
             try
             {
                 var body = ea.Body;
@@ -177,10 +174,9 @@ public partial class ZaabeeRabbitMqClient
             prefetchCount);
         var consumer = new EventingBasicConsumer(channel);
 
-        consumer.Received += async (model, ea) =>
+        consumer.Received += async (_, ea) =>
         {
-            var eventingBasicConsumer = (EventingBasicConsumer)model;
-            var consumerChannel = eventingBasicConsumer.Model;
+            var consumerChannel = consumer.Model;
             try
             {
                 await resolve.Invoke()(ea.Body.ToArray());
@@ -223,7 +219,7 @@ public partial class ZaabeeRabbitMqClient
         properties.Headers ??= new Dictionary<string, object>();
         if (!properties.Headers.TryGetValue(RetryCount, out var retryCount))
             properties.Headers.Add(RetryCount, 0);
-        var count = (int)retryCount;
+        var count = (int)(retryCount ?? 0);
         properties.Headers[RetryCount] = ++count;
     }
 }
