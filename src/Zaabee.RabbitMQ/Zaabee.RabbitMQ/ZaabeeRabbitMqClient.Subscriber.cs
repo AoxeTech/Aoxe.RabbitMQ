@@ -25,11 +25,7 @@ public partial class ZaabeeRabbitMqClient
             prefetchCount);
         var consumer = new EventingBasicConsumer(channel);
 
-        consumer.Received += OnConsumerOnReceived;
-        channel.BasicConsume(queue: queueParam.Queue, autoAck: false, consumer: consumer);
-        return;
-
-        void OnConsumerOnReceived(object model, BasicDeliverEventArgs ea)
+        consumer.Received += (model, ea) =>
         {
             var eventingBasicConsumer = (EventingBasicConsumer)model;
             var consumerChannel = eventingBasicConsumer.Model;
@@ -54,7 +50,8 @@ public partial class ZaabeeRabbitMqClient
                     consumerChannel.BasicNack(ea.DeliveryTag, false, false);
                 }
             }
-        }
+        };
+        channel.BasicConsume(queue: queueParam.Queue, autoAck: false, consumer: consumer);
     }
 
     private void Consume(
@@ -78,11 +75,7 @@ public partial class ZaabeeRabbitMqClient
             prefetchCount);
         var consumer = new EventingBasicConsumer(channel);
 
-        consumer.Received += OnConsumerOnReceived;
-        channel.BasicConsume(queue: queueParam.Queue, autoAck: false, consumer: consumer);
-        return;
-
-        void OnConsumerOnReceived(object model, BasicDeliverEventArgs ea)
+        consumer.Received += (model, ea) =>
         {
             var eventingBasicConsumer = (EventingBasicConsumer)model;
             var consumerChannel = eventingBasicConsumer.Model;
@@ -105,7 +98,8 @@ public partial class ZaabeeRabbitMqClient
                     consumerChannel.BasicNack(ea.DeliveryTag, false, false);
                 }
             }
-        }
+        };
+        channel.BasicConsume(queue: queueParam.Queue, autoAck: false, consumer: consumer);
     }
 
     private void Consume<T>(
