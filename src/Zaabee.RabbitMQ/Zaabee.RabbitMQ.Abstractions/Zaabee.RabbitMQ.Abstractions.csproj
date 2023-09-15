@@ -6,7 +6,7 @@
 		<Version>2023.4.2</Version>
 		<Authors>Mutuduxf</Authors>
 		<Company>Mutuduxf</Company>
-		<PackageTags>Zaabee;Message Queue;MQ;Message Bus;RabbitMQ;Abstractions</PackageTags>
+		<PackageTags>Zaabee;Message Queue;MQ;Message Bus;RabbitMQ;AMQP;Abstractions</PackageTags>
 		<Description>The Interface/BaseClass/Attribute for Zaaby.RabbitMQ</Description>
 		<PackageProjectUrl>https://github.com/PicoHex/Zaabee.RabbitMQ</PackageProjectUrl>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
