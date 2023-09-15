@@ -32,19 +32,14 @@ public partial class ZaabeeRabbitMqClient
         Func<Action<T?>> resolve,
         bool persistence,
         ushort prefetchCount = Consts.DefaultPrefetchCount,
-        int consumeRetry = Consts.DefaultConsumeRetry)
-    {
-        var normalExchangeParam = GetExchangeParam(topic, persistence);
-        var normalQueueParam = GetQueueParam(topic, persistence);
-        Consume(
-            normalExchangeParam,
-            normalQueueParam,
+        int consumeRetry = Consts.DefaultConsumeRetry) =>
+        Consume(GetExchangeParam(topic, persistence),
+            GetQueueParam(topic, persistence),
             null,
             null,
             resolve,
             prefetchCount,
             consumeRetry);
-    }
 
     /// <inheritdoc />
     public void Receive<T>(
@@ -52,19 +47,14 @@ public partial class ZaabeeRabbitMqClient
         Func<Func<T?, Task>> resolve,
         bool persistence,
         ushort prefetchCount = Consts.DefaultPrefetchCount,
-        int consumeRetry = Consts.DefaultConsumeRetry)
-    {
-        var normalExchangeParam = GetExchangeParam(topic, persistence);
-        var normalQueueParam = GetQueueParam(topic, persistence);
-        Consume(
-            normalExchangeParam,
-            normalQueueParam,
+        int consumeRetry = Consts.DefaultConsumeRetry) =>
+        Consume(GetExchangeParam(topic, persistence),
+            GetQueueParam(topic, persistence),
             null,
             null,
             resolve,
             prefetchCount,
             consumeRetry);
-    }
 
     /// <inheritdoc />
     public void Receive(
@@ -72,36 +62,27 @@ public partial class ZaabeeRabbitMqClient
         Func<Action<byte[]>> resolve,
         bool persistence,
         ushort prefetchCount = Consts.DefaultPrefetchCount,
-        int consumeRetry = Consts.DefaultConsumeRetry)
-    {
-        var normalExchangeParam = GetExchangeParam(topic, persistence);
-        var normalQueueParam = GetQueueParam(topic, persistence);
-        Consume(
-            normalExchangeParam,
-            normalQueueParam,
+        int consumeRetry = Consts.DefaultConsumeRetry) =>
+        Consume(GetExchangeParam(topic, persistence),
+            GetQueueParam(topic, persistence),
             null,
             null,
             resolve,
             prefetchCount,
             consumeRetry);
-    }
 
     /// <inheritdoc />
     public void Receive(string topic,
         Func<Func<byte[], Task>> resolve,
         bool persistence,
         ushort prefetchCount = 10,
-        int consumeRetry = Consts.DefaultConsumeRetry)
-    {
-        var normalExchangeParam = GetExchangeParam(topic, persistence);
-        var normalQueueParam = GetQueueParam(topic, persistence);
+        int consumeRetry = Consts.DefaultConsumeRetry) =>
         Consume(
-            normalExchangeParam,
-            normalQueueParam,
+            GetExchangeParam(topic, persistence),
+            GetQueueParam(topic, persistence),
             null,
             null,
             resolve,
             prefetchCount,
             consumeRetry);
-    }
 }

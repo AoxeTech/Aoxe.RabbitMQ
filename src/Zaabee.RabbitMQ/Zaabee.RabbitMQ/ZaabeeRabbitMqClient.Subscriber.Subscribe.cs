@@ -47,6 +47,7 @@ public partial class ZaabeeRabbitMqClient
         var queue = GetQueueName(resolve);
         var normalExchangeParam = GetExchangeParam(topic, persistence);
         var normalQueueParam = GetQueueParam(queue, persistence, isExclusive);
+        // The exclusive queue do not have dlx
         if (isExclusive)
         {
             Consume(
@@ -86,6 +87,7 @@ public partial class ZaabeeRabbitMqClient
         var queue = GenerateQueueName(resolve);
         var normalExchangeParam = GetExchangeParam(topic, persistence);
         var normalQueueParam = GetQueueParam(queue, persistence, isExclusive);
+        // The exclusive queue do not have dlx
         if (isExclusive)
         {
             Consume(
@@ -125,6 +127,7 @@ public partial class ZaabeeRabbitMqClient
         var queue = GetQueueName(resolve);
         var normalExchangeParam = GetExchangeParam(topic, persistence);
         var normalQueueParam = GetQueueParam(queue, persistence, isExclusive);
+        // The exclusive queue do not have dlx
         if (isExclusive)
         {
             Consume(
@@ -164,6 +167,7 @@ public partial class ZaabeeRabbitMqClient
         var queue = GenerateQueueName(resolve);
         var normalExchangeParam = GetExchangeParam(topic, persistence);
         var normalQueueParam = GetQueueParam(queue, persistence, isExclusive);
+        // The exclusive queue do not have dlx
         if (isExclusive)
         {
             Consume(
