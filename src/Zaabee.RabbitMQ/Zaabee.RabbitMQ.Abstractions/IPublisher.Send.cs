@@ -11,7 +11,7 @@ public partial interface IPublisher
     /// <param name="dlx"></param>
     /// <typeparam name="T"></typeparam>
     void Send<T>(
-        T message,
+        T? message,
         bool persistence,
         int publishRetry = Consts.DefaultPublishRetry,
         bool dlx = true);
@@ -27,7 +27,7 @@ public partial interface IPublisher
     /// <typeparam name="T"></typeparam>
     void Send<T>(
         string topic,
-        T message,
+        T? message,
         bool persistence,
         int publishRetry = Consts.DefaultPublishRetry,
         bool dlx = true);

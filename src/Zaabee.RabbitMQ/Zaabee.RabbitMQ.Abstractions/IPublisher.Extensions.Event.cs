@@ -11,7 +11,7 @@ public static partial class PublisherExtension
     /// <typeparam name="T"></typeparam>
     public static void PublishEvent<T>(
         this IPublisher publisher,
-        T @event,
+        T? @event,
         int publishRetry = Consts.DefaultPublishRetry) =>
         publisher.Publish(@event, true, publishRetry);
 
@@ -26,7 +26,7 @@ public static partial class PublisherExtension
     public static void PublishEvent<T>(
         this IPublisher publisher,
         string topic,
-        T @event,
+        T? @event,
         int publishRetry = Consts.DefaultPublishRetry) =>
         publisher.Publish(topic, @event, true, publishRetry);
 

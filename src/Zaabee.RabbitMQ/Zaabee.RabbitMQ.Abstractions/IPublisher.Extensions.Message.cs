@@ -11,7 +11,7 @@ public static partial class PublisherExtension
     /// <typeparam name="T"></typeparam>
     public static void PublishMessage<T>(
         this IPublisher publisher,
-        T message,
+        T? message,
         int publishRetry = Consts.DefaultPublishRetry) =>
         publisher.Publish(message, false, publishRetry);
 
@@ -26,7 +26,7 @@ public static partial class PublisherExtension
     public static void PublishMessage<T>(
         this IPublisher publisher,
         string topic,
-        T message,
+        T? message,
         int publishRetry = Consts.DefaultPublishRetry) =>
         publisher.Publish(topic, message, false, publishRetry);
 

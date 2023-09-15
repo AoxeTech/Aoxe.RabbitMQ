@@ -4,7 +4,7 @@ public partial class ZaabeeRabbitMqClient
 {
     /// <inheritdoc />
     public void Publish<T>(
-        T message,
+        T? message,
         bool persistence,
         int publishRetry = Consts.DefaultPublishRetry) =>
         Publish(GetTopicName(typeof(T)),
@@ -15,7 +15,7 @@ public partial class ZaabeeRabbitMqClient
     /// <inheritdoc />
     public void Publish<T>(
         string topic,
-        T message,
+        T? message,
         bool persistence,
         int publishRetry = Consts.DefaultPublishRetry) =>
         Publish(topic,

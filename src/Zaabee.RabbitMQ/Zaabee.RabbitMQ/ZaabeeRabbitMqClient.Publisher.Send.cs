@@ -4,7 +4,7 @@ public partial class ZaabeeRabbitMqClient
 {
     /// <inheritdoc />
     public void Send<T>(
-        T message,
+        T? message,
         bool persistence,
         int publishRetry = Consts.DefaultPublishRetry,
         bool dlx = true) =>
@@ -17,7 +17,7 @@ public partial class ZaabeeRabbitMqClient
     /// <inheritdoc />
     public void Send<T>(
         string topic,
-        T message,
+        T? message,
         bool persistence,
         int publishRetry = Consts.DefaultPublishRetry,
         bool dlx = true) =>
@@ -33,18 +33,12 @@ public partial class ZaabeeRabbitMqClient
         byte[] body,
         bool persistence,
         int publishRetry = Consts.DefaultPublishRetry,
-        bool dlx = true)
-    {
-        var normalExchangeParam = GetExchangeParam(topic, persistence);
-        var normalQueueParam = GetQueueParam(topic, persistence);
-        var dlxExchangeParam = dlx ? GetExchangeParam(topic, persistence, ExchangeRole.Dlx) : null;
-        var dlxQueueParam = dlx ? GetQueueParam(topic, persistence, false, QueueRole.Dlx) : null;
+        bool dlx = true) =>
         Send(body,
-            normalExchangeParam,
-            normalQueueParam,
-            dlxExchangeParam,
-            dlxQueueParam,
+            GetExchangeParam(topic, persistence),
+            GetQueueParam(topic, persistence),
+            dlx ? GetExchangeParam(topic, persistence, ExchangeRole.Dlx) : null,
+            dlx ? GetQueueParam(topic, persistence, false, QueueRole.Dlx) : null,
             persistence,
             publishRetry);
-    }
 }

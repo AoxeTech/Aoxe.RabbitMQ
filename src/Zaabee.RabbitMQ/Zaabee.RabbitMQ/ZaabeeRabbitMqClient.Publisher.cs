@@ -7,8 +7,7 @@ public partial class ZaabeeRabbitMqClient
         ExchangeParam exchangeParam,
         QueueParam? queueParam,
         bool persistence,
-        int retry = Consts.DefaultPublishRetry)
-    {
+        int retry = Consts.DefaultPublishRetry) =>
         GetRetryPolicy(retry).Execute(() =>
         {
             IBasicProperties? properties = null;
@@ -20,7 +19,6 @@ public partial class ZaabeeRabbitMqClient
             }
             channel.BasicPublish(exchangeParam.Exchange, DefaultRoutingKey, properties, body);
         });
-    }
 
     private void Send(
         byte[] body,
@@ -29,8 +27,7 @@ public partial class ZaabeeRabbitMqClient
         ExchangeParam? dlxExchangeParam,
         QueueParam? dlxQueueParam,
         bool persistence,
-        int publishRetry = Consts.DefaultPublishRetry)
-    {
+        int publishRetry = Consts.DefaultPublishRetry) =>
         GetRetryPolicy(publishRetry).Execute(() =>
         {
             IBasicProperties? properties = null;
@@ -48,7 +45,6 @@ public partial class ZaabeeRabbitMqClient
             }
             channel.BasicPublish(normalExchangeParam.Exchange, DefaultRoutingKey, properties, body);
         });
-    }
 
     private static Policy GetRetryPolicy(int retry) =>
         Policy.Handle<BrokerUnreachableException>()

@@ -45,33 +45,15 @@ public partial class ZaabeeRabbitMqClient
         bool isExclusive = false)
     {
         var queue = GetQueueName(resolve);
-        var normalExchangeParam = GetExchangeParam(topic, persistence);
-        var normalQueueParam = GetQueueParam(queue, persistence, isExclusive);
         // The exclusive queue do not have dlx
-        if (isExclusive)
-        {
-            Consume(
-                normalExchangeParam,
-                normalQueueParam,
-                null,
-                null,
-                resolve,
-                prefetchCount,
-                consumeRetry);
-        }
-        else
-        {
-            var dlxExchangeParam = dlx ? GetExchangeParam(topic, persistence, ExchangeRole.Dlx) : null;
-            var dlxQueueParam = dlx ? GetQueueParam(queue, persistence, isExclusive, QueueRole.Dlx) : null;
-            Consume(
-                normalExchangeParam,
-                normalQueueParam,
-                dlxExchangeParam,
-                dlxQueueParam,
-                resolve,
-                prefetchCount,
-                consumeRetry);
-        }
+        Consume(
+            GetExchangeParam(topic, persistence),
+            GetQueueParam(queue, persistence, isExclusive),
+            dlx && !isExclusive ? GetExchangeParam(topic, persistence, ExchangeRole.Dlx) : null,
+            dlx && !isExclusive ? GetQueueParam(queue, persistence, isExclusive, QueueRole.Dlx) : null,
+            resolve,
+            prefetchCount,
+            consumeRetry);
     }
 
     /// <inheritdoc />
@@ -85,33 +67,14 @@ public partial class ZaabeeRabbitMqClient
         bool isExclusive = false)
     {
         var queue = GenerateQueueName(resolve);
-        var normalExchangeParam = GetExchangeParam(topic, persistence);
-        var normalQueueParam = GetQueueParam(queue, persistence, isExclusive);
         // The exclusive queue do not have dlx
-        if (isExclusive)
-        {
-            Consume(
-                normalExchangeParam,
-                normalQueueParam,
-                null,
-                null,
-                resolve,
-                prefetchCount,
-                consumeRetry);
-        }
-        else
-        {
-            var dlxExchangeParam = dlx ? GetExchangeParam(topic, persistence, ExchangeRole.Dlx) : null;
-            var dlxQueueParam = dlx ? GetQueueParam(queue, persistence, isExclusive, QueueRole.Dlx) : null;
-            Consume(
-                normalExchangeParam,
-                normalQueueParam,
-                dlxExchangeParam,
-                dlxQueueParam,
-                resolve,
-                prefetchCount,
-                consumeRetry);
-        }
+        Consume(GetExchangeParam(topic, persistence),
+            GetQueueParam(queue, persistence, isExclusive),
+            dlx && !isExclusive ? GetExchangeParam(topic, persistence, ExchangeRole.Dlx) : null,
+            dlx && !isExclusive ? GetQueueParam(queue, persistence, isExclusive, QueueRole.Dlx) : null,
+            resolve,
+            prefetchCount,
+            consumeRetry);
     }
 
     /// <inheritdoc />
@@ -125,33 +88,14 @@ public partial class ZaabeeRabbitMqClient
         bool isExclusive = false)
     {
         var queue = GetQueueName(resolve);
-        var normalExchangeParam = GetExchangeParam(topic, persistence);
-        var normalQueueParam = GetQueueParam(queue, persistence, isExclusive);
         // The exclusive queue do not have dlx
-        if (isExclusive)
-        {
-            Consume(
-                normalExchangeParam,
-                normalQueueParam,
-                null,
-                null,
-                resolve,
-                prefetchCount,
-                consumeRetry);
-        }
-        else
-        {
-            var dlxExchangeParam = dlx ? GetExchangeParam(topic, persistence, ExchangeRole.Dlx) : null;
-            var dlxQueueParam = dlx ? GetQueueParam(queue, persistence, isExclusive, QueueRole.Dlx) : null;
-            Consume(
-                normalExchangeParam,
-                normalQueueParam,
-                dlxExchangeParam,
-                dlxQueueParam,
-                resolve,
-                prefetchCount,
-                consumeRetry);
-        }
+        Consume(GetExchangeParam(topic, persistence),
+            GetQueueParam(queue, persistence, isExclusive),
+            dlx && !isExclusive ? GetExchangeParam(topic, persistence, ExchangeRole.Dlx) : null,
+            dlx && !isExclusive ? GetQueueParam(queue, persistence, isExclusive, QueueRole.Dlx) : null,
+            resolve,
+            prefetchCount,
+            consumeRetry);
     }
 
     /// <inheritdoc />
@@ -165,32 +109,13 @@ public partial class ZaabeeRabbitMqClient
         bool isExclusive = false)
     {
         var queue = GenerateQueueName(resolve);
-        var normalExchangeParam = GetExchangeParam(topic, persistence);
-        var normalQueueParam = GetQueueParam(queue, persistence, isExclusive);
         // The exclusive queue do not have dlx
-        if (isExclusive)
-        {
-            Consume(
-                normalExchangeParam,
-                normalQueueParam,
-                null,
-                null,
-                resolve,
-                prefetchCount,
-                consumeRetry);
-        }
-        else
-        {
-            var dlxExchangeParam = dlx ? GetExchangeParam(topic, persistence, ExchangeRole.Dlx) : null;
-            var dlxQueueParam = dlx ? GetQueueParam(queue, persistence, isExclusive, QueueRole.Dlx) : null;
-            Consume(
-                normalExchangeParam,
-                normalQueueParam,
-                dlxExchangeParam,
-                dlxQueueParam,
-                resolve,
-                prefetchCount,
-                consumeRetry);
-        }
+        Consume(GetExchangeParam(topic, persistence),
+            GetQueueParam(queue, persistence, isExclusive),
+            dlx && !isExclusive ? GetExchangeParam(topic, persistence, ExchangeRole.Dlx) : null,
+            dlx && !isExclusive ? GetQueueParam(queue, persistence, isExclusive, QueueRole.Dlx) : null,
+            resolve,
+            prefetchCount,
+            consumeRetry);
     }
 }

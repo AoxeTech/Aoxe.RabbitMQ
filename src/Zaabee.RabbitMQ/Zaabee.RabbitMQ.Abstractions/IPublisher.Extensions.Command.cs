@@ -12,7 +12,7 @@ public static partial class PublisherExtension
     /// <typeparam name="T"></typeparam>
     public static void SendCommand<T>(
         this IPublisher publisher,
-        T command,
+        T? command,
         int publishRetry = Consts.DefaultPublishRetry,
         bool dlx = true) =>
         publisher.Send(command, true, publishRetry, dlx);
@@ -29,7 +29,7 @@ public static partial class PublisherExtension
     public static void SendCommand<T>(
         this IPublisher publisher,
         string topic,
-        T command,
+        T? command,
         int publishRetry = Consts.DefaultPublishRetry,
         bool dlx = true) =>
         publisher.Send(topic, command, true, publishRetry, dlx);
