@@ -9,37 +9,14 @@ public partial class ZaabeeRabbitMqClient
         ushort prefetchCount = 10,
         int consumeRetry = Consts.DefaultConsumeRetry,
         bool dlx = true,
-        bool isExclusive = false)
-    {
-        var topic = GetTypeName(typeof(T));
-        var queue = GetQueueName(resolve);
-        var normalExchangeParam = GetExchangeParam(topic, persistence);
-        var normalQueueParam = GetQueueParam(queue, persistence, isExclusive);
-        if (isExclusive)
-        {
-            Consume(
-                normalExchangeParam,
-                normalQueueParam,
-                null,
-                null,
-                resolve,
-                prefetchCount,
-                consumeRetry);
-        }
-        else
-        {
-            var dlxExchangeParam = dlx ? GetExchangeParam(topic, persistence, ExchangeRole.Dlx) : null;
-            var dlxQueueParam = dlx ? GetQueueParam(queue, persistence, isExclusive, QueueRole.Dlx) : null;
-            Consume(
-                normalExchangeParam,
-                normalQueueParam,
-                dlxExchangeParam,
-                dlxQueueParam,
-                resolve,
-                prefetchCount,
-                consumeRetry);
-        }
-    }
+        bool isExclusive = false) =>
+        Subscribe(GetTypeName(typeof(T)),
+            resolve,
+            persistence,
+            prefetchCount,
+            consumeRetry,
+            dlx,
+            isExclusive);
 
     /// <inheritdoc />
     public void Subscribe<T>(
@@ -48,37 +25,14 @@ public partial class ZaabeeRabbitMqClient
         ushort prefetchCount = 10,
         int consumeRetry = Consts.DefaultConsumeRetry,
         bool dlx = true,
-        bool isExclusive = false)
-    {
-        var topic = GetTypeName(typeof(T));
-        var queue = GetQueueName(resolve);
-        var normalExchangeParam = GetExchangeParam(topic, persistence);
-        var normalQueueParam = GetQueueParam(queue, persistence, isExclusive);
-        if (isExclusive)
-        {
-            Consume(
-                normalExchangeParam,
-                normalQueueParam,
-                null,
-                null,
-                resolve,
-                prefetchCount,
-                consumeRetry);
-        }
-        else
-        {
-            var dlxExchangeParam = dlx ? GetExchangeParam(topic, persistence, ExchangeRole.Dlx) : null;
-            var dlxQueueParam = dlx ? GetQueueParam(queue, persistence, isExclusive, QueueRole.Dlx) : null;
-            Consume(
-                normalExchangeParam,
-                normalQueueParam,
-                dlxExchangeParam,
-                dlxQueueParam,
-                resolve,
-                prefetchCount,
-                consumeRetry);
-        }
-    }
+        bool isExclusive = false) =>
+        Subscribe(GetTypeName(typeof(T)),
+            resolve,
+            persistence,
+            prefetchCount,
+            consumeRetry,
+            dlx,
+            isExclusive);
 
     /// <inheritdoc />
     public void Subscribe<T>(

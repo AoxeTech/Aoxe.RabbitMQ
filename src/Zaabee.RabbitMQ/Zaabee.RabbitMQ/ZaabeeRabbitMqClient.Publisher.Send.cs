@@ -7,21 +7,12 @@ public partial class ZaabeeRabbitMqClient
         T message,
         bool persistence,
         int publishRetry = Consts.DefaultPublishRetry,
-        bool dlx = true)
-    {
-        var topic = GetTypeName(typeof(T));
-        var normalExchangeParam = GetExchangeParam(topic, persistence);
-        var normalQueueParam = GetQueueParam(topic, persistence);
-        var dlxExchangeParam = dlx ? GetExchangeParam(topic, persistence, ExchangeRole.Dlx) : null;
-        var dlxQueueParam = dlx ? GetQueueParam(topic, persistence, false, QueueRole.Dlx) : null;
-        Send(_serializer.ToBytes(message),
-            normalExchangeParam,
-            normalQueueParam,
-            dlxExchangeParam,
-            dlxQueueParam,
+        bool dlx = true) =>
+        Send(GetTypeName(typeof(T)),
+            message,
             persistence,
-            publishRetry);
-    }
+            publishRetry,
+            dlx);
 
     /// <inheritdoc />
     public void Send<T>(
@@ -29,20 +20,12 @@ public partial class ZaabeeRabbitMqClient
         T message,
         bool persistence,
         int publishRetry = Consts.DefaultPublishRetry,
-        bool dlx = true)
-    {
-        var normalExchangeParam = GetExchangeParam(topic, persistence);
-        var normalQueueParam = GetQueueParam(topic, persistence);
-        var dlxExchangeParam = dlx ? GetExchangeParam(topic, persistence, ExchangeRole.Dlx) : null;
-        var dlxQueueParam = dlx ? GetQueueParam(topic, persistence, false, QueueRole.Dlx) : null;
-        Send(_serializer.ToBytes(message),
-            normalExchangeParam,
-            normalQueueParam,
-            dlxExchangeParam,
-            dlxQueueParam,
+        bool dlx = true) =>
+        Send(topic,
+            _serializer.ToBytes(message),
             persistence,
-            publishRetry);
-    }
+            publishRetry,
+            dlx);
 
     /// <inheritdoc />
     public void Send(
