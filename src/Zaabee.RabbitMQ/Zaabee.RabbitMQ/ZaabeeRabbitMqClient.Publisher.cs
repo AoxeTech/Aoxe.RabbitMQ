@@ -5,13 +5,12 @@ public partial class ZaabeeRabbitMqClient
     private void Publish(
         byte[] body,
         ExchangeParam exchangeParam,
-        QueueParam? queueParam,
         bool persistence,
         int retry = Consts.DefaultPublishRetry) =>
         GetRetryPolicy(retry).Execute(() =>
         {
             IBasicProperties? properties = null;
-            using var channel = GenerateChannel(_publishConn, exchangeParam, queueParam);
+            using var channel = GenerateChannel(_publishConn, exchangeParam);
             if (persistence)
             {
                 properties = channel.CreateBasicProperties();

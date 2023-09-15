@@ -28,9 +28,9 @@ public partial class ZaabeeRabbitMqClient
         string topic,
         byte[] body,
         bool persistence,
-        int publishRetry = Consts.DefaultPublishRetry)
-    {
-        var exchangeParam = GetExchangeParam(topic, persistence);
-        Publish(body, exchangeParam, null, persistence, publishRetry);
-    }
+        int publishRetry = Consts.DefaultPublishRetry) =>
+        Publish(body,
+            GetExchangeParam(topic, persistence),
+            persistence,
+            publishRetry);
 }
