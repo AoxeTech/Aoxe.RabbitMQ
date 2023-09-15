@@ -15,7 +15,7 @@ public class Subscriber
         return Task.CompletedTask;
     }
 
-    public void TestEventExceptionHandler(TestEvent testEvent)
+    public void TestEventExceptionHandler(TestEvent? testEvent)
     {
         Console.WriteLine($"{nameof(TestEventExceptionHandler)} has been triggered. {nameof(testEvent)}: {testEvent.ToJson()}");
         throw new Exception("Test");
