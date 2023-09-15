@@ -7,7 +7,7 @@ public partial class ZaabeeRabbitMqClient
         T message,
         bool persistence,
         int publishRetry = Consts.DefaultPublishRetry) =>
-        Publish(GetTypeName(typeof(T)),
+        Publish(GetTopicName(typeof(T)),
             message,
             persistence,
             publishRetry);

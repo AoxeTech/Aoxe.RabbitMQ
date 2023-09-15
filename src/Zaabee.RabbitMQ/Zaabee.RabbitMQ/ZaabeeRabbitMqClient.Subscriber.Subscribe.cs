@@ -10,7 +10,7 @@ public partial class ZaabeeRabbitMqClient
         int consumeRetry = Consts.DefaultConsumeRetry,
         bool dlx = true,
         bool isExclusive = false) =>
-        Subscribe(GetTypeName(typeof(T)),
+        Subscribe(GetTopicName(typeof(T)),
             resolve,
             persistence,
             prefetchCount,
@@ -26,7 +26,7 @@ public partial class ZaabeeRabbitMqClient
         int consumeRetry = Consts.DefaultConsumeRetry,
         bool dlx = true,
         bool isExclusive = false) =>
-        Subscribe(GetTypeName(typeof(T)),
+        Subscribe(GetTopicName(typeof(T)),
             resolve,
             persistence,
             prefetchCount,
@@ -83,7 +83,7 @@ public partial class ZaabeeRabbitMqClient
         bool dlx = true,
         bool isExclusive = false)
     {
-        var queue = GetQueueName(resolve);
+        var queue = GenerateQueueName(resolve);
         var normalExchangeParam = GetExchangeParam(topic, persistence);
         var normalQueueParam = GetQueueParam(queue, persistence, isExclusive);
         if (isExclusive)
@@ -161,7 +161,7 @@ public partial class ZaabeeRabbitMqClient
         bool dlx = true,
         bool isExclusive = false)
     {
-        var queue = GetQueueName(resolve);
+        var queue = GenerateQueueName(resolve);
         var normalExchangeParam = GetExchangeParam(topic, persistence);
         var normalQueueParam = GetQueueParam(queue, persistence, isExclusive);
         if (isExclusive)

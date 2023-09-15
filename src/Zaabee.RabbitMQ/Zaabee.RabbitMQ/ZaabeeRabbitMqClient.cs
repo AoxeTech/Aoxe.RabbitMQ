@@ -7,7 +7,7 @@ public sealed partial class ZaabeeRabbitMqClient : IZaabeeRabbitMqClient
     private readonly IConnection _subscribeAsyncConn;
     private readonly IJsonSerializer _serializer;
 
-    private readonly ConcurrentDictionary<Type, string> _queueNameDic = new();
+    private readonly ConcurrentDictionary<Type, string> _topicNameDic = new();
     private readonly ConcurrentDictionary<string, IModel> _subscriberChannelDic = new();
     private readonly ConcurrentDictionary<string, IModel> _subscriberAsyncChannelDic = new();
     private const string DefaultRoutingKey = "#";
@@ -252,19 +252,19 @@ public sealed partial class ZaabeeRabbitMqClient : IZaabeeRabbitMqClient
     private string GetQueueName<T>(Func<Action<T>> resolve)
     {
         var handle = resolve();
-        var messageName = GetTypeName(typeof(T));
+        var messageName = GetTopicName(typeof(T));
         return $"{handle.Method.ReflectedType?.FullName}.{handle.Method.Name}[{messageName}]";
     }
 
-    private string GetQueueName<T>(Func<Func<T, Task>> resolve)
+    private string GenerateQueueName<T>(Func<Func<T, Task>> resolve)
     {
         var handle = resolve();
-        var messageName = GetTypeName(typeof(T));
+        var messageName = GetTopicName(typeof(T));
         return $"{handle.Method.ReflectedType?.FullName}.{handle.Method.Name}[{messageName}]";
     }
 
-    private string GetTypeName(Type type) =>
-        _queueNameDic.GetOrAdd(type,
+    private string GetTopicName(Type type) =>
+        _topicNameDic.GetOrAdd(type,
             _ => type.GetCustomAttributes(typeof(MessageVersionAttribute), false).FirstOrDefault()
                 is MessageVersionAttribute msgVerAttr
                 ? $"{type}[{msgVerAttr.Version}]"

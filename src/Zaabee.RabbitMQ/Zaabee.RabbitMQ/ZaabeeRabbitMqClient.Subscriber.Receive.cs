@@ -8,7 +8,7 @@ public partial class ZaabeeRabbitMqClient
         bool persistence,
         ushort prefetchCount = Consts.DefaultPrefetchCount,
         int consumeRetry = Consts.DefaultConsumeRetry) =>
-        Receive(GetTypeName(typeof(T)),
+        Receive(GetTopicName(typeof(T)),
             resolve,
             persistence,
             prefetchCount,
@@ -20,7 +20,7 @@ public partial class ZaabeeRabbitMqClient
         bool persistence,
         ushort prefetchCount = Consts.DefaultPrefetchCount,
         int consumeRetry = Consts.DefaultConsumeRetry) =>
-        Receive(GetTypeName(typeof(T)),
+        Receive(GetTopicName(typeof(T)),
             resolve,
             persistence,
             prefetchCount,
