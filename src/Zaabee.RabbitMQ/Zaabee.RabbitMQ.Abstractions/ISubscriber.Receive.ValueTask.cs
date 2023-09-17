@@ -11,7 +11,7 @@ public partial interface ISubscriber
     /// <param name="consumeRetry"></param>
     /// <typeparam name="T"></typeparam>
     void Receive<T>(
-        Func<Action<T?>> resolve,
+        Func<Func<T?, ValueTask>> resolve,
         bool persistence,
         ushort prefetchCount = Consts.DefaultPrefetchCount,
         int consumeRetry = Consts.DefaultConsumeRetry);
@@ -27,7 +27,7 @@ public partial interface ISubscriber
     /// <typeparam name="T"></typeparam>
     void Receive<T>(
         string topic,
-        Func<Action<T?>> resolve,
+        Func<Func<T?, ValueTask>> resolve,
         bool persistence,
         ushort prefetchCount = Consts.DefaultPrefetchCount,
         int consumeRetry = Consts.DefaultConsumeRetry);
@@ -42,7 +42,7 @@ public partial interface ISubscriber
     /// <param name="consumeRetry"></param>
     void Receive(
         string topic,
-        Func<Action<byte[]>> resolve,
+        Func<Func<byte[], ValueTask>> resolve,
         bool persistence,
         ushort prefetchCount = Consts.DefaultPrefetchCount,
         int consumeRetry = Consts.DefaultConsumeRetry);

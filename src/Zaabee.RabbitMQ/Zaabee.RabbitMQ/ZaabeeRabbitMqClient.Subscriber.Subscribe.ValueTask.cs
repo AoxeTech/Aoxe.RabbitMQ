@@ -1,10 +1,10 @@
-namespace Zaabee.RabbitMQ;
+﻿namespace Zaabee.RabbitMQ;
 
 public partial class ZaabeeRabbitMqClient
 {
     /// <inheritdoc />
     public void Subscribe<T>(
-        Func<Action<T?>> resolve,
+        Func<Func<T?, ValueTask>> resolve,
         bool persistence,
         ushort prefetchCount = 10,
         int consumeRetry = Consts.DefaultConsumeRetry,
@@ -21,17 +21,16 @@ public partial class ZaabeeRabbitMqClient
     /// <inheritdoc />
     public void Subscribe<T>(
         string topic,
-        Func<Action<T?>> resolve,
+        Func<Func<T?, ValueTask>> resolve,
         bool persistence,
         ushort prefetchCount = 10,
         int consumeRetry = Consts.DefaultConsumeRetry,
         bool dlx = true,
         bool isExclusive = false)
     {
-        var queue = GetQueueName(resolve);
+        var queue = GenerateQueueName(resolve);
         // The exclusive queue do not have dlx
-        Consume(
-            GetExchangeParam(topic, persistence),
+        Consume(GetExchangeParam(topic, persistence),
             GetQueueParam(queue, persistence, isExclusive),
             dlx && !isExclusive ? GetExchangeParam(topic, persistence, ExchangeRole.Dlx) : null,
             dlx && !isExclusive ? GetQueueParam(queue, persistence, isExclusive, QueueRole.Dlx) : null,
@@ -43,14 +42,14 @@ public partial class ZaabeeRabbitMqClient
     /// <inheritdoc />
     public void Subscribe(
         string topic,
-        Func<Action<byte[]>> resolve,
+        Func<Func<byte[], ValueTask>> resolve,
         bool persistence,
         ushort prefetchCount = 10,
         int consumeRetry = Consts.DefaultConsumeRetry,
         bool dlx = true,
         bool isExclusive = false)
     {
-        var queue = GetQueueName(resolve);
+        var queue = GenerateQueueName(resolve);
         // The exclusive queue do not have dlx
         Consume(GetExchangeParam(topic, persistence),
             GetQueueParam(queue, persistence, isExclusive),

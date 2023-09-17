@@ -4,7 +4,7 @@ public partial class ZaabeeRabbitMqClient
 {
     /// <inheritdoc />
     public void Receive<T>(
-        Func<Action<T?>> resolve,
+        Func<Func<T?, Task>> resolve,
         bool persistence,
         ushort prefetchCount = Consts.DefaultPrefetchCount,
         int consumeRetry = Consts.DefaultConsumeRetry) =>
@@ -17,7 +17,7 @@ public partial class ZaabeeRabbitMqClient
     /// <inheritdoc />
     public void Receive<T>(
         string topic,
-        Func<Action<T?>> resolve,
+        Func<Func<T?, Task>> resolve,
         bool persistence,
         ushort prefetchCount = Consts.DefaultPrefetchCount,
         int consumeRetry = Consts.DefaultConsumeRetry) =>
@@ -30,13 +30,13 @@ public partial class ZaabeeRabbitMqClient
             consumeRetry);
 
     /// <inheritdoc />
-    public void Receive(
-        string topic,
-        Func<Action<byte[]>> resolve,
+    public void Receive(string topic,
+        Func<Func<byte[], Task>> resolve,
         bool persistence,
-        ushort prefetchCount = Consts.DefaultPrefetchCount,
+        ushort prefetchCount = 10,
         int consumeRetry = Consts.DefaultConsumeRetry) =>
-        Consume(GetExchangeParam(topic, persistence),
+        Consume(
+            GetExchangeParam(topic, persistence),
             GetQueueParam(topic, persistence),
             null,
             null,

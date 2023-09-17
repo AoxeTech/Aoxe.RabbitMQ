@@ -263,6 +263,13 @@ public sealed partial class ZaabeeRabbitMqClient : IZaabeeRabbitMqClient
         return $"{handle.Method.ReflectedType?.FullName}.{handle.Method.Name}[{messageName}]";
     }
 
+    private string GenerateQueueName<T>(Func<Func<T, ValueTask>> resolve)
+    {
+        var handle = resolve();
+        var messageName = GetTopicName(typeof(T));
+        return $"{handle.Method.ReflectedType?.FullName}.{handle.Method.Name}[{messageName}]";
+    }
+
     private string GetTopicName(Type type) =>
         _topicNameDic.GetOrAdd(type,
             _ => type.GetCustomAttributes(typeof(MessageVersionAttribute), false).FirstOrDefault()
