@@ -4,7 +4,7 @@ public sealed partial class ZaabeeRabbitMqClient : IZaabeeRabbitMqClient
 {
     private readonly IConnection _publishConn;
     private readonly IConnection _subscribeConn;
-    private readonly IConnection _subscribeAsyncConn;
+    private readonly IConnection _subscribeAsyncConn;   
     private readonly IJsonSerializer _serializer;
 
     private readonly ConcurrentDictionary<Type, string> _topicNameDic = new();
@@ -21,6 +21,7 @@ public sealed partial class ZaabeeRabbitMqClient : IZaabeeRabbitMqClient
         {
             RequestedHeartbeat = options.HeartBeat,
             AutomaticRecoveryEnabled = options.AutomaticRecoveryEnabled,
+            TopologyRecoveryEnabled = options.TopologyRecoveryEnabled,
             NetworkRecoveryInterval = options.NetworkRecoveryInterval,
             RequestedConnectionTimeout = options.RequestedConnectionTimeout,
             SocketReadTimeout = options.SocketReadTimeout,
@@ -34,6 +35,7 @@ public sealed partial class ZaabeeRabbitMqClient : IZaabeeRabbitMqClient
         {
             RequestedHeartbeat = options.HeartBeat,
             AutomaticRecoveryEnabled = options.AutomaticRecoveryEnabled,
+            TopologyRecoveryEnabled = options.TopologyRecoveryEnabled,
             NetworkRecoveryInterval = options.NetworkRecoveryInterval,
             RequestedConnectionTimeout = options.RequestedConnectionTimeout,
             SocketReadTimeout = options.SocketReadTimeout,
@@ -215,7 +217,7 @@ public sealed partial class ZaabeeRabbitMqClient : IZaabeeRabbitMqClient
         };
     }
 
-    private static ExchangeParam GetExchangeParam(
+    private static ExchangeParam CreateExchangeParam(
         string topic,
         bool persistence,
         ExchangeRole exchangeRole = ExchangeRole.Normal) =>
@@ -230,7 +232,7 @@ public sealed partial class ZaabeeRabbitMqClient : IZaabeeRabbitMqClient
             Durable = persistence
         };
 
-    private static QueueParam GetQueueParam(
+    private static QueueParam CreateQueueParam(
         string queue,
         bool persistence,
         bool isExclusive = false,
@@ -241,15 +243,19 @@ public sealed partial class ZaabeeRabbitMqClient : IZaabeeRabbitMqClient
             Queue = queueRole is QueueRole.Dlx ? $"{queue}[dlx]" : queue,
             Durable = persistence
         };
+        if (isExclusive)
+        {
+            queueParam.Queue += $"[{Guid.NewGuid()}]";
+            queueParam.Exclusive = true;
+            queueParam.AutoDelete = true;
+            return queueParam;
+        }
+        queueParam.Arguments ??= new Dictionary<string, object>();
         queueParam.Arguments?.Add("x-queue-type", "quorum");
-        if (!isExclusive) return queueParam;
-        queueParam.Queue += $"[{Guid.NewGuid()}]";
-        queueParam.Exclusive = true;
-        queueParam.AutoDelete = true;
         return queueParam;
     }
 
-    private string GetQueueName<T>(Func<Action<T>> resolve)
+    private string GenerateQueueName<T>(Func<Action<T>> resolve)
     {
         var handle = resolve();
         var messageName = GetTopicName(typeof(T));

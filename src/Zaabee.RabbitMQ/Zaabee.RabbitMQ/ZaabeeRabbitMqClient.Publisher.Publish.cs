@@ -30,7 +30,7 @@ public partial class ZaabeeRabbitMqClient
         bool persistence,
         int publishRetry = Consts.DefaultPublishRetry) =>
         Publish(body,
-            GetExchangeParam(topic, persistence),
+            CreateExchangeParam(topic, persistence),
             persistence,
             publishRetry);
 }

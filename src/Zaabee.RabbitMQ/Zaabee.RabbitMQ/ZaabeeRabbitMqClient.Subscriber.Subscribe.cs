@@ -28,13 +28,13 @@ public partial class ZaabeeRabbitMqClient
         bool dlx = true,
         bool isExclusive = false)
     {
-        var queue = GetQueueName(resolve);
+        var queue = GenerateQueueName(resolve);
         // The exclusive queue do not have dlx
         Consume(
-            GetExchangeParam(topic, persistence),
-            GetQueueParam(queue, persistence, isExclusive),
-            dlx && !isExclusive ? GetExchangeParam(topic, persistence, ExchangeRole.Dlx) : null,
-            dlx && !isExclusive ? GetQueueParam(queue, persistence, isExclusive, QueueRole.Dlx) : null,
+            CreateExchangeParam(topic, persistence),
+            CreateQueueParam(queue, persistence, isExclusive),
+            dlx && !isExclusive ? CreateExchangeParam(topic, persistence, ExchangeRole.Dlx) : null,
+            dlx && !isExclusive ? CreateQueueParam(queue, persistence, isExclusive, QueueRole.Dlx) : null,
             resolve,
             prefetchCount,
             consumeRetry);
@@ -50,12 +50,12 @@ public partial class ZaabeeRabbitMqClient
         bool dlx = true,
         bool isExclusive = false)
     {
-        var queue = GetQueueName(resolve);
+        var queue = GenerateQueueName(resolve);
         // The exclusive queue do not have dlx
-        Consume(GetExchangeParam(topic, persistence),
-            GetQueueParam(queue, persistence, isExclusive),
-            dlx && !isExclusive ? GetExchangeParam(topic, persistence, ExchangeRole.Dlx) : null,
-            dlx && !isExclusive ? GetQueueParam(queue, persistence, isExclusive, QueueRole.Dlx) : null,
+        Consume(CreateExchangeParam(topic, persistence),
+            CreateQueueParam(queue, persistence, isExclusive),
+            dlx && !isExclusive ? CreateExchangeParam(topic, persistence, ExchangeRole.Dlx) : null,
+            dlx && !isExclusive ? CreateQueueParam(queue, persistence, isExclusive, QueueRole.Dlx) : null,
             resolve,
             prefetchCount,
             consumeRetry);

@@ -21,8 +21,8 @@ public partial class ZaabeeRabbitMqClient
         bool persistence,
         ushort prefetchCount = Consts.DefaultPrefetchCount,
         int consumeRetry = Consts.DefaultConsumeRetry) =>
-        Consume(GetExchangeParam(topic, persistence),
-            GetQueueParam(topic, persistence),
+        Consume(CreateExchangeParam(topic, persistence),
+            CreateQueueParam(topic, persistence),
             null,
             null,
             resolve,
@@ -36,8 +36,8 @@ public partial class ZaabeeRabbitMqClient
         bool persistence,
         ushort prefetchCount = Consts.DefaultPrefetchCount,
         int consumeRetry = Consts.DefaultConsumeRetry) =>
-        Consume(GetExchangeParam(topic, persistence),
-            GetQueueParam(topic, persistence),
+        Consume(CreateExchangeParam(topic, persistence),
+            CreateQueueParam(topic, persistence),
             null,
             null,
             resolve,

@@ -6,6 +6,7 @@ public class ZaabeeRabbitMqOptions
     public string UserName { get; set; } = null!;
     public string Password { get; set; } = null!;
     public bool AutomaticRecoveryEnabled { get; set; } = true;
+    public bool TopologyRecoveryEnabled { get; set; } = true;
     public TimeSpan HeartBeat { get; set; } = TimeSpan.FromSeconds(60.0);
     public TimeSpan NetworkRecoveryInterval { get; set; } = TimeSpan.FromSeconds(5.0);
     public TimeSpan RequestedConnectionTimeout { get; set; } = TimeSpan.FromSeconds(30.0);
