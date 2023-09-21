@@ -2,12 +2,12 @@
 	<PropertyGroup>
 		<TargetFrameworks>netstandard2.0;net6.0;net7.0;net8.0</TargetFrameworks>
 		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-		<PackageVersion>2023.6.0</PackageVersion>
-		<Version>2023.6.0</Version>
+		<PackageVersion>2023.6.2</PackageVersion>
+		<Version>2023.6.2</Version>
 		<Authors>Mutuduxf</Authors>
 		<Company>Mutuduxf</Company>
-		<PackageTags>Zaabee;Message Queue;MQ;Message Bus;RabbitMQ</PackageTags>
-		<PackageProjectUrl>https://github.com/PicoHex/Zaabee.AMQP</PackageProjectUrl>
+		<PackageTags>Zaabee Messaging;Messaging Queue;MQ;Messaging Bus;RabbitMQ;AMQP</PackageTags>
+		<PackageProjectUrl>https://github.com/PicoHex/Zaabee.RabbitMQ</PackageProjectUrl>
 		<Description>An easy-to-use and robust RabbitMQ client.</Description>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<LangVersion>Latest</LangVersion>
@@ -17,7 +17,7 @@
 		<PackageReference Include="Microsoft.Extensions.Logging" Version="7.0.0" />
 		<PackageReference Include="Polly" Version="7.2.4" />
 		<PackageReference Include="RabbitMQ.Client" Version="6.5.0" />
-		<PackageReference Include="Zaabee.RabbitMQ.Abstractions" Version="2023.6.0" />
+		<PackageReference Include="Zaabee.RabbitMQ.Abstractions" Version="2023.6.2" />
 		<PackageReference Include="Zaabee.Serializer.Abstractions" Version="2023.5.0" />
 	</ItemGroup>
 </Project>
