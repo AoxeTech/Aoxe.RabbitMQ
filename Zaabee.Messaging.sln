@@ -12,11 +12,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Zaabee.RabbiqMQ.Demo", "Zaa
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Zaabee.RabbitMQ.Tests", "Zaabee.RabbitMQ.Tests", "{0BE0DAE0-8488-4E5A-9208-5ED2248CF558}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Zaabee.Azure.Messaging", "Zaabee.Azure.Messaging", "{4A3BE89A-259A-4398-AC37-D08FEB393538}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Zaabee.Azure", "Zaabee.Azure", "{4A3BE89A-259A-4398-AC37-D08FEB393538}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zaabee.Azure.EventHubs", "src\Zaabee.Azure.Messaging\Zaabee.Azure.EventHubs\Zaabee.Azure.EventHubs.csproj", "{CAF19F8E-52E7-489D-9FCC-77764E7A0A45}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zaabee.Azure.EventHubs", "src\Zaabee.Azure\Zaabee.Azure.EventHubs\Zaabee.Azure.EventHubs.csproj", "{CAF19F8E-52E7-489D-9FCC-77764E7A0A45}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zaabee.Azure.ServiceBus", "src\Zaabee.Azure.Messaging\Zaabee.Azure.ServiceBus\Zaabee.Azure.ServiceBus.csproj", "{110A25EF-EEBB-4863-960D-AA63DDDD45B7}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zaabee.Azure.ServiceBus", "src\Zaabee.Azure\Zaabee.Azure.ServiceBus\Zaabee.Azure.ServiceBus.csproj", "{110A25EF-EEBB-4863-960D-AA63DDDD45B7}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zaabee.RabbitMQ", "src\Zaabee.RabbitMQ\Zaabee.RabbitMQ\Zaabee.RabbitMQ.csproj", "{E99B5D42-9E56-47EB-9E32-BE874FEF9C9A}"
 EndProject
@@ -26,7 +26,15 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zaabee.RabbitMQ.Demo", "dem
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zaabee.RabbitMQ.Streams.Demo", "demo\Zaabee.RabbitMQ.Demo\Zaabee.RabbitMQ.Streams.Demo\Zaabee.RabbitMQ.Streams.Demo.csproj", "{27DFDE94-06E2-4B54-8B19-9820DB2D31E5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zaabee.Azure.EventGrid", "src\Zaabee.Azure.Messaging\Zaabee.Azure.EventGrid\Zaabee.Azure.EventGrid.csproj", "{EE54F944-6F54-411A-B342-70485444864D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zaabee.Azure.EventGrid", "src\Zaabee.Azure\Zaabee.Azure.EventGrid\Zaabee.Azure.EventGrid.csproj", "{EE54F944-6F54-411A-B342-70485444864D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Zaabee.AWS", "Zaabee.AWS", "{D83A9A6C-65B2-4BFB-925F-2DEC10B058C2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zaabee.AWS.SQS", "src\Zaabee.AWS\Zaabee.AWS.SQS\Zaabee.AWS.SQS.csproj", "{195438FA-BA2B-4D57-8C40-B272D0680C18}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zaabee.AWS.SNS", "src\Zaabee.AWS\Zaabee.AWS.SNS\Zaabee.AWS.SNS.csproj", "{5E6AB558-7F6F-429E-B5CB-5CAC8CAFBEA3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zaabee.AWS.MQ", "src\Zaabee.AWS\Zaabee.AWS.MQ\Zaabee.AWS.MQ.csproj", "{ABF0A70A-F410-4F27-8428-E31B8E73F03A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -62,6 +70,18 @@ Global
 		{EE54F944-6F54-411A-B342-70485444864D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EE54F944-6F54-411A-B342-70485444864D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EE54F944-6F54-411A-B342-70485444864D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{195438FA-BA2B-4D57-8C40-B272D0680C18}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{195438FA-BA2B-4D57-8C40-B272D0680C18}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{195438FA-BA2B-4D57-8C40-B272D0680C18}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{195438FA-BA2B-4D57-8C40-B272D0680C18}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5E6AB558-7F6F-429E-B5CB-5CAC8CAFBEA3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5E6AB558-7F6F-429E-B5CB-5CAC8CAFBEA3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5E6AB558-7F6F-429E-B5CB-5CAC8CAFBEA3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5E6AB558-7F6F-429E-B5CB-5CAC8CAFBEA3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ABF0A70A-F410-4F27-8428-E31B8E73F03A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ABF0A70A-F410-4F27-8428-E31B8E73F03A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ABF0A70A-F410-4F27-8428-E31B8E73F03A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ABF0A70A-F410-4F27-8428-E31B8E73F03A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{25678307-0063-4430-B354-DD5B65CAEC39} = {A9E5ECCA-5ED9-4E42-A239-13FDD50BDBBE}
@@ -75,5 +95,9 @@ Global
 		{D34E1B0D-AC99-4E2E-A7DB-716906A734E6} = {01BEE77B-3706-4EF8-959F-5821509BBB6A}
 		{27DFDE94-06E2-4B54-8B19-9820DB2D31E5} = {01BEE77B-3706-4EF8-959F-5821509BBB6A}
 		{EE54F944-6F54-411A-B342-70485444864D} = {4A3BE89A-259A-4398-AC37-D08FEB393538}
+		{D83A9A6C-65B2-4BFB-925F-2DEC10B058C2} = {A9E5ECCA-5ED9-4E42-A239-13FDD50BDBBE}
+		{195438FA-BA2B-4D57-8C40-B272D0680C18} = {D83A9A6C-65B2-4BFB-925F-2DEC10B058C2}
+		{5E6AB558-7F6F-429E-B5CB-5CAC8CAFBEA3} = {D83A9A6C-65B2-4BFB-925F-2DEC10B058C2}
+		{ABF0A70A-F410-4F27-8428-E31B8E73F03A} = {D83A9A6C-65B2-4BFB-925F-2DEC10B058C2}
 	EndGlobalSection
 EndGlobal
