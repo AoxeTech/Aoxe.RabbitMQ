@@ -26,6 +26,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zaabee.RabbitMQ.Demo", "dem
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zaabee.RabbitMQ.Streams.Demo", "demo\Zaabee.RabbitMQ.Demo\Zaabee.RabbitMQ.Streams.Demo\Zaabee.RabbitMQ.Streams.Demo.csproj", "{27DFDE94-06E2-4B54-8B19-9820DB2D31E5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zaabee.Azure.EventGrid", "src\Zaabee.Azure.Messaging\Zaabee.Azure.EventGrid\Zaabee.Azure.EventGrid.csproj", "{EE54F944-6F54-411A-B342-70485444864D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -56,6 +58,10 @@ Global
 		{27DFDE94-06E2-4B54-8B19-9820DB2D31E5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{27DFDE94-06E2-4B54-8B19-9820DB2D31E5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{27DFDE94-06E2-4B54-8B19-9820DB2D31E5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EE54F944-6F54-411A-B342-70485444864D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EE54F944-6F54-411A-B342-70485444864D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EE54F944-6F54-411A-B342-70485444864D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EE54F944-6F54-411A-B342-70485444864D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{25678307-0063-4430-B354-DD5B65CAEC39} = {A9E5ECCA-5ED9-4E42-A239-13FDD50BDBBE}
@@ -68,5 +74,6 @@ Global
 		{68FC74FA-5D8D-4EF7-9175-D159BACBF8B6} = {25678307-0063-4430-B354-DD5B65CAEC39}
 		{D34E1B0D-AC99-4E2E-A7DB-716906A734E6} = {01BEE77B-3706-4EF8-959F-5821509BBB6A}
 		{27DFDE94-06E2-4B54-8B19-9820DB2D31E5} = {01BEE77B-3706-4EF8-959F-5821509BBB6A}
+		{EE54F944-6F54-411A-B342-70485444864D} = {4A3BE89A-259A-4398-AC37-D08FEB393538}
 	EndGlobalSection
 EndGlobal

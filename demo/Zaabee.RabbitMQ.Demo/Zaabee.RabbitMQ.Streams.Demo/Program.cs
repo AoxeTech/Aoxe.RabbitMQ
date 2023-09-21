@@ -21,7 +21,7 @@ await streamSystem.CreateStream(
 
 var confirmationTaskCompletionSource = new TaskCompletionSource<int>();
 var confirmationCount = 0;
-const int MessageCount = 100;
+const int messageCount = 100;
 var producer = await Producer.Create( // (1)
         new ProducerConfig(streamSystem, streamName)
         {
@@ -34,10 +34,10 @@ var producer = await Producer.Create( // (1)
                 {
                     case ConfirmationStatus.Confirmed: // (3)
                         // all the messages received here are confirmed
-                        if (confirmationCount == MessageCount)
+                        if (confirmationCount == messageCount)
                         {
                             Console.WriteLine("*********************************");
-                            Console.WriteLine($"All the {MessageCount} messages are confirmed");
+                            Console.WriteLine($"All the {messageCount} messages are confirmed");
                             Console.WriteLine("*********************************");
                         }
 
@@ -54,13 +54,14 @@ var producer = await Producer.Create( // (1)
                         Console.WriteLine(
                             $"Message {confirmation.PublishingId} failed with {confirmation.Status}");
                         break;
+                    case ConfirmationStatus.WaitForConfirmation:
                     default:
                         throw new ArgumentOutOfRangeException();
                 }
 
-                if (confirmationCount == MessageCount)
+                if (confirmationCount == messageCount)
                 {
-                    confirmationTaskCompletionSource.SetResult(MessageCount);
+                    confirmationTaskCompletionSource.SetResult(messageCount);
                 }
 
                 await Task.CompletedTask.ConfigureAwait(false);
@@ -73,7 +74,7 @@ var producer = await Producer.Create( // (1)
 
 // Send 100 messages
 Console.WriteLine("Starting publishing...");
-for (var i = 0; i < MessageCount; i++)
+for (var i = 0; i < messageCount; i++)
 {
     await producer.Send( // (6)
         new Message(Encoding.ASCII.GetBytes($"{i}"))
