@@ -2,8 +2,8 @@
 	<PropertyGroup>
 		<TargetFrameworks>netstandard2.0;net6.0;net7.0;net8.0</TargetFrameworks>
 		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-		<PackageVersion>2023.8.0</PackageVersion>
-		<Version>2023.8.0</Version>
+		<PackageVersion>2023.8.2</PackageVersion>
+		<Version>2023.8.2</Version>
 		<Authors>Mutuduxf</Authors>
 		<Company>Mutuduxf</Company>
 		<PackageTags>Zaabee Messaging;Messaging Queue;MQ;Messaging Bus;RabbitMQ;AMQP</PackageTags>

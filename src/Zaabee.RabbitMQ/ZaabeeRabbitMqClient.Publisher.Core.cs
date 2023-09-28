@@ -5,7 +5,7 @@ public partial class ZaabeeRabbitMqClient
     private void Publish(
         byte[] body,
         ExchangeParam normalExchangeParam,
-        QueueParam normalQueueParam,
+        QueueParam? normalQueueParam,
         bool persistence,
         int publishRetry = Consts.DefaultPublishRetry) =>
         GetRetryPolicy(publishRetry).Execute(() =>

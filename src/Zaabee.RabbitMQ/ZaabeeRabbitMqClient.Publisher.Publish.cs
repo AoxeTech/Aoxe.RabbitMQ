@@ -24,7 +24,7 @@ public partial class ZaabeeRabbitMqClient
         string? queueName = null) =>
         Publish(body,
             CreateExchangeParam(topic, persistence),
-            CreateQueueParam(topic, persistence),
+            queueName is null ? null : CreateQueueParam(queueName, persistence),
             persistence,
             publishRetry);
 }
