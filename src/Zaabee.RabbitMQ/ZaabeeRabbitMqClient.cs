@@ -244,7 +244,6 @@ public sealed partial class ZaabeeRabbitMqClient : IZaabeeRabbitMqClient
         };
         if (isExclusive)
         {
-            queueParam.Queue += $"[{Guid.NewGuid()}]";
             queueParam.Exclusive = true;
             queueParam.AutoDelete = true;
             return queueParam;

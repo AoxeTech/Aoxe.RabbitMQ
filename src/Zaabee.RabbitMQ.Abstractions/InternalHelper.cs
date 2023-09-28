@@ -13,24 +13,24 @@ internal static class InternalHelper
                 ? $"{type}[{msgVerAttr.Version}]"
                 : type.ToString());
 
-    internal static string GenerateQueueName<T>(Func<Action<T>> resolve)
+    internal static string GenerateQueueName<T>(Func<Action<T>> resolve, bool isExclusive)
     {
         var handle = resolve();
         var messageName = GetTopicName(typeof(T));
-        return $"{handle.Method.ReflectedType?.FullName}.{handle.Method.Name}[{messageName}]";
+        return $"{handle.Method.ReflectedType?.FullName}.{handle.Method.Name}[{messageName}]{(isExclusive ? $"[{Guid.NewGuid()}]" : string.Empty)}";
     }
 
-    internal static string GenerateQueueName<T>(Func<Func<T, Task>> resolve)
+    internal static string GenerateQueueName<T>(Func<Func<T, Task>> resolve, bool isExclusive)
     {
         var handle = resolve();
         var messageName = GetTopicName(typeof(T));
-        return $"{handle.Method.ReflectedType?.FullName}.{handle.Method.Name}[{messageName}]";
+        return $"{handle.Method.ReflectedType?.FullName}.{handle.Method.Name}[{messageName}]{(isExclusive ? $"[{Guid.NewGuid()}]" : string.Empty)}";
     }
 
-    internal static string GenerateQueueName<T>(Func<Func<T, ValueTask>> resolve)
+    internal static string GenerateQueueName<T>(Func<Func<T, ValueTask>> resolve, bool isExclusive)
     {
         var handle = resolve();
         var messageName = GetTopicName(typeof(T));
-        return $"{handle.Method.ReflectedType?.FullName}.{handle.Method.Name}[{messageName}]";
+        return $"{handle.Method.ReflectedType?.FullName}.{handle.Method.Name}[{messageName}]{(isExclusive ? $"[{Guid.NewGuid()}]" : string.Empty)}";
     }
 }

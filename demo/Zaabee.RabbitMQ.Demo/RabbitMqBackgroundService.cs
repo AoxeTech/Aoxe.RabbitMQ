@@ -15,7 +15,8 @@ public class RabbitMqBackgroundService : BackgroundService
         _messageBus.SubscribeEvent<TestEvent>(() => new Subscriber().TestEventHandlerAsync);
         // _messageBus.ReceiveCommand<TestEvent>(() => new Subscriber().TestEventHandler);
         _messageBus.ReceiveCommand<TestEvent>(() => new Subscriber().TestEventExceptionHandler);
-        _messageBus.SubscribeEvent<TestEventWithVersion>(() => new Subscriber().TestEventExceptionWithVersionHandler, 20);
+        _messageBus.SubscribeEvent<TestEventWithVersion>(() => new Subscriber().TestEventExceptionWithVersionHandler, null, 20);
+        _messageBus.SubscribeEvent<TestEventWithVersion>(() => new Subscriber().TestEventExceptionWithVersionHandler, "TestQueueName", 20);
         _messageBus.ListenMessage<TestMessage>(() => new Subscriber().TestMessageHandler);
         return Task.CompletedTask;
     }

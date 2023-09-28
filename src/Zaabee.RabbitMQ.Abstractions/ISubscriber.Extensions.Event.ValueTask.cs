@@ -14,7 +14,7 @@ public static partial class SubscriberExtension
     /// <typeparam name="T"></typeparam>
     public static void SubscribeEvent<T>(
         this ISubscriber subscriber,
-        Func<Action<T?>> resolve,
+        Func<Func<T?, ValueTask>> resolve,
         string? queueName = null,
         ushort prefetchCount = Consts.DefaultPrefetchCount,
         int consumeRetry = Consts.DefaultConsumeRetry,
@@ -39,7 +39,7 @@ public static partial class SubscriberExtension
     public static void SubscribeEvent<T>(
         this ISubscriber subscriber,
         string topic,
-        Func<Action<T?>> resolve,
+        Func<Func<T?, ValueTask>> resolve,
         string? queueName = null,
         ushort prefetchCount = Consts.DefaultPrefetchCount,
         int consumeRetry = Consts.DefaultConsumeRetry,
@@ -62,7 +62,7 @@ public static partial class SubscriberExtension
     public static void SubscribeEvent(
         this ISubscriber subscriber,
         string topic,
-        Func<Action<byte[]>> resolve,
+        Func<Func<byte[], ValueTask>> resolve,
         string? queueName = null,
         ushort prefetchCount = Consts.DefaultPrefetchCount,
         int consumeRetry = Consts.DefaultConsumeRetry,

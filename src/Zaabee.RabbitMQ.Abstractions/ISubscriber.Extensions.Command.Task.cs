@@ -12,7 +12,7 @@ public static partial class SubscriberExtension
     /// <typeparam name="T"></typeparam>
     public static void ReceiveCommand<T>(
         this ISubscriber subscriber,
-        Func<Action<T?>> resolve,
+        Func<Func<T?, Task>> resolve,
         ushort prefetchCount = Consts.DefaultPrefetchCount,
         int consumeRetry = Consts.DefaultConsumeRetry)
     {
@@ -20,7 +20,7 @@ public static partial class SubscriberExtension
         subscriber.Subscribe(topic, resolve, topic, true, prefetchCount, consumeRetry);
     }
 
-    /// <summary>
+    /// <summary>t
     /// The subscriber cluster will get the command from the queue which bind the specified topic.
     /// </summary>
     /// <param name="subscriber"></param>
@@ -32,7 +32,7 @@ public static partial class SubscriberExtension
     public static void ReceiveCommand<T>(
         this ISubscriber subscriber,
         string topic,
-        Func<Action<T?>> resolve,
+        Func<Func<T?, Task>> resolve,
         ushort prefetchCount = Consts.DefaultPrefetchCount,
         int consumeRetry = Consts.DefaultConsumeRetry) =>
         subscriber.Subscribe(topic, resolve, topic, true, prefetchCount, consumeRetry);
@@ -48,7 +48,7 @@ public static partial class SubscriberExtension
     public static void ReceiveCommand(
         this ISubscriber subscriber,
         string topic,
-        Func<Action<byte[]>> resolve,
+        Func<Func<byte[], Task>> resolve,
         ushort prefetchCount = Consts.DefaultPrefetchCount,
         int consumeRetry = Consts.DefaultConsumeRetry) =>
         subscriber.Subscribe(topic, resolve, topic, true, prefetchCount, consumeRetry);

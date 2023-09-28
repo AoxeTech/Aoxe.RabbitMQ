@@ -18,7 +18,8 @@ public class Startup
             new ZaabeeRabbitMqClient(new ZaabeeRabbitMqOptions
             {
                 AutomaticRecoveryEnabled = true,
-                Hosts = new List<string> { "192.168.78.130" },
+                // Hosts = new List<string> { "192.168.78.130" },
+                Hosts = new List<string> { "127.0.0.1" },
                 UserName = "admin",
                 Password = "123",
                 Serializer = new NewtonsoftJson.Serializer()

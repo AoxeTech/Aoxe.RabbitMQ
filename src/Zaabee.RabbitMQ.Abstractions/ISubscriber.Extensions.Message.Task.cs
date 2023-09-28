@@ -11,7 +11,7 @@ public static partial class SubscriberExtension
     /// <typeparam name="T"></typeparam>
     public static void ListenMessage<T>(
         this ISubscriber subscriber,
-        Func<Action<T?>> resolve,
+        Func<Func<T?, Task>> resolve,
         ushort prefetchCount = Consts.DefaultPrefetchCount)
     {
         var topic = InternalHelper.GetTopicName(typeof(T));
@@ -30,7 +30,7 @@ public static partial class SubscriberExtension
     public static void ListenMessage<T>(
         this ISubscriber subscriber,
         string topic,
-        Func<Action<T?>> resolve,
+        Func<Func<T?, Task>> resolve,
         ushort prefetchCount = Consts.DefaultPrefetchCount)
     {
         var queueName = InternalHelper.GenerateQueueName(resolve, true);
@@ -47,7 +47,7 @@ public static partial class SubscriberExtension
     public static void ListenMessage(
         this ISubscriber subscriber,
         string topic,
-        Func<Action<byte[]>> resolve,
+        Func<Func<byte[], Task>> resolve,
         ushort prefetchCount = Consts.DefaultPrefetchCount)
     {
         var queueName = InternalHelper.GenerateQueueName(resolve, true);
