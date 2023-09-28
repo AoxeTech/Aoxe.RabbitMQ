@@ -12,8 +12,11 @@ public static partial class PublisherExtension
     public static void SendCommand<T>(
         this IPublisher publisher,
         T? command,
-        int publishRetry = Consts.DefaultPublishRetry) =>
-        publisher.Send(command, true, publishRetry);
+        int publishRetry = Consts.DefaultPublishRetry)
+    {
+        var topic = InternalHelper.GetTopicName(typeof(T));
+        publisher.Publish(topic, command, true, publishRetry, topic);
+    }
 
     /// <summary>
     /// Send the command to the specified topic.
@@ -28,7 +31,7 @@ public static partial class PublisherExtension
         string topic,
         T? command,
         int publishRetry = Consts.DefaultPublishRetry) =>
-        publisher.Send(topic, command, true, publishRetry);
+        publisher.Publish(topic, command, true, publishRetry, topic);
 
     /// <summary>
     /// Send the command to the specified topic.
@@ -42,5 +45,5 @@ public static partial class PublisherExtension
         string topic,
         byte[] body,
         int publishRetry = Consts.DefaultPublishRetry) =>
-        publisher.Send(topic, body, true, publishRetry);
+        publisher.Publish(topic, body, true, publishRetry, topic);
 }

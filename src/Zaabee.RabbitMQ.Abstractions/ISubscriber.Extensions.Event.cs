@@ -16,8 +16,12 @@ public static partial class SubscriberExtension
         Func<Action<T?>> resolve,
         ushort prefetchCount = Consts.DefaultPrefetchCount,
         int consumeRetry = Consts.DefaultConsumeRetry,
-        bool dlx = true) =>
-        subscriber.Subscribe(resolve, true, prefetchCount, consumeRetry, dlx, false);
+        bool dlx = true)
+    {
+        var topic = InternalHelper.GetTopicName(typeof(T));
+        var queueName = InternalHelper.GenerateQueueName(resolve);
+        subscriber.Subscribe(topic, resolve, queueName, true, prefetchCount, consumeRetry, dlx, false);
+    }
 
     /// <summary>
     /// The subscriber cluster will get the event from its own queue which bind the default topic.
@@ -33,8 +37,12 @@ public static partial class SubscriberExtension
         Func<Func<T?, Task>> resolve,
         ushort prefetchCount = Consts.DefaultPrefetchCount,
         int consumeRetry = Consts.DefaultConsumeRetry,
-        bool dlx = true) =>
-        subscriber.Subscribe(resolve, true, prefetchCount, consumeRetry, dlx, false);
+        bool dlx = true)
+    {
+        var topic = InternalHelper.GetTopicName(typeof(T));
+        var queueName = InternalHelper.GenerateQueueName(resolve);
+        subscriber.Subscribe(topic, resolve, queueName, true, prefetchCount, consumeRetry, dlx, false);
+    }
 
     /// <summary>
     /// The subscriber cluster will get the event from its own queue which bind the specified topic.
@@ -52,8 +60,11 @@ public static partial class SubscriberExtension
         Func<Action<T?>> resolve,
         ushort prefetchCount = Consts.DefaultPrefetchCount,
         int consumeRetry = Consts.DefaultConsumeRetry,
-        bool dlx = true) =>
-        subscriber.Subscribe(topic, resolve, true, prefetchCount, consumeRetry, dlx, false);
+        bool dlx = true)
+    {
+        var queueName = InternalHelper.GenerateQueueName(resolve);
+        subscriber.Subscribe(topic, resolve, queueName, true, prefetchCount, consumeRetry, dlx, false);
+    }
 
     /// <summary>
     /// The subscriber cluster will get the event from its own queue which bind the specified topic.
@@ -71,8 +82,11 @@ public static partial class SubscriberExtension
         Func<Func<T?, Task>> resolve,
         ushort prefetchCount = Consts.DefaultPrefetchCount,
         int consumeRetry = Consts.DefaultConsumeRetry,
-        bool dlx = true) =>
-        subscriber.Subscribe(topic, resolve, true, prefetchCount, consumeRetry, dlx, false);
+        bool dlx = true)
+    {
+        var queueName = InternalHelper.GenerateQueueName(resolve);
+        subscriber.Subscribe(topic, resolve, queueName, true, prefetchCount, consumeRetry, dlx, false);
+    }
 
     /// <summary>
     /// The subscriber cluster will get the event from its own queue which bind the specified topic.
@@ -89,8 +103,11 @@ public static partial class SubscriberExtension
         Func<Action<byte[]>> resolve,
         ushort prefetchCount = Consts.DefaultPrefetchCount,
         int consumeRetry = Consts.DefaultConsumeRetry,
-        bool dlx = true) =>
-        subscriber.Subscribe(topic, resolve, true, prefetchCount, consumeRetry, dlx, false);
+        bool dlx = true)
+    {
+        var queueName = InternalHelper.GenerateQueueName(resolve);
+        subscriber.Subscribe(topic, resolve, queueName, true, prefetchCount, consumeRetry, dlx, false);
+    }
 
     /// <summary>
     /// The subscriber cluster will get the event from its own queue which bind the specified topic.
@@ -107,6 +124,9 @@ public static partial class SubscriberExtension
         Func<Func<byte[], Task>> resolve,
         ushort prefetchCount = Consts.DefaultPrefetchCount,
         int consumeRetry = Consts.DefaultConsumeRetry,
-        bool dlx = true) =>
-        subscriber.Subscribe(topic, resolve, true, prefetchCount, consumeRetry, dlx, false);
+        bool dlx = true)
+    {
+        var queueName = InternalHelper.GenerateQueueName(resolve);
+        subscriber.Subscribe(topic, resolve, queueName, true, prefetchCount, consumeRetry, dlx, false);
+    }
 }

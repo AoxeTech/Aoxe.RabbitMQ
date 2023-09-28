@@ -80,11 +80,11 @@ public class RabbitMqDemoController : Controller
         var sw = Stopwatch.StartNew();
         for (var i = 0; i < quantity; i++)
         {
-            _messageBus.Publish(new TestMessage
+            _messageBus.PublishMessage(new TestMessage
             {
                 Id = Guid.NewGuid(),
                 Timestamp = DateTimeOffset.Now
-            }, false);
+            });
         }
 
         return sw.ElapsedMilliseconds;
@@ -96,11 +96,11 @@ public class RabbitMqDemoController : Controller
         var sw = Stopwatch.StartNew();
         for (var i = 0; i < quantity; i++)
         {
-            _messageBus.Send(new TestMessage
+            _messageBus.PublishMessage(new TestMessage
             {
                 Id = Guid.NewGuid(),
                 Timestamp = DateTimeOffset.Now
-            }, false);
+            });
         }
 
         return sw.ElapsedMilliseconds;

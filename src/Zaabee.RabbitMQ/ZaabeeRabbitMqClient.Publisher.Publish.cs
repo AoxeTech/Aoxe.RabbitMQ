@@ -4,33 +4,27 @@ public partial class ZaabeeRabbitMqClient
 {
     /// <inheritdoc />
     public void Publish<T>(
-        T? message,
-        bool persistence,
-        int publishRetry = Consts.DefaultPublishRetry) =>
-        Publish(GetTopicName(typeof(T)),
-            message,
-            persistence,
-            publishRetry);
-
-    /// <inheritdoc />
-    public void Publish<T>(
         string topic,
         T? message,
         bool persistence,
-        int publishRetry = Consts.DefaultPublishRetry) =>
+        int publishRetry = Consts.DefaultPublishRetry,
+        string? queueName = null) =>
         Publish(topic,
             _serializer.ToBytes(message),
             persistence,
-            publishRetry);
+            publishRetry,
+            queueName);
 
     /// <inheritdoc />
     public void Publish(
         string topic,
         byte[] body,
         bool persistence,
-        int publishRetry = Consts.DefaultPublishRetry) =>
+        int publishRetry = Consts.DefaultPublishRetry,
+        string? queueName = null) =>
         Publish(body,
             CreateExchangeParam(topic, persistence),
+            CreateQueueParam(topic, persistence),
             persistence,
             publishRetry);
 }

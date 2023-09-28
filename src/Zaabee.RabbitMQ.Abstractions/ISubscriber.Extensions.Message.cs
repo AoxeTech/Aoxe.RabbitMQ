@@ -12,8 +12,12 @@ public static partial class SubscriberExtension
     public static void ListenMessage<T>(
         this ISubscriber subscriber,
         Func<Action<T?>> resolve,
-        ushort prefetchCount = Consts.DefaultPrefetchCount) =>
-        subscriber.Subscribe(resolve, false, prefetchCount, 0, false, true);
+        ushort prefetchCount = Consts.DefaultPrefetchCount)
+    {
+        var topic = InternalHelper.GetTopicName(typeof(T));
+        var queueName = InternalHelper.GenerateQueueName(resolve);
+        subscriber.Subscribe(topic, resolve, queueName, false, prefetchCount, 0, false, true);
+    }
 
     /// <summary>
     /// The subscriber cluster will get the message from its own queue which bind the default topic.
@@ -25,8 +29,12 @@ public static partial class SubscriberExtension
     public static void ListenMessage<T>(
         this ISubscriber subscriber,
         Func<Func<T?, Task>> resolve,
-        ushort prefetchCount = Consts.DefaultPrefetchCount) =>
-        subscriber.Subscribe(resolve, false, prefetchCount, 0, false, true);
+        ushort prefetchCount = Consts.DefaultPrefetchCount)
+    {
+        var topic = InternalHelper.GetTopicName(typeof(T));
+        var queueName = InternalHelper.GenerateQueueName(resolve);
+        subscriber.Subscribe(topic, resolve, queueName, false, prefetchCount, 0, false, true);
+    }
 
     /// <summary>
     /// The subscriber cluster will get the message from its own queue which bind the specified topic.
@@ -40,8 +48,11 @@ public static partial class SubscriberExtension
         this ISubscriber subscriber,
         string topic,
         Func<Action<T?>> resolve,
-        ushort prefetchCount = Consts.DefaultPrefetchCount) =>
-        subscriber.Subscribe(topic, resolve, false, prefetchCount, 0, false, true);
+        ushort prefetchCount = Consts.DefaultPrefetchCount)
+    {
+        var queueName = InternalHelper.GenerateQueueName(resolve);
+        subscriber.Subscribe(topic, resolve, queueName, false, prefetchCount, 0, false, true);
+    }
 
     /// <summary>
     /// The subscriber cluster will get the message from its own queue which bind the specified topic.
@@ -55,8 +66,11 @@ public static partial class SubscriberExtension
         this ISubscriber subscriber,
         string topic,
         Func<Func<T?, Task>> resolve,
-        ushort prefetchCount = Consts.DefaultPrefetchCount) =>
-        subscriber.Subscribe(topic, resolve, false, prefetchCount, 0, false, true);
+        ushort prefetchCount = Consts.DefaultPrefetchCount)
+    {
+        var queueName = InternalHelper.GenerateQueueName(resolve);
+        subscriber.Subscribe(topic, resolve, queueName, false, prefetchCount, 0, false, true);
+    }
 
     /// <summary>
     /// The subscriber cluster will get the message from its own queue which bind the specified topic.
@@ -69,8 +83,11 @@ public static partial class SubscriberExtension
         this ISubscriber subscriber,
         string topic,
         Func<Action<byte[]>> resolve,
-        ushort prefetchCount = Consts.DefaultPrefetchCount) =>
-        subscriber.Subscribe(topic, resolve, false, prefetchCount, 0, false, true);
+        ushort prefetchCount = Consts.DefaultPrefetchCount)
+    {
+        var queueName = InternalHelper.GenerateQueueName(resolve);
+        subscriber.Subscribe(topic, resolve, queueName, false, prefetchCount, 0, false, true);
+    }
 
     /// <summary>
     /// The subscriber cluster will get the message from its own queue which bind the specified topic.
@@ -83,6 +100,9 @@ public static partial class SubscriberExtension
         this ISubscriber subscriber,
         string topic,
         Func<Func<byte[], Task>> resolve,
-        ushort prefetchCount = Consts.DefaultPrefetchCount) =>
-        subscriber.Subscribe(topic, resolve, false, prefetchCount, 0, false, true);
+        ushort prefetchCount = Consts.DefaultPrefetchCount)
+    {
+        var queueName = InternalHelper.GenerateQueueName(resolve);
+        subscriber.Subscribe(topic, resolve, queueName, false, prefetchCount, 0, false, true);
+    }
 }

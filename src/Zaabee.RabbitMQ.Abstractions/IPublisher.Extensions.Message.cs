@@ -13,7 +13,7 @@ public static partial class PublisherExtension
         this IPublisher publisher,
         T? message,
         int publishRetry = Consts.DefaultPublishRetry) =>
-        publisher.Publish(message, false, publishRetry);
+        publisher.Publish(InternalHelper.GetTopicName(typeof(T)), message, false, publishRetry);
 
     /// <summary>
     /// Publish the message to the specified topic.

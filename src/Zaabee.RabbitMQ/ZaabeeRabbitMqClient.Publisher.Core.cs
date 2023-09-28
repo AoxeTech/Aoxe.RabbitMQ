@@ -4,27 +4,8 @@ public partial class ZaabeeRabbitMqClient
 {
     private void Publish(
         byte[] body,
-        ExchangeParam exchangeParam,
-        bool persistence,
-        int retry = Consts.DefaultPublishRetry) =>
-        GetRetryPolicy(retry).Execute(() =>
-        {
-            IBasicProperties? properties = null;
-            using var channel = GenerateChannel(_publishConn, exchangeParam);
-            if (persistence)
-            {
-                properties = channel.CreateBasicProperties();
-                properties.Persistent = persistence;
-            }
-            channel.BasicPublish(exchangeParam.Exchange, DefaultRoutingKey, properties, body);
-        });
-
-    private void Send(
-        byte[] body,
         ExchangeParam normalExchangeParam,
         QueueParam normalQueueParam,
-        ExchangeParam? dlxExchangeParam,
-        QueueParam? dlxQueueParam,
         bool persistence,
         int publishRetry = Consts.DefaultPublishRetry) =>
         GetRetryPolicy(publishRetry).Execute(() =>
@@ -35,8 +16,8 @@ public partial class ZaabeeRabbitMqClient
                 normalExchangeParam,
                 normalQueueParam,
                 null,
-                dlxExchangeParam,
-                dlxQueueParam);
+                null,
+                null);
             if (persistence)
             {
                 properties = channel.CreateBasicProperties();
