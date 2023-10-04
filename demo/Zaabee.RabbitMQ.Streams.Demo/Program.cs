@@ -1,11 +1,9 @@
-﻿using System.Net;
-
-var streamSystem = await StreamSystem.Create( // (1)
+﻿var streamSystem = await StreamSystem.Create( // (1)
     new StreamSystemConfig() // (2)
     {
-        UserName = "guest",
-        Password = "guest",
-        Endpoints = new List<EndPoint>() { new IPEndPoint(IPAddress.Loopback, 5552) }
+        UserName = "admin",
+        Password = "123",
+        Endpoints = new List<EndPoint> { new IPEndPoint(IPAddress.Loopback, 5552) }
     }
     // streamLogger // (3)
 ).ConfigureAwait(false);
