@@ -2,8 +2,8 @@
 	<PropertyGroup>
 		<TargetFrameworks>netstandard2.0;net6.0;net7.0;net8.0</TargetFrameworks>
 		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-		<PackageVersion>2023.9.2</PackageVersion>
-		<Version>2023.9.2</Version>
+		<PackageVersion>2023.10.0</PackageVersion>
+		<Version>2023.10.0</Version>
 		<Authors>Mutuduxf</Authors>
 		<Company>Mutuduxf</Company>
 		<PackageTags>Zaabee Messaging;Messaging Queue;MQ;Messaging Bus;RabbitMQ;AMQP</PackageTags>
@@ -17,7 +17,7 @@
 		<PackageReference Include="Microsoft.Extensions.Logging" Version="7.0.0" />
 		<PackageReference Include="Polly" Version="8.0.0" />
 		<PackageReference Include="RabbitMQ.Client" Version="6.5.0" />
-		<PackageReference Include="Zaabee.RabbitMQ.Abstractions" Version="2023.9.0" />
+		<PackageReference Include="Zaabee.RabbitMQ.Abstractions" Version="2023.10.0" />
 		<PackageReference Include="Zaabee.Serializer.Abstractions" Version="2023.5.0" />
 	</ItemGroup>
 </Project>
