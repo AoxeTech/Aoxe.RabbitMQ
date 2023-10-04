@@ -3,21 +3,54 @@
 public class RabbitMqBackgroundService : BackgroundService
 {
     private readonly IZaabeeRabbitMqClient _messageBus;
+    private readonly IServiceProvider _serviceProvider;
 
-    public RabbitMqBackgroundService(IZaabeeRabbitMqClient messageBus)
+    public RabbitMqBackgroundService(IZaabeeRabbitMqClient messageBus, IServiceProvider serviceProvider)
     {
         _messageBus = messageBus;
+        _serviceProvider = serviceProvider;
     }
 
     protected override Task ExecuteAsync(CancellationToken stoppingToken)
     {
-        _messageBus.SubscribeEvent<TestEvent>(() => new Subscriber().TestEventHandler);
-        _messageBus.SubscribeEvent<TestEvent>(() => new Subscriber().TestEventHandlerAsync);
-        // _messageBus.ReceiveCommand<TestEvent>(() => new Subscriber().TestEventHandler);
-        _messageBus.ReceiveCommand<TestEvent>(() => new Subscriber().TestEventExceptionHandler);
-        _messageBus.SubscribeEvent<TestEventWithVersion>(() => new Subscriber().TestEventExceptionWithVersionHandler, null, 20);
-        _messageBus.SubscribeEvent<TestEventWithVersion>(() => new Subscriber().TestEventExceptionWithVersionHandler, "TestQueueName", 20);
-        _messageBus.ListenMessage<TestMessage>(() => new Subscriber().TestMessageHandler);
+        _messageBus.SubscribeEvent<TestEvent>(() =>
+        {
+            using var scope = _serviceProvider.CreateScope();
+            return scope.ServiceProvider.GetRequiredService<Subscriber>().TestEventHandler;
+        });
+        _messageBus.SubscribeEvent<TestEvent>(() =>
+        {
+            using var scope = _serviceProvider.CreateScope();
+            return scope.ServiceProvider.GetRequiredService<Subscriber>().TestEventHandler;
+        });
+        _messageBus.SubscribeEvent<TestEvent>(() =>
+        {
+            using var scope = _serviceProvider.CreateScope();
+            return scope.ServiceProvider.GetRequiredService<Subscriber>().TestEventHandlerAsync;
+        });
+        // _messageBus.ReceiveCommand<TestEvent>(() => _serviceProvider.GetRequiredService<Subscriber>().TestEventHandler);
+        _messageBus.ReceiveCommand<TestEvent>(() =>
+        {
+            using var scope = _serviceProvider.CreateScope();
+            return scope.ServiceProvider.GetRequiredService<Subscriber>().TestEventExceptionHandler;
+        });
+        _messageBus.SubscribeEvent<TestEventWithVersion>(() =>
+            {
+                using var scope = _serviceProvider.CreateScope();
+                return scope.ServiceProvider.GetRequiredService<Subscriber>().TestEventExceptionWithVersionHandler;
+            },
+            prefetchCount: 20);
+        _messageBus.SubscribeEvent<TestEventWithVersion>(() =>
+            {
+                using var scope = _serviceProvider.CreateScope();
+                return scope.ServiceProvider.GetRequiredService<Subscriber>().TestEventExceptionWithVersionHandler;
+            },
+            "TestQueueName", 20);
+        _messageBus.ListenMessage<TestMessage>(() =>
+        {
+            using var scope = _serviceProvider.CreateScope();
+            return scope.ServiceProvider.GetRequiredService<Subscriber>().TestMessageHandler;
+        });
         return Task.CompletedTask;
     }
 

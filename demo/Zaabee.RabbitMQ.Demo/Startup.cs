@@ -24,6 +24,7 @@ public class Startup
                 Password = "123",
                 Serializer = new NewtonsoftJson.Serializer()
             }));
+        services.AddScoped<Subscriber,Subscriber>();
         services.AddHostedService<RabbitMqBackgroundService>();
     }
 
