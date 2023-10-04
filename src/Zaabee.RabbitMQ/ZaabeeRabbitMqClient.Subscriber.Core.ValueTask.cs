@@ -21,7 +21,7 @@ public partial class ZaabeeRabbitMqClient
             dlxExchangeParam,
             dlxQueueParam,
             prefetchCount);
-        var consumer = new EventingBasicConsumer(channel);
+        var consumer = new AsyncEventingBasicConsumer(channel);
 
         consumer.Received += async (_, ea) =>
         {
@@ -74,7 +74,7 @@ public partial class ZaabeeRabbitMqClient
             retryExchangeParam,
             dlxQueueParam,
             prefetchCount);
-        var consumer = new EventingBasicConsumer(channel);
+        var consumer = new AsyncEventingBasicConsumer(channel);
 
         consumer.Received += async (_, ea) =>
         {

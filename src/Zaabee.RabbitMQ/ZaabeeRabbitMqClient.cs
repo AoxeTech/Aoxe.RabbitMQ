@@ -85,7 +85,7 @@ public sealed partial class ZaabeeRabbitMqClient : IZaabeeRabbitMqClient
         ushort prefetchCount = Consts.DefaultPrefetchCount) =>
         _subscriberAsyncChannelDic.GetOrAdd(normalQueueParam.Queue, _ =>
         {
-            var channel = GenerateChannel(_subscribeConn,
+            var channel = GenerateChannel(_subscribeAsyncConn,
                 normalExchangeParam,
                 normalQueueParam,
                 retryExchangeParam,
