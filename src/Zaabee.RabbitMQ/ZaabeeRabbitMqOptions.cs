@@ -1,6 +1,6 @@
 ﻿namespace Zaabee.RabbitMQ;
 
-public class ZaabeeRabbitMqOptions
+public sealed class ZaabeeRabbitMqOptions
 {
     public List<string> Hosts { get; set; } = new();
     public string UserName { get; set; } = null!;
@@ -12,6 +12,7 @@ public class ZaabeeRabbitMqOptions
     public TimeSpan RequestedConnectionTimeout { get; set; } = TimeSpan.FromSeconds(30.0);
     public TimeSpan SocketReadTimeout { get; set; } = TimeSpan.FromSeconds(30);
     public TimeSpan SocketWriteTimeout { get; set; } = TimeSpan.FromSeconds(30);
+    public int ConsumerDispatchConcurrency { get; set; } = Consts.DefaultPrefetchCount;
 
     private string _virtualHost = string.Empty;
 

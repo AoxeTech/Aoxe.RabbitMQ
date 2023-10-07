@@ -28,6 +28,7 @@ public sealed partial class ZaabeeRabbitMqClient : IZaabeeRabbitMqClient
             UserName = options.UserName,
             Password = options.Password,
             VirtualHost = string.IsNullOrWhiteSpace(options.VirtualHost) ? "/" : options.VirtualHost,
+            ConsumerDispatchConcurrency = options.ConsumerDispatchConcurrency
         };
 
         var asyncFactory = new ConnectionFactory
