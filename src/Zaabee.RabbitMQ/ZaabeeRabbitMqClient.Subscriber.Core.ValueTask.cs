@@ -35,12 +35,15 @@ public partial class ZaabeeRabbitMqClient
             }
             catch
             {
-                var retryCount = GetRetryCount(ea.BasicProperties);
-                IncreaseRetryCount(ea.BasicProperties);
-                if (retryCount < consumeRetry && retryExchangeParam is not null)
+                if (retryExchangeParam is not null)
                 {
-                    consumerChannel.BasicPublish(retryExchangeParam.Exchange, DefaultRoutingKey, ea.BasicProperties, ea.Body);
-                    consumerChannel.BasicAck(ea.DeliveryTag, false);
+                    var retryCount = GetRetryCount(ea.BasicProperties);
+                    if (retryCount < consumeRetry )
+                    {
+                        IncreaseRetryCount(ea.BasicProperties);
+                        consumerChannel.BasicPublish(retryExchangeParam.Exchange, DefaultRoutingKey, ea.BasicProperties, ea.Body);
+                        consumerChannel.BasicAck(ea.DeliveryTag, false);
+                    }
                 }
                 else
                 {
@@ -70,8 +73,8 @@ public partial class ZaabeeRabbitMqClient
         var channel = GetConsumerAsyncChannel(
             exchangeParam,
             queueParam,
-            dlxExchangeParam,
             retryExchangeParam,
+            dlxExchangeParam,
             dlxQueueParam,
             prefetchCount);
         var consumer = new AsyncEventingBasicConsumer(channel);
@@ -86,12 +89,15 @@ public partial class ZaabeeRabbitMqClient
             }
             catch
             {
-                var retryCount = GetRetryCount(ea.BasicProperties);
-                IncreaseRetryCount(ea.BasicProperties);
-                if (retryCount < consumeRetry && retryExchangeParam is not null)
+                if (retryExchangeParam is not null)
                 {
-                    consumerChannel.BasicPublish(retryExchangeParam.Exchange, DefaultRoutingKey, ea.BasicProperties, ea.Body);
-                    consumerChannel.BasicAck(ea.DeliveryTag, false);
+                    var retryCount = GetRetryCount(ea.BasicProperties);
+                    if (retryCount < consumeRetry)
+                    {
+                        IncreaseRetryCount(ea.BasicProperties);
+                        consumerChannel.BasicPublish(retryExchangeParam.Exchange, DefaultRoutingKey, ea.BasicProperties, ea.Body);
+                        consumerChannel.BasicAck(ea.DeliveryTag, false);
+                    }
                 }
                 else
                 {
