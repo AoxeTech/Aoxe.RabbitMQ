@@ -3,7 +3,7 @@ namespace Zaabee.RabbitMQ.Abstractions;
 public static partial class SubscriberExtension
 {
     /// <summary>
-    /// The subscriber cluster will get the message from its own queue which bind the default topic.
+    /// The subscriber node will get the message from its own queue which bind the default topic.
     /// </summary>
     /// <param name="subscriber"></param>
     /// <param name="resolve"></param>
@@ -22,7 +22,7 @@ public static partial class SubscriberExtension
     }
 
     /// <summary>
-    /// The subscriber cluster will get the message from its own queue which bind the specified topic.
+    /// The subscriber node will get the message from its own queue which bind the specified topic.
     /// </summary>
     /// <param name="subscriber"></param>
     /// <param name="topic"></param>
@@ -42,7 +42,7 @@ public static partial class SubscriberExtension
     }
 
     /// <summary>
-    /// The subscriber cluster will get the message from its own queue which bind the specified topic.
+    /// The subscriber node will get the message from its own queue which bind the specified topic.
     /// </summary>
     /// <param name="subscriber"></param>
     /// <param name="topic"></param>

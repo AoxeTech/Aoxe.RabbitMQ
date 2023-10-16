@@ -10,7 +10,7 @@ public static partial class SubscriberExtension
     /// <param name="queueName"></param>
     /// <param name="prefetchCount"></param>
     /// <typeparam name="T"></typeparam>
-    public static void ListenMessage<T>(
+    public static void SubscribeMessage<T>(
         this ISubscriber subscriber,
         Func<Action<T?>> resolve,
         string? queueName = null,
@@ -18,7 +18,7 @@ public static partial class SubscriberExtension
     {
         var topic = InternalHelper.GetTopicName(typeof(T));
         queueName = queueName is null ? InternalHelper.GenerateQueueName(resolve, true) : $"{queueName}[{Guid.NewGuid()}]";
-        subscriber.Subscribe(topic, resolve, queueName, false, prefetchCount, 0, false, true);
+        subscriber.Subscribe(topic, resolve, queueName, false, prefetchCount, 0, false, false);
     }
 
     /// <summary>
@@ -30,7 +30,7 @@ public static partial class SubscriberExtension
     /// <param name="queueName"></param>
     /// <param name="prefetchCount"></param>
     /// <typeparam name="T"></typeparam>
-    public static void ListenMessage<T>(
+    public static void SubscribeMessage<T>(
         this ISubscriber subscriber,
         string topic,
         Func<Action<T?>> resolve,
@@ -38,7 +38,7 @@ public static partial class SubscriberExtension
         ushort prefetchCount = Consts.DefaultPrefetchCount)
     {
         queueName = queueName is null ? InternalHelper.GenerateQueueName(resolve, true) : $"{queueName}[{Guid.NewGuid()}]";
-        subscriber.Subscribe(topic, resolve, queueName, false, prefetchCount, 0, false, true);
+        subscriber.Subscribe(topic, resolve, queueName, false, prefetchCount, 0, false, false);
     }
 
     /// <summary>
@@ -49,7 +49,7 @@ public static partial class SubscriberExtension
     /// <param name="resolve"></param>
     /// <param name="queueName"></param>
     /// <param name="prefetchCount"></param>
-    public static void ListenMessage(
+    public static void SubscribeMessage(
         this ISubscriber subscriber,
         string topic,
         Func<Action<byte[]>> resolve,
@@ -57,6 +57,6 @@ public static partial class SubscriberExtension
         ushort prefetchCount = Consts.DefaultPrefetchCount)
     {
         queueName = queueName is null ? InternalHelper.GenerateQueueName(resolve, true) : $"{queueName}[{Guid.NewGuid()}]";
-        subscriber.Subscribe(topic, resolve, queueName, false, prefetchCount, 0, false, true);
+        subscriber.Subscribe(topic, resolve, queueName, false, prefetchCount, 0, false, false);
     }
 }
