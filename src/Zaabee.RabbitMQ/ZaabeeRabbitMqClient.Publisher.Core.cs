@@ -15,9 +15,9 @@ public partial class ZaabeeRabbitMqClient
                 _publishConn,
                 normalExchangeParam,
                 normalQueueParam,
-                null,
-                null,
-                null);
+                retryExchangeParam: null,
+                dlxExchangeParam: null,
+                dlxQueueParam: null);
             if (persistence)
             {
                 properties = channel.CreateBasicProperties();
