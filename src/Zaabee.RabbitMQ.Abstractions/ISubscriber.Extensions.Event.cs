@@ -18,11 +18,21 @@ public static partial class SubscriberExtension
         string? queueName = null,
         ushort prefetchCount = Consts.DefaultPrefetchCount,
         int consumeRetry = Consts.DefaultConsumeRetry,
-        bool dlx = true)
+        bool dlx = true
+    )
     {
         var topic = InternalHelper.GetTopicName(typeof(T));
         queueName ??= InternalHelper.GenerateQueueName(resolve, false);
-        subscriber.Subscribe(topic, resolve, queueName, true, prefetchCount, consumeRetry, dlx, isExclusive: false);
+        subscriber.Subscribe(
+            topic,
+            resolve,
+            queueName,
+            true,
+            prefetchCount,
+            consumeRetry,
+            dlx,
+            isExclusive: false
+        );
     }
 
     /// <summary>
@@ -43,10 +53,20 @@ public static partial class SubscriberExtension
         string? queueName = null,
         ushort prefetchCount = Consts.DefaultPrefetchCount,
         int consumeRetry = Consts.DefaultConsumeRetry,
-        bool dlx = true)
+        bool dlx = true
+    )
     {
         queueName ??= InternalHelper.GenerateQueueName(resolve, false);
-        subscriber.Subscribe(topic, resolve, queueName, true, prefetchCount, consumeRetry, dlx, isExclusive: false);
+        subscriber.Subscribe(
+            topic,
+            resolve,
+            queueName,
+            true,
+            prefetchCount,
+            consumeRetry,
+            dlx,
+            isExclusive: false
+        );
     }
 
     /// <summary>
@@ -66,9 +86,19 @@ public static partial class SubscriberExtension
         string? queueName = null,
         ushort prefetchCount = Consts.DefaultPrefetchCount,
         int consumeRetry = Consts.DefaultConsumeRetry,
-        bool dlx = true)
+        bool dlx = true
+    )
     {
         queueName ??= InternalHelper.GenerateQueueName(resolve, false);
-        subscriber.Subscribe(topic, resolve, queueName, true, prefetchCount, consumeRetry, dlx, isExclusive: false);
+        subscriber.Subscribe(
+            topic,
+            resolve,
+            queueName,
+            true,
+            prefetchCount,
+            consumeRetry,
+            dlx,
+            isExclusive: false
+        );
     }
 }

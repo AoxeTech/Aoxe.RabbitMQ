@@ -7,11 +7,14 @@ internal static class InternalHelper
     private static readonly ConcurrentDictionary<Type, string> TopicNameDic = new();
 
     internal static string GetTopicName(Type type) =>
-        TopicNameDic.GetOrAdd(type,
-            _ => type.GetCustomAttributes(typeof(MessageVersionAttribute), false).FirstOrDefault()
-                is MessageVersionAttribute msgVerAttr
-                ? $"{type}[{msgVerAttr.Version}]"
-                : type.ToString());
+        TopicNameDic.GetOrAdd(
+            type,
+            _ =>
+                type.GetCustomAttributes(typeof(MessageVersionAttribute), false).FirstOrDefault()
+                    is MessageVersionAttribute msgVerAttr
+                    ? $"{type}[{msgVerAttr.Version}]"
+                    : type.ToString()
+        );
 
     internal static string GenerateQueueName<T>(Func<Action<T>> resolve, bool isExclusive)
     {

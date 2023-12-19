@@ -9,18 +9,21 @@ public partial class ZaabeeRabbitMqClient
         QueueParam? dlxQueueParam,
         Func<Func<T?, Task>> resolve,
         ushort prefetchCount = Consts.DefaultPrefetchCount,
-        int consumeRetry = Consts.DefaultConsumeRetry)
+        int consumeRetry = Consts.DefaultConsumeRetry
+    )
     {
-        var retryExchangeParam = consumeRetry > 0
-            ? CreateExchangeParam(queueParam.Queue, true, ExchangeRole.Retry)
-            : null;
+        var retryExchangeParam =
+            consumeRetry > 0
+                ? CreateExchangeParam(queueParam.Queue, true, ExchangeRole.Retry)
+                : null;
         var channel = GetConsumerAsyncChannel(
             exchangeParam,
             queueParam,
             retryExchangeParam,
             dlxExchangeParam,
             dlxQueueParam,
-            prefetchCount);
+            prefetchCount
+        );
         var consumer = new AsyncEventingBasicConsumer(channel);
 
         consumer.Received += async (_, ea) =>
@@ -41,7 +44,12 @@ public partial class ZaabeeRabbitMqClient
                     if (retryCount < consumeRetry)
                     {
                         IncreaseRetryCount(ea.BasicProperties);
-                        consumerChannel.BasicPublish(retryExchangeParam.Exchange, DefaultRoutingKey, ea.BasicProperties, ea.Body);
+                        consumerChannel.BasicPublish(
+                            retryExchangeParam.Exchange,
+                            DefaultRoutingKey,
+                            ea.BasicProperties,
+                            ea.Body
+                        );
                         consumerChannel.BasicAck(ea.DeliveryTag, false);
                     }
                 }
@@ -65,18 +73,21 @@ public partial class ZaabeeRabbitMqClient
         QueueParam? dlxQueueParam,
         Func<Func<byte[], Task>> resolve,
         ushort prefetchCount = Consts.DefaultPrefetchCount,
-        int consumeRetry = Consts.DefaultConsumeRetry)
+        int consumeRetry = Consts.DefaultConsumeRetry
+    )
     {
-        var retryExchangeParam = consumeRetry > 0
-            ? CreateExchangeParam(queueParam.Queue, true, ExchangeRole.Retry)
-            : null;
+        var retryExchangeParam =
+            consumeRetry > 0
+                ? CreateExchangeParam(queueParam.Queue, true, ExchangeRole.Retry)
+                : null;
         var channel = GetConsumerAsyncChannel(
             exchangeParam,
             queueParam,
             retryExchangeParam,
             dlxExchangeParam,
             dlxQueueParam,
-            prefetchCount);
+            prefetchCount
+        );
         var consumer = new AsyncEventingBasicConsumer(channel);
 
         consumer.Received += async (_, ea) =>
@@ -95,7 +106,12 @@ public partial class ZaabeeRabbitMqClient
                     if (retryCount < consumeRetry)
                     {
                         IncreaseRetryCount(ea.BasicProperties);
-                        consumerChannel.BasicPublish(retryExchangeParam.Exchange, DefaultRoutingKey, ea.BasicProperties, ea.Body);
+                        consumerChannel.BasicPublish(
+                            retryExchangeParam.Exchange,
+                            DefaultRoutingKey,
+                            ea.BasicProperties,
+                            ea.Body
+                        );
                         consumerChannel.BasicAck(ea.DeliveryTag, false);
                     }
                 }

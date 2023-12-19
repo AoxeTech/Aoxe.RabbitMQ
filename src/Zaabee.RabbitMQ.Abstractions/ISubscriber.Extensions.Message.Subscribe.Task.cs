@@ -14,10 +14,13 @@ public static partial class SubscriberExtension
         this ISubscriber subscriber,
         Func<Func<T?, Task>> resolve,
         string? queueName = null,
-        ushort prefetchCount = Consts.DefaultPrefetchCount)
+        ushort prefetchCount = Consts.DefaultPrefetchCount
+    )
     {
         var topic = InternalHelper.GetTopicName(typeof(T));
-        queueName = queueName is null ? InternalHelper.GenerateQueueName(resolve, true) : $"{queueName}[{Guid.NewGuid()}]";
+        queueName = queueName is null
+            ? InternalHelper.GenerateQueueName(resolve, true)
+            : $"{queueName}[{Guid.NewGuid()}]";
         subscriber.Subscribe(topic, resolve, queueName, false, prefetchCount, 0, false, false);
     }
 
@@ -35,9 +38,12 @@ public static partial class SubscriberExtension
         string topic,
         Func<Func<T?, Task>> resolve,
         string? queueName = null,
-        ushort prefetchCount = Consts.DefaultPrefetchCount)
+        ushort prefetchCount = Consts.DefaultPrefetchCount
+    )
     {
-        queueName = queueName is null ? InternalHelper.GenerateQueueName(resolve, true) : $"{queueName}[{Guid.NewGuid()}]";
+        queueName = queueName is null
+            ? InternalHelper.GenerateQueueName(resolve, true)
+            : $"{queueName}[{Guid.NewGuid()}]";
         subscriber.Subscribe(topic, resolve, queueName, false, prefetchCount, 0, false, false);
     }
 
@@ -54,9 +60,12 @@ public static partial class SubscriberExtension
         string topic,
         Func<Func<byte[], Task>> resolve,
         string? queueName = null,
-        ushort prefetchCount = Consts.DefaultPrefetchCount)
+        ushort prefetchCount = Consts.DefaultPrefetchCount
+    )
     {
-        queueName = queueName is null ? InternalHelper.GenerateQueueName(resolve, true) : $"{queueName}[{Guid.NewGuid()}]";
+        queueName = queueName is null
+            ? InternalHelper.GenerateQueueName(resolve, true)
+            : $"{queueName}[{Guid.NewGuid()}]";
         subscriber.Subscribe(topic, resolve, queueName, false, prefetchCount, 0, false, false);
     }
 }

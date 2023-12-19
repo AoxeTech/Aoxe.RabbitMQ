@@ -22,7 +22,8 @@ public partial interface ISubscriber
         ushort prefetchCount = Consts.DefaultPrefetchCount,
         int consumeRetry = Consts.DefaultConsumeRetry,
         bool dlx = true,
-        bool isExclusive = false);
+        bool isExclusive = false
+    );
 
     /// <summary>
     /// The subscriber cluster will get the message from its own queue which bind the specified topic.
@@ -43,5 +44,6 @@ public partial interface ISubscriber
         ushort prefetchCount = Consts.DefaultPrefetchCount,
         int consumeRetry = Consts.DefaultConsumeRetry,
         bool dlx = true,
-        bool isExclusive = false);
+        bool isExclusive = false
+    );
 }

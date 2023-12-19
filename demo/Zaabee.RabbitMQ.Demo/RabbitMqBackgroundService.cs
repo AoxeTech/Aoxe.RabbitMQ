@@ -5,7 +5,10 @@ public class RabbitMqBackgroundService : BackgroundService
     private readonly IZaabeeRabbitMqClient _messageBus;
     private readonly IServiceProvider _serviceProvider;
 
-    public RabbitMqBackgroundService(IZaabeeRabbitMqClient messageBus, IServiceProvider serviceProvider)
+    public RabbitMqBackgroundService(
+        IZaabeeRabbitMqClient messageBus,
+        IServiceProvider serviceProvider
+    )
     {
         _messageBus = messageBus;
         _serviceProvider = serviceProvider;
@@ -34,18 +37,29 @@ public class RabbitMqBackgroundService : BackgroundService
             using var scope = _serviceProvider.CreateScope();
             return scope.ServiceProvider.GetRequiredService<Subscriber>().TestEventExceptionHandler;
         });
-        _messageBus.SubscribeEvent<TestEventWithVersion>(() =>
+        _messageBus.SubscribeEvent<TestEventWithVersion>(
+            () =>
             {
                 using var scope = _serviceProvider.CreateScope();
-                return scope.ServiceProvider.GetRequiredService<Subscriber>().TestEventExceptionWithVersionHandler;
+                return scope
+                    .ServiceProvider
+                    .GetRequiredService<Subscriber>()
+                    .TestEventExceptionWithVersionHandler;
             },
-            prefetchCount: 20);
-        _messageBus.SubscribeEvent<TestEventWithVersion>(() =>
+            prefetchCount: 20
+        );
+        _messageBus.SubscribeEvent<TestEventWithVersion>(
+            () =>
             {
                 using var scope = _serviceProvider.CreateScope();
-                return scope.ServiceProvider.GetRequiredService<Subscriber>().TestEventExceptionWithVersionHandler;
+                return scope
+                    .ServiceProvider
+                    .GetRequiredService<Subscriber>()
+                    .TestEventExceptionWithVersionHandler;
             },
-            "TestQueueName", 20);
+            "TestQueueName",
+            20
+        );
         _messageBus.ListenMessage<TestMessage>(() =>
         {
             using var scope = _serviceProvider.CreateScope();

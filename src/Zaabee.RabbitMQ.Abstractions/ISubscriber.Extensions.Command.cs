@@ -14,7 +14,8 @@ public static partial class SubscriberExtension
         this ISubscriber subscriber,
         Func<Action<T?>> resolve,
         ushort prefetchCount = Consts.DefaultPrefetchCount,
-        int consumeRetry = Consts.DefaultConsumeRetry)
+        int consumeRetry = Consts.DefaultConsumeRetry
+    )
     {
         var topic = InternalHelper.GetTopicName(typeof(T));
         subscriber.Subscribe(topic, resolve, topic, true, prefetchCount, consumeRetry);
@@ -34,8 +35,8 @@ public static partial class SubscriberExtension
         string topic,
         Func<Action<T?>> resolve,
         ushort prefetchCount = Consts.DefaultPrefetchCount,
-        int consumeRetry = Consts.DefaultConsumeRetry) =>
-        subscriber.Subscribe(topic, resolve, topic, true, prefetchCount, consumeRetry);
+        int consumeRetry = Consts.DefaultConsumeRetry
+    ) => subscriber.Subscribe(topic, resolve, topic, true, prefetchCount, consumeRetry);
 
     /// <summary>
     /// The subscriber cluster will get the command from the queue which bind the specified topic.
@@ -50,6 +51,6 @@ public static partial class SubscriberExtension
         string topic,
         Func<Action<byte[]>> resolve,
         ushort prefetchCount = Consts.DefaultPrefetchCount,
-        int consumeRetry = Consts.DefaultConsumeRetry) =>
-        subscriber.Subscribe(topic, resolve, topic, true, prefetchCount, consumeRetry);
+        int consumeRetry = Consts.DefaultConsumeRetry
+    ) => subscriber.Subscribe(topic, resolve, topic, true, prefetchCount, consumeRetry);
 }

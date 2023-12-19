@@ -16,7 +16,8 @@ public interface IPublisher
         T? message,
         bool persistence,
         int publishRetry = Consts.DefaultPublishRetry,
-        string? queueName = null);
+        string? queueName = null
+    );
 
     /// <summary>
     /// Publish the message to the specified topic.
@@ -31,5 +32,6 @@ public interface IPublisher
         byte[] body,
         bool persistence,
         int publishRetry = Consts.DefaultPublishRetry,
-        string? queueName = null);
+        string? queueName = null
+    );
 }

@@ -4,7 +4,7 @@ public sealed partial class ZaabeeRabbitMqClient : IZaabeeRabbitMqClient
 {
     private readonly IConnection _publishConn;
     private readonly IConnection _subscribeConn;
-    private readonly IConnection _subscribeAsyncConn;   
+    private readonly IConnection _subscribeAsyncConn;
     private readonly IJsonSerializer _serializer;
 
     private readonly ConcurrentDictionary<string, IModel> _subscriberChannelDic = new();
@@ -13,9 +13,12 @@ public sealed partial class ZaabeeRabbitMqClient : IZaabeeRabbitMqClient
 
     public ZaabeeRabbitMqClient(ZaabeeRabbitMqOptions options)
     {
-        if (options is null) throw new ArgumentNullException(nameof(options));
-        if (options.Serializer is null) throw new ArgumentNullException(nameof(options.Serializer));
-        if (options.Hosts.Count is 0) throw new ArgumentNullException(nameof(options.Hosts));
+        if (options is null)
+            throw new ArgumentNullException(nameof(options));
+        if (options.Serializer is null)
+            throw new ArgumentNullException(nameof(options.Serializer));
+        if (options.Hosts.Count is 0)
+            throw new ArgumentNullException(nameof(options.Hosts));
         var factory = new ConnectionFactory
         {
             RequestedHeartbeat = options.HeartBeat,
@@ -27,7 +30,9 @@ public sealed partial class ZaabeeRabbitMqClient : IZaabeeRabbitMqClient
             SocketWriteTimeout = options.SocketWriteTimeout,
             UserName = options.UserName,
             Password = options.Password,
-            VirtualHost = string.IsNullOrWhiteSpace(options.VirtualHost) ? "/" : options.VirtualHost,
+            VirtualHost = string.IsNullOrWhiteSpace(options.VirtualHost)
+                ? "/"
+                : options.VirtualHost,
             ConsumerDispatchConcurrency = options.ConsumerDispatchConcurrency
         };
 
@@ -42,18 +47,23 @@ public sealed partial class ZaabeeRabbitMqClient : IZaabeeRabbitMqClient
             SocketWriteTimeout = options.SocketWriteTimeout,
             UserName = options.UserName,
             Password = options.Password,
-            VirtualHost = string.IsNullOrWhiteSpace(options.VirtualHost) ? "/" : options.VirtualHost,
+            VirtualHost = string.IsNullOrWhiteSpace(options.VirtualHost)
+                ? "/"
+                : options.VirtualHost,
             DispatchConsumersAsync = true
         };
 
-        (_publishConn, _subscribeConn, _subscribeAsyncConn) =
-            options.Hosts.Any()
-                ? (factory.CreateConnection(options.Hosts),
-                    factory.CreateConnection(options.Hosts),
-                    asyncFactory.CreateConnection(options.Hosts))
-                : (factory.CreateConnection(),
-                    factory.CreateConnection(),
-                    asyncFactory.CreateConnection());
+        (_publishConn, _subscribeConn, _subscribeAsyncConn) = options.Hosts.Any()
+            ? (
+                factory.CreateConnection(options.Hosts),
+                factory.CreateConnection(options.Hosts),
+                asyncFactory.CreateConnection(options.Hosts)
+            )
+            : (
+                factory.CreateConnection(),
+                factory.CreateConnection(),
+                asyncFactory.CreateConnection()
+            );
 
         _serializer = options.Serializer;
     }
@@ -64,18 +74,24 @@ public sealed partial class ZaabeeRabbitMqClient : IZaabeeRabbitMqClient
         ExchangeParam? retryExchangeParam = null,
         ExchangeParam? dlxExchangeParam = null,
         QueueParam? dlxQueueParam = null,
-        ushort prefetchCount = Consts.DefaultPrefetchCount) =>
-        _subscriberChannelDic.GetOrAdd(normalQueueParam.Queue, _ =>
-        {
-            var channel = GenerateChannel(_subscribeConn,
-                normalExchangeParam,
-                normalQueueParam,
-                retryExchangeParam,
-                dlxExchangeParam,
-                dlxQueueParam);
-            channel.BasicQos(0, prefetchCount, false);
-            return channel;
-        });
+        ushort prefetchCount = Consts.DefaultPrefetchCount
+    ) =>
+        _subscriberChannelDic.GetOrAdd(
+            normalQueueParam.Queue,
+            _ =>
+            {
+                var channel = GenerateChannel(
+                    _subscribeConn,
+                    normalExchangeParam,
+                    normalQueueParam,
+                    retryExchangeParam,
+                    dlxExchangeParam,
+                    dlxQueueParam
+                );
+                channel.BasicQos(0, prefetchCount, false);
+                return channel;
+            }
+        );
 
     private IModel GetConsumerAsyncChannel(
         ExchangeParam normalExchangeParam,
@@ -83,18 +99,24 @@ public sealed partial class ZaabeeRabbitMqClient : IZaabeeRabbitMqClient
         ExchangeParam? retryExchangeParam = null,
         ExchangeParam? dlxExchangeParam = null,
         QueueParam? dlxQueueParam = null,
-        ushort prefetchCount = Consts.DefaultPrefetchCount) =>
-        _subscriberAsyncChannelDic.GetOrAdd(normalQueueParam.Queue, _ =>
-        {
-            var channel = GenerateChannel(_subscribeAsyncConn,
-                normalExchangeParam,
-                normalQueueParam,
-                retryExchangeParam,
-                dlxExchangeParam,
-                dlxQueueParam);
-            channel.BasicQos(0, prefetchCount, false);
-            return channel;
-        });
+        ushort prefetchCount = Consts.DefaultPrefetchCount
+    ) =>
+        _subscriberAsyncChannelDic.GetOrAdd(
+            normalQueueParam.Queue,
+            _ =>
+            {
+                var channel = GenerateChannel(
+                    _subscribeAsyncConn,
+                    normalExchangeParam,
+                    normalQueueParam,
+                    retryExchangeParam,
+                    dlxExchangeParam,
+                    dlxQueueParam
+                );
+                channel.BasicQos(0, prefetchCount, false);
+                return channel;
+            }
+        );
 
     private static IModel GenerateChannel(
         IConnection connection,
@@ -102,7 +124,8 @@ public sealed partial class ZaabeeRabbitMqClient : IZaabeeRabbitMqClient
         QueueParam? normalQueueParam = null,
         ExchangeParam? retryExchangeParam = null,
         ExchangeParam? dlxExchangeParam = null,
-        QueueParam? dlxQueueParam = null)
+        QueueParam? dlxQueueParam = null
+    )
     {
         var channel = connection.CreateModel();
 
@@ -130,14 +153,16 @@ public sealed partial class ZaabeeRabbitMqClient : IZaabeeRabbitMqClient
         IModel channel,
         ExchangeParam normalExchangeParam,
         QueueParam? normalQueueParam,
-        Dictionary<string, object>? dlxArgs)
+        Dictionary<string, object>? dlxArgs
+    )
     {
         channel.ExchangeDeclare(
             exchange: normalExchangeParam.Exchange,
             type: normalExchangeParam.Type.ToString().ToLower(),
             durable: normalExchangeParam.Durable,
             autoDelete: normalExchangeParam.AutoDelete,
-            arguments: normalExchangeParam.Arguments);
+            arguments: normalExchangeParam.Arguments
+        );
 
         if (normalQueueParam is null)
             return;
@@ -154,30 +179,35 @@ public sealed partial class ZaabeeRabbitMqClient : IZaabeeRabbitMqClient
             durable: normalQueueParam.Durable,
             exclusive: normalQueueParam.Exclusive,
             autoDelete: normalQueueParam.AutoDelete,
-            arguments: normalQueueParam.Arguments);
+            arguments: normalQueueParam.Arguments
+        );
 
         channel.QueueBind(
             queue: normalQueueParam.Queue,
             exchange: normalExchangeParam.Exchange,
-            routingKey: DefaultRoutingKey);
+            routingKey: DefaultRoutingKey
+        );
     }
 
     private static void DeclareRetryExchangeAndQueue(
         IModel channel,
         ExchangeParam retryExchangeParam,
-        string queueName)
+        string queueName
+    )
     {
         channel.ExchangeDeclare(
             exchange: retryExchangeParam.Exchange,
             type: retryExchangeParam.Type.ToString().ToLower(),
             durable: retryExchangeParam.Durable,
             autoDelete: retryExchangeParam.AutoDelete,
-            arguments: retryExchangeParam.Arguments);
+            arguments: retryExchangeParam.Arguments
+        );
 
         channel.QueueBind(
             queue: queueName,
             exchange: retryExchangeParam.Exchange,
-            routingKey: DefaultRoutingKey);
+            routingKey: DefaultRoutingKey
+        );
     }
 
     /// <summary>
@@ -190,26 +220,30 @@ public sealed partial class ZaabeeRabbitMqClient : IZaabeeRabbitMqClient
     private static Dictionary<string, object> DeclareDlxExchangeAndQueue(
         IModel channel,
         ExchangeParam dlxExchangeParam,
-        QueueParam dlxQueueParam)
+        QueueParam dlxQueueParam
+    )
     {
         channel.ExchangeDeclare(
             exchange: dlxExchangeParam.Exchange,
             type: dlxExchangeParam.Type.ToString().ToLower(),
             durable: dlxExchangeParam.Durable,
             autoDelete: dlxExchangeParam.AutoDelete,
-            arguments: dlxExchangeParam.Arguments);
+            arguments: dlxExchangeParam.Arguments
+        );
 
         channel.QueueDeclare(
             queue: dlxQueueParam.Queue,
             durable: dlxQueueParam.Durable,
             exclusive: dlxQueueParam.Exclusive,
             autoDelete: dlxQueueParam.AutoDelete,
-            arguments: dlxQueueParam.Arguments);
+            arguments: dlxQueueParam.Arguments
+        );
 
         channel.QueueBind(
             queue: dlxQueueParam.Queue,
             exchange: dlxExchangeParam.Exchange,
-            routingKey: DefaultRoutingKey);
+            routingKey: DefaultRoutingKey
+        );
 
         return new Dictionary<string, object>
         {
@@ -220,7 +254,8 @@ public sealed partial class ZaabeeRabbitMqClient : IZaabeeRabbitMqClient
     private static ExchangeParam CreateExchangeParam(
         string topic,
         bool persistence,
-        ExchangeRole exchangeRole = ExchangeRole.Normal) =>
+        ExchangeRole exchangeRole = ExchangeRole.Normal
+    ) =>
         new()
         {
             Exchange = exchangeRole switch
@@ -236,7 +271,8 @@ public sealed partial class ZaabeeRabbitMqClient : IZaabeeRabbitMqClient
         string queue,
         bool persistence,
         bool isExclusive = false,
-        QueueRole queueRole = QueueRole.Normal)
+        QueueRole queueRole = QueueRole.Normal
+    )
     {
         var queueParam = new QueueParam
         {

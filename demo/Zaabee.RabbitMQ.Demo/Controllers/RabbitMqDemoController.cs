@@ -16,11 +16,9 @@ public class RabbitMqDemoController : Controller
         var sw = Stopwatch.StartNew();
         for (var i = 0; i < quantity; i++)
         {
-            _messageBus.PublishEvent(new TestEvent
-            {
-                Id = Guid.NewGuid(),
-                Timestamp = DateTimeOffset.Now
-            });
+            _messageBus.PublishEvent(
+                new TestEvent { Id = Guid.NewGuid(), Timestamp = DateTimeOffset.Now }
+            );
         }
 
         return sw.ElapsedMilliseconds;
@@ -32,11 +30,9 @@ public class RabbitMqDemoController : Controller
         var sw = Stopwatch.StartNew();
         for (var i = 0; i < quantity; i++)
         {
-            _messageBus.PublishEvent(new TestEventWithVersion
-            {
-                Id = Guid.NewGuid(),
-                Timestamp = DateTimeOffset.Now
-            });
+            _messageBus.PublishEvent(
+                new TestEventWithVersion { Id = Guid.NewGuid(), Timestamp = DateTimeOffset.Now }
+            );
         }
 
         return sw.ElapsedMilliseconds;
@@ -48,11 +44,9 @@ public class RabbitMqDemoController : Controller
         var sw = Stopwatch.StartNew();
         for (var i = 0; i < quantity; i++)
         {
-            _messageBus.SendCommand(new TestEvent
-            {
-                Id = Guid.NewGuid(),
-                Timestamp = DateTimeOffset.Now
-            });
+            _messageBus.SendCommand(
+                new TestEvent { Id = Guid.NewGuid(), Timestamp = DateTimeOffset.Now }
+            );
         }
 
         return sw.ElapsedMilliseconds;
@@ -64,11 +58,9 @@ public class RabbitMqDemoController : Controller
         var sw = Stopwatch.StartNew();
         for (var i = 0; i < quantity; i++)
         {
-            _messageBus.SendCommand(new TestEventWithVersion
-            {
-                Id = Guid.NewGuid(),
-                Timestamp = DateTimeOffset.Now
-            });
+            _messageBus.SendCommand(
+                new TestEventWithVersion { Id = Guid.NewGuid(), Timestamp = DateTimeOffset.Now }
+            );
         }
 
         return sw.ElapsedMilliseconds;
@@ -80,11 +72,9 @@ public class RabbitMqDemoController : Controller
         var sw = Stopwatch.StartNew();
         for (var i = 0; i < quantity; i++)
         {
-            _messageBus.PublishMessage(new TestMessage
-            {
-                Id = Guid.NewGuid(),
-                Timestamp = DateTimeOffset.Now
-            });
+            _messageBus.PublishMessage(
+                new TestMessage { Id = Guid.NewGuid(), Timestamp = DateTimeOffset.Now }
+            );
         }
 
         return sw.ElapsedMilliseconds;
@@ -96,11 +86,9 @@ public class RabbitMqDemoController : Controller
         var sw = Stopwatch.StartNew();
         for (var i = 0; i < quantity; i++)
         {
-            _messageBus.PublishMessage(new TestMessage
-            {
-                Id = Guid.NewGuid(),
-                Timestamp = DateTimeOffset.Now
-            });
+            _messageBus.PublishMessage(
+                new TestMessage { Id = Guid.NewGuid(), Timestamp = DateTimeOffset.Now }
+            );
         }
 
         return sw.ElapsedMilliseconds;

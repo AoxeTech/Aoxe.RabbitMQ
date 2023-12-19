@@ -12,8 +12,8 @@ public static partial class PublisherExtension
     public static void PublishEvent<T>(
         this IPublisher publisher,
         T? @event,
-        int publishRetry = Consts.DefaultPublishRetry) =>
-        publisher.Publish(InternalHelper.GetTopicName(typeof(T)), @event, true, publishRetry);
+        int publishRetry = Consts.DefaultPublishRetry
+    ) => publisher.Publish(InternalHelper.GetTopicName(typeof(T)), @event, true, publishRetry);
 
     /// <summary>
     /// Publish the event to the specified topic.
@@ -27,8 +27,8 @@ public static partial class PublisherExtension
         this IPublisher publisher,
         string topic,
         T? @event,
-        int publishRetry = Consts.DefaultPublishRetry) =>
-        publisher.Publish(topic, @event, true, publishRetry);
+        int publishRetry = Consts.DefaultPublishRetry
+    ) => publisher.Publish(topic, @event, true, publishRetry);
 
     /// <summary>
     /// Publish the event to the specified topic.
@@ -41,6 +41,6 @@ public static partial class PublisherExtension
         this IPublisher publisher,
         string topic,
         byte[] body,
-        int publishRetry = Consts.DefaultPublishRetry) =>
-        publisher.Publish(topic, body, true, publishRetry);
+        int publishRetry = Consts.DefaultPublishRetry
+    ) => publisher.Publish(topic, body, true, publishRetry);
 }

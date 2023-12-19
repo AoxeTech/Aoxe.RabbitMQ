@@ -12,8 +12,8 @@ public static partial class PublisherExtension
     public static void PublishMessage<T>(
         this IPublisher publisher,
         T? message,
-        int publishRetry = Consts.DefaultPublishRetry) =>
-        publisher.Publish(InternalHelper.GetTopicName(typeof(T)), message, false, publishRetry);
+        int publishRetry = Consts.DefaultPublishRetry
+    ) => publisher.Publish(InternalHelper.GetTopicName(typeof(T)), message, false, publishRetry);
 
     /// <summary>
     /// Publish the message to the specified topic.
@@ -27,8 +27,8 @@ public static partial class PublisherExtension
         this IPublisher publisher,
         string topic,
         T? message,
-        int publishRetry = Consts.DefaultPublishRetry) =>
-        publisher.Publish(topic, message, false, publishRetry);
+        int publishRetry = Consts.DefaultPublishRetry
+    ) => publisher.Publish(topic, message, false, publishRetry);
 
     /// <summary>
     /// Publish the message to the specified topic.
@@ -41,6 +41,6 @@ public static partial class PublisherExtension
         this IPublisher publisher,
         string topic,
         byte[] body,
-        int publishRetry = Consts.DefaultPublishRetry) =>
-        publisher.Publish(topic, body, false, publishRetry);
+        int publishRetry = Consts.DefaultPublishRetry
+    ) => publisher.Publish(topic, body, false, publishRetry);
 }

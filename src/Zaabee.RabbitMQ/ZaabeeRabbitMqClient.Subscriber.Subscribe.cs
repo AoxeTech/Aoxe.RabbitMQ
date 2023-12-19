@@ -11,17 +11,21 @@ public partial class ZaabeeRabbitMqClient
         ushort prefetchCount = Consts.DefaultPrefetchCount,
         int consumeRetry = Consts.DefaultConsumeRetry,
         bool dlx = true,
-        bool isExclusive = false)
+        bool isExclusive = false
+    )
     {
         // The exclusive queue do not have dlx
         Consume(
             CreateExchangeParam(topic, persistence),
             CreateQueueParam(queueName, persistence, isExclusive),
             dlx && !isExclusive ? CreateExchangeParam(topic, persistence, ExchangeRole.Dlx) : null,
-            dlx && !isExclusive ? CreateQueueParam(queueName, persistence, isExclusive, QueueRole.Dlx) : null,
+            dlx && !isExclusive
+                ? CreateQueueParam(queueName, persistence, isExclusive, QueueRole.Dlx)
+                : null,
             resolve,
             prefetchCount,
-            consumeRetry);
+            consumeRetry
+        );
     }
 
     /// <inheritdoc />
@@ -33,15 +37,20 @@ public partial class ZaabeeRabbitMqClient
         ushort prefetchCount = Consts.DefaultPrefetchCount,
         int consumeRetry = Consts.DefaultConsumeRetry,
         bool dlx = true,
-        bool isExclusive = false)
+        bool isExclusive = false
+    )
     {
         // The exclusive queue do not have dlx
-        Consume(CreateExchangeParam(topic, persistence),
+        Consume(
+            CreateExchangeParam(topic, persistence),
             CreateQueueParam(queueName, persistence, isExclusive),
             dlx && !isExclusive ? CreateExchangeParam(topic, persistence, ExchangeRole.Dlx) : null,
-            dlx && !isExclusive ? CreateQueueParam(queueName, persistence, isExclusive, QueueRole.Dlx) : null,
+            dlx && !isExclusive
+                ? CreateQueueParam(queueName, persistence, isExclusive, QueueRole.Dlx)
+                : null,
             resolve,
             prefetchCount,
-            consumeRetry);
+            consumeRetry
+        );
     }
 }
