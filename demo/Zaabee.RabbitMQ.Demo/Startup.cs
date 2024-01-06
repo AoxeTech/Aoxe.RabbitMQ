@@ -21,7 +21,7 @@ public class Startup
                     {
                         AutomaticRecoveryEnabled = true,
                         // Hosts = new List<string> { "192.168.78.130" },
-                        Hosts = ["127.0.0.1"],
+                        Hosts =  ["127.0.0.1"],
                         UserName = "admin",
                         Password = "123",
                         Serializer = new NewtonsoftJson.Serializer()
@@ -36,7 +36,7 @@ public class Startup
     public void Configure(IApplicationBuilder app)
     {
         app.UseOpenApi();
-        app.UseSwaggerUi3();
+        app.UseSwaggerUi();
         app.UseHttpsRedirection();
         app.UseRouting();
         app.UseEndpoints(endpoints => endpoints.MapControllers());
