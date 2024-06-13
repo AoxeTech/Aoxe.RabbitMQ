@@ -1,4 +1,4 @@
-# Zaabee.RabbitMQ
+# Aoxe.RabbitMQ
 
 [RabbitMQ](http://www.rabbitmq.com/) is the most widely deployed open source message broker.
 
@@ -11,33 +11,33 @@ RabbitMQ is lightweight and easy to deploy on premises and in the cloud. It supp
 ### NuGet
 
 ```CLI
-Install-Package Zaabee.RabbitMQ
-Install-Package Zaabee.NewtonsoftJson
+Install-Package Aoxe.RabbitMQ
+Install-Package Aoxe.NewtonsoftJson
 ```
 
 In addition we have the following json serializers:
 
-[Zaabee.Jil](https://github.com/PicoHex/Zaabee.Serialization/tree/master/src/Zaabee.MsgPack)
+[Aoxe.Jil](https://github.com/AoxeTech/Aoxe.Serialization/tree/master/src/Aoxe.MsgPack)
 
-[Zaabee.SystemTextJson](https://github.com/PicoHex/Zaabee.Serialization/tree/master/src/Zaabee.SystemTextJson)
+[Aoxe.SystemTextJson](https://github.com/AoxeTech/Aoxe.Serialization/tree/master/src/Aoxe.SystemTextJson)
 
-[Zaabee.Utf8Json](https://github.com/PicoHex/Zaabee.Serialization/tree/master/src/Zaabee.Utf8Json)
+[Aoxe.Utf8Json](https://github.com/AoxeTech/Aoxe.Serialization/tree/master/src/Aoxe.Utf8Json)
 
 ### Asp.net core
 
 Import reference in startup.cs
 
 ```CSharp
-using Zaabee.RabbitMQ;
-using Zaabee.RabbitMQ.Abstractions;
-using Zaabee.NewtonsoftJson;
+using Aoxe.RabbitMQ;
+using Aoxe.RabbitMQ.Abstractions;
+using Aoxe.NewtonsoftJson;
 ```
 
-Register ZaabeeRabbitMqClient in ConfigureServices method
+Register AoxeRabbitMqClient in ConfigureServices method
 
 ```CSharp
-services.AddSingleton<IZaabeeRabbitMqClient>(_ =>
-    new ZaabeeRabbitMqClient(new ZaabeeRabbitMqOptions
+services.AddSingleton<IAoxeRabbitMqClient>(_ =>
+    new AoxeRabbitMqClient(new AoxeRabbitMqOptions
     {
         AutomaticRecoveryEnabled = true,
         Hosts = new List<string> { `192.168.78.130` },
@@ -68,7 +68,7 @@ public class TestEventWithVersion
 
 ### Publish
 
-In Zaabee.RabbitMQ we distinguish the different publishing methods by message type and message sending type as follows:
+In Aoxe.RabbitMQ we distinguish the different publishing methods by message type and message sending type as follows:
 
 ```csharp
 void PublishEvent<T>(T @event);
