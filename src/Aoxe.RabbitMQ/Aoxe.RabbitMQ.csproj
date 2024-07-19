@@ -2,8 +2,8 @@
 	
 	<PropertyGroup>
 		<TargetFrameworks>netstandard2.0;net6.0;net8.0;net9.0</TargetFrameworks>
-		<PackageVersion>2024.1.0</PackageVersion>
-		<Version>2024.1.0</Version>
+		<PackageVersion>2024.1.1</PackageVersion>
+		<Version>2024.1.1</Version>
 		<Description>An easy-to-use and robust RabbitMQ client.</Description>
 		<PackageTags>Aoxe Messaging;Messaging Queue;MQ;Messaging Bus;RabbitMQ;AMQP</PackageTags>
 		<PackageProjectUrl>https://github.com/AoxeTech</PackageProjectUrl>
@@ -27,7 +27,7 @@
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
-		<PackageReference Include="Polly" Version="8.4.0" />
+		<PackageReference Include="Polly" Version="8.4.1" />
 		<PackageReference Include="RabbitMQ.Client" Version="6.8.1" />
 		<PackageReference Include="Aoxe.RabbitMQ.Abstractions" Version="2024.1.0" />
 		<PackageReference Include="Aoxe.Serializer.Abstractions" Version="2024.1.0" />
