@@ -1,13 +1,5 @@
-global using System;
-global using System.Collections.Concurrent;
-global using System.Collections.Generic;
-global using System.Linq;
-global using System.Net.Sockets;
-global using System.Threading.Tasks;
+﻿// Global using directives
+
 global using Aoxe.RabbitMQ.Abstractions;
-global using Aoxe.RabbitMQ.Internal;
-global using Aoxe.Serializer.Abstractions;
-global using Polly;
-global using RabbitMQ.Client;
-global using RabbitMQ.Client.Events;
-global using RabbitMQ.Client.Exceptions;
+global using Aoxe.RabbitMQ.Client;
+global using Microsoft.Extensions.DependencyInjection;

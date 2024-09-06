@@ -1,5 +1,3 @@
-using System.Linq;
-
 namespace Aoxe.RabbitMQ.Abstractions;
 
 internal static class InternalHelper

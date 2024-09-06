@@ -1,4 +1,4 @@
-namespace Aoxe.RabbitMQ;
+namespace Aoxe.RabbitMQ.Client;
 
 public partial class AoxeRabbitMqClient
 {

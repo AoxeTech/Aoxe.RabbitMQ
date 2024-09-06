@@ -1,4 +1,4 @@
-﻿namespace Aoxe.RabbitMQ.Internal;
+﻿namespace Aoxe.RabbitMQ.Client.Internal;
 
 internal enum QueueRole
 {

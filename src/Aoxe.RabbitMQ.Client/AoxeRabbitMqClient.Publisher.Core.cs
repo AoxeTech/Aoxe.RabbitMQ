@@ -1,4 +1,6 @@
-namespace Aoxe.RabbitMQ;
+using Aoxe.RabbitMQ.Client.Internal;
+
+namespace Aoxe.RabbitMQ.Client;
 
 public partial class AoxeRabbitMqClient
 {

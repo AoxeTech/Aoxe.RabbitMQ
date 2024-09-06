@@ -1,4 +1,4 @@
-﻿namespace Aoxe.RabbitMQ.Internal;
+﻿namespace Aoxe.RabbitMQ.Client.Internal;
 
 /// <summary>
 /// 队列参数

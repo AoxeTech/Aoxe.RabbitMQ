@@ -1,11 +1,13 @@
-﻿namespace Aoxe.RabbitMQ;
+﻿using Aoxe.RabbitMQ.Client.Internal;
+
+namespace Aoxe.RabbitMQ.Client;
 
 public partial class AoxeRabbitMqClient
 {
     /// <inheritdoc />
     public void Subscribe<T>(
         string topic,
-        Func<Func<T?, Task>> resolve,
+        Func<Func<T?, ValueTask>> resolve,
         string queueName,
         bool persistence = true,
         ushort prefetchCount = Consts.DefaultPrefetchCount,
@@ -31,7 +33,7 @@ public partial class AoxeRabbitMqClient
     /// <inheritdoc />
     public void Subscribe(
         string topic,
-        Func<Func<byte[], Task>> resolve,
+        Func<Func<byte[], ValueTask>> resolve,
         string queueName,
         bool persistence = true,
         ushort prefetchCount = Consts.DefaultPrefetchCount,

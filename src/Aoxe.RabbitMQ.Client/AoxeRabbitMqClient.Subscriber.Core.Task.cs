@@ -1,4 +1,6 @@
-﻿namespace Aoxe.RabbitMQ;
+﻿using Aoxe.RabbitMQ.Client.Internal;
+
+namespace Aoxe.RabbitMQ.Client;
 
 public partial class AoxeRabbitMqClient
 {
@@ -7,7 +9,7 @@ public partial class AoxeRabbitMqClient
         QueueParam queueParam,
         ExchangeParam? dlxExchangeParam,
         QueueParam? dlxQueueParam,
-        Func<Func<T?, ValueTask>> resolve,
+        Func<Func<T?, Task>> resolve,
         ushort prefetchCount = Consts.DefaultPrefetchCount,
         int consumeRetry = Consts.DefaultConsumeRetry
     )
@@ -71,7 +73,7 @@ public partial class AoxeRabbitMqClient
         QueueParam queueParam,
         ExchangeParam? dlxExchangeParam,
         QueueParam? dlxQueueParam,
-        Func<Func<byte[], ValueTask>> resolve,
+        Func<Func<byte[], Task>> resolve,
         ushort prefetchCount = Consts.DefaultPrefetchCount,
         int consumeRetry = Consts.DefaultConsumeRetry
     )
