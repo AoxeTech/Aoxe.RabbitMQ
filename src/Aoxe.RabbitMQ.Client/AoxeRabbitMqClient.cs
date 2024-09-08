@@ -13,6 +13,9 @@ public sealed partial class AoxeRabbitMqClient : IAoxeRabbitMqClient
     private readonly ConcurrentDictionary<string, IModel> _subscriberAsyncChannelDic = new();
     private const string DefaultRoutingKey = "#";
 
+    public AoxeRabbitMqClient(Func<AoxeRabbitMqOptions> optionsFactory)
+        : this(optionsFactory()) { }
+
     public AoxeRabbitMqClient(AoxeRabbitMqOptions options)
     {
         if (options is null)
