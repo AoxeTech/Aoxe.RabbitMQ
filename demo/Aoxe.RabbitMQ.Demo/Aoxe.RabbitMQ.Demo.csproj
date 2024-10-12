@@ -9,6 +9,6 @@
 	</ItemGroup>
 	<ItemGroup>
 		<PackageReference Include="NSwag.AspNetCore" Version="14.1.0" />
-		<PackageReference Include="Aoxe.NewtonsoftJson" Version="2024.2.2" />
+		<PackageReference Include="Aoxe.NewtonsoftJson" Version="2024.3.0" />
 	</ItemGroup>
 </Project>

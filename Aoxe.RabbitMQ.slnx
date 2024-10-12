@@ -1,0 +1,12 @@
+﻿<Solution>
+  <Folder Name="/demo/">
+    <Project Path="demo\Aoxe.RabbitMQ.Demo\Aoxe.RabbitMQ.Demo.csproj" Type="Classic C#" />
+    <Project Path="demo\Aoxe.RabbitMQ.Streams.Demo\Aoxe.RabbitMQ.Streams.Demo.csproj" Type="Classic C#" />
+  </Folder>
+  <Folder Name="/src/">
+    <Project Path="src\Aoxe.RabbitMQ.Abstractions\Aoxe.RabbitMQ.Abstractions.csproj" Type="Classic C#" />
+    <Project Path="src\Aoxe.RabbitMQ.Client\Aoxe.RabbitMQ.Client.csproj" Type="Classic C#" />
+    <Project Path="src\Aoxe.RabbitMQ\Aoxe.RabbitMQ.csproj" Type="Classic C#" />
+  </Folder>
+  <Folder Name="/tests/" />
+</Solution>
